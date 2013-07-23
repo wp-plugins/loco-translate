@@ -1,0 +1,91 @@
+=== Plugin Name ===
+Contributors: timwhitlock
+Tags: translation, translators, localization, l10n, i18n, Gettext, POEdit
+Requires at least: 3.5
+Tested up to: 3.5
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Translate Wordpress plugins and themes directly in your browser
+
+
+== Description ==
+
+The Loco Translate plugin provides in-browser editing of PO files used for localizing Wordpress plugins and themes.
+
+Features include:
+
+* POEdit style translations editor inside the Wordpress admin area
+* Extraction of translatable strings from your source code
+* Create and update langauge files directly in your project
+
+Built by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>
+
+
+
+== Installation ==
+
+1. Unzip all files to the `/wp-content/plugins/loco-translate` directory
+2. Log into Wordpress admin and activate the 'Loco Translate' plugin through the 'Plugins' menu
+3. Go to *Tools > Manage Translations* in the left-hand menu to start translating
+
+
+If you want to create new translations for a theme or plugin, follow these steps:
+
+1. Create a `languages` directory in your plugin or theme's root directory
+2. Make the new directory writable by the web server
+3. Find the theme or plugin in the list at *Tools > Manage Translations*
+4. Click `+ New language` and follow the on-screen prompts.
+
+Make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
+
+
+== Frequently Asked Questions ==
+
+= Does this automatically translate my project? =
+
+No. It's for manually entering your own translations, but we do intend to be integrating some automatic translation services into the plugin soon.
+
+
+= Why can't it extract any translatable strings from my code? =
+
+The extraction process looks fo Wordpress translation functions with string literal arguments, such as `__('Foo')`.
+
+Using your own custom functions like `myTranslate('Foo')` won't work. Neither will using variables, such as `__( $foo )`.
+
+
+= Do I need to create a POT file? =
+
+There are some good reasons to, but you don't have to in order to use this plugin.
+
+Loco Translate allows you to work purely with PO files and keep them up to date with the source code without the interim step of maintaining a POT file.
+
+
+= Why do I get errors when I try to save files? =
+
+To be able to save PO files directly to your project, the files must be writable by the web server. 
+
+You shouldn't do this in a live server, only for developing your theme or plugin on a local server.
+
+If you're unsure how to set file permission on your server, ask your systems administrator. 
+
+
+= How do I create MO files? =
+
+If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your system, Loco Translate will automatcally create a MO file when you save a PO file.
+
+Ensure that the web server is able to write the file to disk, and also ensure that the `msgfmt` program is in a common location, such as `/usr/bin/msgfmt`.
+
+
+
+== Screenshots ==
+
+1. Translating strings in the browser with the Loco PO Editor.
+
+
+
+== Changelog ==
+
+= 1.0.0 =
+* First version published

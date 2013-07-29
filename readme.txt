@@ -87,5 +87,16 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Changelog ==
 
+= 1.1.0 =
+* Added translation search filter in editor
+
 = 1.0.0 =
 * First version published
+
+
+== Upgrade Notice ==
+
+= 1.1.0 =
+* Bug fixes and improvements available.
+
+

@@ -80,6 +80,9 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
                     <span><?php Loco::h( Loco::_x('Fuzzy','Editor button') )?></span>
                 </button>
             </form>
+            <form action="<?php echo $phpbase?>/loco-fail.php" id="loco-filter">
+                <input type="text" maxlength="100" name="q" id="loco-search" placeholder="<?php Loco::h(Loco::__('Filter translations'))?>" autocomplete="off" disabled />
+            </form>
             <form action="http://wordpress.org/support/plugin/<?php echo Loco::NS?>" target="_blank">
                 <button class="button loco-help" data-loco="help" type="submit">
                     <span><?php Loco::h( Loco::_x('Help','Editor button') )?></span>

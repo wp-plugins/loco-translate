@@ -129,6 +129,7 @@ h2 .nav-tab.nav-tab-loco {
     margin: 0;
 }
 
+#loco-search,
 #loco-nav button {
     display: block;
     position: relative;
@@ -170,6 +171,19 @@ h2 .nav-tab.nav-tab-loco {
     background-image:   linear-gradient(to bottom, #e0e0e0, #fefefe);
 }
 
+
+
+/* additional for search field and text field listener */
+#loco-filter input[type="text"] {
+    padding-left: 10px;
+    margin-left: 20px;
+    width: 300px;
+    font-size: 15px;
+}
+
+#loco-filter .icon.clear {
+    display: none !important;
+}
 
 
 

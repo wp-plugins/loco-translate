@@ -126,13 +126,13 @@ abstract class LocoAdmin {
             foreach( wp_get_themes( array( 'allowed' => true ) ) as $name => $theme ){
                 $root = $theme->get_theme_root().'/'.$name;
                 $name = $theme->get('Name');
-                $themes[] = self::init_package_args($root) + compact('name');
+                $themes[] = self::init_package_args( $root, $name, 'theme' );
             }
             // @var $plugin array
             foreach( get_plugins() as $subpath => $plugin ){
                 $root = WP_PLUGIN_DIR.'/'.dirname($subpath);
                 $name = $plugin['Name'];
-                $plugins[] = self::init_package_args($root) + compact('name');
+                $plugins[] = self::init_package_args( $root, $name, 'plugin' );
             }
             // order most active first
             $sorter = array( __CLASS__, 'sort_packages' );
@@ -158,8 +158,10 @@ abstract class LocoAdmin {
      * initialize template arguments for a plugin or theme table row
      * @return array
      */
-    private function init_package_args( $root ){
+    private function init_package_args( $root, $name, $type ){
         $files = self::find_po( $root );
+        // find newest file in package to establish cache invalidation
+        $mtime = self::newest_mtime_recursive( $files['po'], $files['pot'] );
         // filesystem warning. Only want one though
         $warnings = array();
         foreach( $files as $ext => $paths ){
@@ -179,7 +181,7 @@ abstract class LocoAdmin {
                 $warnings[] = sprintf( Loco::__('"%s" folder not writable'), basename($dir) );
             }
         }
-        return $files + compact('root','warnings');
+        return $files + compact('root','warnings','name','mtime');
     }    
     
 
@@ -188,12 +190,10 @@ abstract class LocoAdmin {
      * Sort packages according to most recently updated language files
      */
     private static function sort_packages( array $a, array $b ){
-        $atime = self::newest_mtime_recursive( $a['po'], $a['pot'] );
-        $btime = self::newest_mtime_recursive( $b['po'], $b['pot'] );
-        if( $atime > $btime ){
+        if( $a['mtime'] > $b['mtime'] ){
             return -1;
         }
-        if( $btime > $atime ){
+        if( $b['mtime'] > $a['mtime'] ){
             return 1;
         }
         return 0;

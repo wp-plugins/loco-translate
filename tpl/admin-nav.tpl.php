@@ -17,7 +17,7 @@
             <?php endif?> 
         <?php endforeach?> 
         <a href="http://localise.biz/?<?php echo Loco::utm_query('nav')?>" class="nav-tab nav-tab-loco">
-            <?php echo Loco::html(Loco::__('Powered by Loco'))?> 
+            <?php echo Loco::html(Loco::__('Powered by'))?> <strong>Loco</strong>
         </a>
     </h2>
     

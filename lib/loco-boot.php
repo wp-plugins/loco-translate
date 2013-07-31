@@ -171,5 +171,52 @@ abstract class Loco {
         }
         return $post;
     }    
+    
+    
+    
+    /**
+     * Abstraction of cache retrieval, using apc where possible
+     * @return mixed 
+     */
+    public static function cached( $key ){
+        $key = self::cache_key($key);
+        if( function_exists('apc_fetch') ){
+            return apc_fetch( $key );
+        }
+        return get_transient( $key );
+    } 
+
+
+
+    /**
+     * Abstraction of cache storage, using apc where possible
+     * @return void
+     */
+     public static function cache( $key, $value, $ttl = 0 ){
+        $key = self::cache_key($key);
+        if( function_exists('apc_fetch') ){
+            apc_store( $key, $value, $ttl );
+            return;
+        }
+        if( ! $ttl ){
+            // WP will expire immediately as opposed to never, setting to ten days.
+            $ttl = 864000;
+        }
+        set_transient( $key, $value, $ttl );
+    }    
+
+     
+     
+    /**
+     * Sanitize a cache key
+     */    
+    private static function cache_key( $key ){
+        $key = 'loco_'.$key;
+        if( isset($key{45}) ){
+            $key = 'loco_'.md5($key);
+        }        
+        return $key;
+    }    
+    
         
 }

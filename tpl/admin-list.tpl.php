@@ -8,7 +8,7 @@
             <thead>
                 <tr>
                     <th scope="col">
-                        <?php Loco::h( Loco::_x('Package name','Table header') )?> 
+                        <?php Loco::h( Loco::_x('Package details','Table header') )?> 
                     </th>
                     <th scope="col">
                         <?php Loco::h( Loco::_x('Translations (PO)','Table header') )?> 
@@ -28,9 +28,23 @@
                 ?> 
                 <tr class="inactive">
                     <td>
-                        <strong><?php Loco::h($name)?></strong>
-                        <br />
-                        <span><?php Loco::h( _n( '1 language', '%u languages', $n ), $n )?></span>
+                        <ul class="loco-details">
+                            <strong><?php Loco::h($name)?></strong>
+                            <li>
+                                
+                            </li>
+                            <li>
+                                <?php Loco::h( _n( '1 language', '%u languages', $n ), $n )?>
+                            </li><?php 
+                            if( $mtime ):?> 
+                            <li class="loco-mtime">
+                                <small>
+                                    <?php Loco::h( Loco::_x('Updated','Modified time') )?> 
+                                    <?php Loco::h( LocoAdmin::format_datetime($mtime) )?> 
+                                </small>
+                            </li><?php
+                            endif?> 
+                        </ul>
                     </td>
                     <td>
                         <ul>

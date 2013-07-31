@@ -78,7 +78,9 @@ h2 .nav-tab.nav-tab-loco:hover {
 .wrap .loco-list .loco-mtime {
     color: #999;
 }
-
+.wrap .loco-list .loco-progress {
+    color: #999;
+}
 
 
 

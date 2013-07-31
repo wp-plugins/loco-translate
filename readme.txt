@@ -89,6 +89,8 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 = 1.1.0 =
 * Added translation search filter in editor
+* Added percentage completion in list view
+
 
 = 1.0.0 =
 * First version published
@@ -98,5 +100,16 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 = 1.1.0 =
 * Bug fixes and improvements available.
+
+
+
+== Coming soon ==
+
+These features are on our todo list. There's no particular timeframe for any of them and they're in no particular order:
+
+* Integration with Google and Bing for automatic translation
+* Full, but optional integration with Loco for collaborative translation
+* Support multiple pairings of POT and PO files within a single package.
+
 
 

@@ -160,8 +160,6 @@ abstract class LocoAdmin {
      */
     private function init_package_args( $root, $name, $type ){
         $files = self::find_po( $root );
-        // find newest file in package to establish cache invalidation
-        $mtime = self::newest_mtime_recursive( $files['po'], $files['pot'] );
         // filesystem warning. Only want one though
         $warnings = array();
         foreach( $files as $ext => $paths ){
@@ -181,7 +179,43 @@ abstract class LocoAdmin {
                 $warnings[] = sprintf( Loco::__('"%s" folder not writable'), basename($dir) );
             }
         }
-        return $files + compact('root','warnings','name','mtime');
+        // find newest file in package to establish cache invalidation
+        $mtime = self::newest_mtime_recursive( $files['po'], $files['pot'] );
+        // get meta data or re-generate meta data from files
+        $mkey = $type.'_'.$name;
+        $meta = Loco::cached( $mkey );
+        if( ! $meta || $mtime > $meta['mtime'] || Loco::VERSION !== $meta['v'] ){
+            $pot = $po = array();
+            foreach( $files['pot'] as $pot_path ){
+                $pot[] = array (
+                    'path' => $pot_path,
+                );
+            }
+            // get progress and locale for each PO file
+            foreach( $files['po'] as $po_path ){
+                try {
+                    unset($headers);    
+                    $export = self::parse_po_with_headers( $po_path, $headers );
+                    $stats  = loco_po_stats( $export );
+                }
+                catch( Exception $Ex ){
+                    // self::warning( $Ex->getMessage() );
+                    continue;
+                }
+                $po[] = array (
+                    'path'   => $po_path,
+                    'name'   => str_replace( array('.po',$name), array('',''), basename($po_path) ),
+                    'stats'  => $stats,
+                    'status' => self::format_progress_summary($stats),
+                    'length' => count( $export ),
+                    'locale' => LocoAdmin::resolve_file_locale($po_path),
+                );
+            }
+            $meta = compact('mtime','po','pot');
+            $meta['v'] = Loco::VERSION;
+            Loco::cache( $mkey, $meta );
+        }
+        return $meta + compact('root','warnings','name');
     }    
     
 
@@ -213,6 +247,7 @@ abstract class LocoAdmin {
         }
         return $mtime;
     }    
+    
     
     
     /**
@@ -296,9 +331,7 @@ abstract class LocoAdmin {
         // remove header and check if empty
         $minlength = 1;
         if( isset($data[0]) && $data[0]['source'] === '' ){
-            // @todo something useful with headers
-            // var_dump( loco_parse_po_headers($data[0]['target']) );
-            $data[0] = array( /* dummy, avoids index errors */ );
+            $data[0] = array();
             $minlength = 2;
         }
         // template file is developer-editable and has no locale
@@ -545,6 +578,23 @@ abstract class LocoAdmin {
     
     
     
+    /**
+     * Parse PO or POT file, placing header object into argument
+     */
+    private static function parse_po_with_headers( $path, &$headers ){
+        $export = self::parse_po( $path );
+        if( ! isset($export[0]) ){
+            throw new Exception('Empty or invalid PO file');
+        }
+        if( $export[0]['source'] !== '' ){
+            throw new Exception('PO file has no header');
+        }
+        $headers = loco_parse_po_headers( $export[0]['target'] );
+        $export[0] = array(); // <- avoid index errors as json
+        return $export;
+    }
+    
+    
     
     /**
      * Resolve a list of PO file paths to locale instances
@@ -567,7 +617,7 @@ abstract class LocoAdmin {
      */
     public static function resolve_file_locale( $path ){
         $stub = str_replace( '.po', '', basename($path) );
-        $locale = loco_locale_resolve($stub) or $locale = new LocoLocale;
+        $locale = loco_locale_resolve($stub);
         return $locale;
     }
     
@@ -655,7 +705,27 @@ abstract class LocoAdmin {
         }
         return date_i18n( $df.' '.$tf, $u ); 
     } 
-
+    
+    
+    
+    /**
+     * PO translate progress summary
+     */   
+    public static function format_progress_summary( array $stats ){
+        extract( $stats );
+        $text = sprintf( Loco::__('%s%% translated'), $p ).', '.sprintf( Loco::_n('1 string', '%s strings', $t ), number_format($t) );
+        $extra = array();
+        if( $f ){
+            $extra[] = sprintf( Loco::__('%s fuzzy'), number_format($f) );
+        }   
+        if( $u ){
+            $extra[] = sprintf( Loco::__('%s unstranslated'), number_format($f) );
+        }
+        if( $extra ){
+            $text .= ' ('.implode(', ',$extra).')';
+        }
+        return $text;
+    }
 
 }
 

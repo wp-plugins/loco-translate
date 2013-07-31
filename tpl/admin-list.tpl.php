@@ -51,12 +51,16 @@
                             <li class="loco-add">
                                 <?php echo LocoAdmin::msginit_link( $root, Loco::_x('New language','Add button') )?> 
                             </li><?php
-                            foreach( $po as $po_path ): 
-                                $locale = LocoAdmin::resolve_file_locale($po_path);
-                                $label = $locale->get_code().' : '.$locale->get_name();
+                            foreach( $po as $po_data ):
+                                extract( $po_data, EXTR_PREFIX_ALL, 'po' );
+                                $code = $po_locale->get_code();
+                                $label = $code ? $code.' : '.$po_locale->get_name() : $po_name;
                             ?> 
                             <li class="loco-edit">
                                 <?php echo LocoAdmin::edit_link( $root, $po_path, $label )?> 
+                                <small class="loco-progress">
+                                    <?php echo $po_stats['p']?>%
+                                </small>
                             </li><?php
                             endforeach;?> 
                         </ul>
@@ -64,7 +68,8 @@
                     <td>
                         <ul><?php // show POT files (should be no more than one)
                         if( $pot ):
-                            foreach( $pot as $pot_path ):
+                            foreach( $pot as $pot_data ):
+                                extract( $pot_data, EXTR_PREFIX_ALL, 'pot' );
                             ?> 
                             <li class="loco-edit">
                                 <?php echo LocoAdmin::edit_link( $root, $pot_path )?> 

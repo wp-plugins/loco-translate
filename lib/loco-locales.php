@@ -9,11 +9,15 @@
  * @return LocoLocale
  */
 function loco_locale_resolve( $s ){
-    if( preg_match('/([a-z]{2})(?:(?:-|_)([a-z]{2}))?$/i', $s, $r ) ){
-        $lc = strtolower( $r[1] );
-        $cc = isset($r[2]) ? strtoupper($r[2]) : '';
-        return LocoLocale::init( $lc, $cc );
+    $lc = '';
+    $cc = '';
+    if( preg_match('/(?:^|\W)([a-z]{2})(?:(?:-|_)([a-z]{2}))?$/i', $s, $r ) ){
+        $lc = strtolower($r[1]);
+        if( isset($r[2]) ){
+            $cc = strtoupper($r[2]);
+        }
     }
+    return LocoLocale::init( $lc, $cc );
 }
 
 
@@ -32,7 +36,6 @@ final class LocoLocale {
     private function __construct( $lc, $cc ){
         $lc and $this->lang = $lc;
         $cc and $this->region = $cc;
-        $this->label = Loco::__('Unknown language');
     }
 
     private function __import( $lc, $cc, array $raw ){
@@ -46,15 +49,19 @@ final class LocoLocale {
     }
     
     public function __toString(){
-        return $this->get_code().', '.$this->label;
+        $str = $this->get_name();
+        if( $code = $this->get_code() ){
+            $str = $code.', '.$str;
+        }
+        return $str;
     }
     
     public function get_code(){
-        return $this->lang && $this->region ? $this->lang.'_'.$this->region : ( $this->lang ? $this->lang : 'zz' ) ;
+        return $this->lang && $this->region ? $this->lang.'_'.$this->region : ( $this->lang ? $this->lang : '' ) ;
     }
     
     public function get_name(){
-        return $this->label;
+        return is_null($this->label) ? Loco::__('Unknown language') : $this->label;
     }
     
     public function equal_to( LocoLocale $locale ){

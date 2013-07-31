@@ -1,0 +1,242 @@
+# Loco Gettext template
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Wed Jul 31 2013 17:14:31 GMT+0100 (BST)\n"
+"POT-Revision-Date: Wed Jul 31 2013 17:14:36 GMT+0100 (BST)\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco - http://localise.biz/"
+
+# Translators: Bold text label in admin error messages
+msgctxt "Message label"
+msgid "Error"
+msgstr ""
+
+msgctxt "Message label"
+msgid "Warning"
+msgstr ""
+
+msgctxt "Message label"
+msgid "OK"
+msgstr ""
+
+msgid "New PO file"
+msgstr ""
+
+msgid "Some files not writable"
+msgstr ""
+
+msgid "\"%s\" folder not writable"
+msgstr ""
+
+msgid "You must specify a valid locale for a new PO file"
+msgstr ""
+
+msgid "No translatable strings found"
+msgstr ""
+
+msgid "Cannot create a PO file."
+msgstr ""
+
+msgid "PO file already exists with locale %s"
+msgstr ""
+
+msgid ""
+"File cannot be created automatically. Fix the file permissions or use Download "
+"instead of Save"
+msgstr ""
+
+msgid "%s file is empty"
+msgstr ""
+
+msgid "Run Sync to update from source code"
+msgstr ""
+
+msgid "No strings could be extracted from source code"
+msgstr ""
+
+msgid "Run Sync to update from %s"
+msgstr ""
+
+msgid "Source code has changed, run Sync to update POT"
+msgstr ""
+
+msgid "POT has changed since PO file was saved, run Sync to update"
+msgstr ""
+
+msgid "Bad file path"
+msgstr ""
+
+msgid "%s%% translated"
+msgstr ""
+
+msgid "1 string"
+msgid_plural "%s strings"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "%s fuzzy"
+msgstr ""
+
+msgid "%s unstranslated"
+msgstr ""
+
+msgid "Loco, Translation Management"
+msgstr ""
+
+msgid "Manage Translations"
+msgstr ""
+
+msgid "Manage translations"
+msgstr ""
+
+msgid "Unknown language"
+msgstr ""
+
+msgid "User does not have permission to manage translations"
+msgstr ""
+
+msgid "Invalid data posted to server"
+msgstr ""
+
+msgid ""
+"Web server cannot create \"%s\" directory in \"%s\". Fix file permissions or create "
+"it manually."
+msgstr ""
+
+msgid ""
+"Web server cannot create files in the \"%s\" directory. Fix file permissions or "
+"use the download function."
+msgstr ""
+
+msgid ""
+"%s file is not writable by the web server. Fix file permissions or download and "
+"copy to \"%s/%s\"."
+msgstr ""
+
+msgid "No strings could be extracted from source files"
+msgstr ""
+
+msgctxt "Table header"
+msgid "Package details"
+msgstr ""
+
+msgctxt "Table header"
+msgid "Translations (PO)"
+msgstr ""
+
+msgctxt "Table header"
+msgid "Template (POT)"
+msgstr ""
+
+msgctxt "Table header"
+msgid "File permissions"
+msgstr ""
+
+msgid "1 language"
+msgid_plural "%u languages"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "Modified time"
+msgid "Updated"
+msgstr ""
+
+msgctxt "Add button"
+msgid "New language"
+msgstr ""
+
+msgctxt "Add button"
+msgid "New template"
+msgstr ""
+
+msgid "Powered by"
+msgstr ""
+
+msgid "Packages"
+msgstr ""
+
+msgid "Template file"
+msgstr ""
+
+msgid "Updated"
+msgstr ""
+
+msgid "never"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Save"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Download"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Sync"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Revert"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Add"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Del"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Fuzzy"
+msgstr ""
+
+msgid "Filter translations"
+msgstr ""
+
+msgctxt "Editor button"
+msgid "Help"
+msgstr ""
+
+msgid "Initialize new translations in %s"
+msgstr ""
+
+msgid "Select from common languages"
+msgstr ""
+
+msgctxt "Form label"
+msgid "or enter any language code"
+msgstr ""
+
+msgctxt "Submit button"
+msgid "Start translating"
+msgstr ""
+
+msgid "New version available"
+msgstr ""
+
+msgid "Upgrade to version %s of Loco Translate"
+msgstr ""
+
+msgid "Select a plugin or theme to translate"
+msgstr ""
+
+msgctxt "Package list header"
+msgid "Themes"
+msgstr ""
+
+msgctxt "Package list header"
+msgid "Plugins"
+msgstr ""

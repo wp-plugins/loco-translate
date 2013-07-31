@@ -89,7 +89,7 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 = 1.1.0 =
 * Added translation search filter in editor
-* Added percentage completion in list view
+* Added percentage completion in list and edit views
 
 
 = 1.0.0 =

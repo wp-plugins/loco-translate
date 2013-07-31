@@ -16,16 +16,19 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
     <?php Loco::render('admin-nav', compact('nav') )?> 
     
     <h3 class="title">
-        <?php Loco::h( $locale ? $locale->get_name() : Loco::__('Template file') )?> 
+        <?php Loco::h( $locale ? $locale->get_name() : Loco::__('Template file') )?>:
         <span class="loco-meta">
-            &ndash;
-            <?php Loco::h( Loco::__('last modified') )?>:
+            <?php Loco::h( Loco::__('Updated') )?>:
             <span id="loco-po-modified">
             <?php if( $modified ):?> 
                  <?php Loco::h($modified)?>
             <?php else:?> 
                 <em><?php Loco::h( Loco::__('never') )?></em>
             <?php endif?> 
+            </span>
+            &mdash;
+            <span id="loco-po-status">
+                <!-- js will load status -->
             </span>
         </span>
     </h3>

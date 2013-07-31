@@ -142,7 +142,7 @@ abstract class LocoAdmin {
             $update = '';
             if( $updates = get_site_transient('update_plugins') ){
                 $key = Loco::NS.'/loco.php';
-                if( isset($updates->checked[$key]) && 1 === version_compare( Loco::VERSION, $updates->checked[$key] ) ){
+                if( isset($updates->checked[$key]) && 1 === version_compare( $updates->checked[$key], Loco::VERSION ) ){
                     $update = $updates->checked[$key];
                 }
             }

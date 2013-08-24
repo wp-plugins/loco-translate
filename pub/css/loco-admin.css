@@ -9,11 +9,11 @@
  */
 @font-face {
   font-family:'IconFont';
-  src:url('../font/fontawesome-webfont.eot');
-  src:url('../font/fontawesome-webfont.eot?#iefix') format('embedded-opentype'),
-      url('../font/fontawesome-webfont.woff') format('woff'),
-      url('../font/fontawesome-webfont.ttf') format('truetype'),
-      url('../font/fontawesome-webfont.svg#IconFont') format('svg');
+  src:url('../font/IconFont.eot');
+  src:url('../font/IconFont.eot?#iefix') format('embedded-opentype'),
+      url('../font/IconFont.woff') format('woff'),
+      url('../font/IconFont.ttf') format('truetype'),
+      url('../font/IconFont.svg#IconFont') format('svg');
   font-weight:normal;
   font-style:normal;
 }
@@ -57,8 +57,11 @@ h2 .nav-tab.nav-tab-loco:hover {
 .wrap .loco-list li.loco-add a:before {
     content: "\f055";
 }
-.wrap .loco-list li.loco-edit a:before {
-    content: "\f016";
+.wrap .loco-list li.loco-edit-po .flag {
+    margin-right: 6px;
+}
+.wrap .loco-list li.loco-edit-pot a:before {
+    content: "\f040";
 }
 
 .wrap .loco-list li.loco-warn > span:before {
@@ -124,6 +127,7 @@ h2 .nav-tab.nav-tab-loco:hover {
 .wrap #loco-poedit-inner {
     min-height: 600px;
     font-size: 14px;
+    clear: both;
 }
 
 .wrap #loco-poedit-inner h2 {
@@ -200,7 +204,6 @@ h2 .nav-tab.nav-tab-loco:hover {
 #loco-filter .icon.clear {
     display: none !important;
 }
-
 
 
 

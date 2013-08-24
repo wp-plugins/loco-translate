@@ -87,6 +87,10 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Changelog ==
 
+= 1.1.1 =
+* Added country flag icons
+* Fixed some IE8 bugs
+
 = 1.1.0 =
 * Added translation search filter in editor
 * Added percentage completion in list and edit views

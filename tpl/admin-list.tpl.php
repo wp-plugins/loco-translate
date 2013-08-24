@@ -56,8 +56,8 @@
                                 $code = $po_locale->get_code();
                                 $label = $code ? $code.' : '.$po_locale->get_name() : $po_name;
                             ?> 
-                            <li class="loco-edit">
-                                <?php echo LocoAdmin::edit_link( $root, $po_path, $label )?> 
+                            <li class="loco-edit-po">
+                                <?php echo LocoAdmin::edit_link( $root, $po_path, $label, $po_locale->icon_class() )?> 
                                 <small class="loco-progress">
                                     <?php echo $po_stats['p']?>%
                                 </small>
@@ -71,7 +71,7 @@
                             foreach( $pot as $pot_data ):
                                 extract( $pot_data, EXTR_PREFIX_ALL, 'pot' );
                             ?> 
-                            <li class="loco-edit">
+                            <li class="loco-edit-pot">
                                 <?php echo LocoAdmin::edit_link( $root, $pot_path )?> 
                             </li><?php
                             endforeach;

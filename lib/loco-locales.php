@@ -60,6 +60,10 @@ final class LocoLocale {
         return $this->lang && $this->region ? $this->lang.'_'.$this->region : ( $this->lang ? $this->lang : '' ) ;
     }
     
+    public function icon_class(){
+        return 'flag flag-'.strtolower($this->region);
+    }
+    
     public function get_name(){
         return is_null($this->label) ? Loco::__('Unknown language') : $this->label;
     }

@@ -50,7 +50,7 @@ abstract class LocoAdmin {
                 $root = isset($_GET['root']) ? self::resolve_path( $_GET['root'], true ) : '';
 
 
-                // Extract messages if 'xgettext' contains a valid package directory
+                // Extract messages if 'xgettext' is in query string
                 //
                 if( isset($_GET['xgettext']) && $root ){
                     $name = basename($root);
@@ -72,7 +72,7 @@ abstract class LocoAdmin {
                 }
 
 
-                // Initialize a new PO file if 'msginit' contains a valid package directory
+                // Initialize a new PO file if 'msginit' is in query string
                 //
                 if( isset($_GET['msginit']) && $root ){
                     // handle PO file creation if locale is set
@@ -95,7 +95,6 @@ abstract class LocoAdmin {
                         $dummy = self::msginit( $root, 'en', $export );
                     }
                     // else render msginit start screen
-                    // @todo list available locales in drop down?
                     $title = Loco::__('New PO file');
                     $locales = loco_require('build/locales-compiled');
                     Loco::enqueue_scripts('admin-poinit');
@@ -104,7 +103,7 @@ abstract class LocoAdmin {
                 }
 
 
-                // Render existing file in editor if 'poedit' contains a valid file path
+                // Render existing file in editor if 'poedit' contains a valid file path relative to package root
                 //
                 if( isset($_GET['poedit']) && $po_path = self::resolve_path( $root.'/'.$_GET['poedit'] ) ){
                     $export = self::parse_po( $po_path );
@@ -398,11 +397,11 @@ abstract class LocoAdmin {
         else if( $modified ){
             if( $ispot ){
                 if( filemtime($path) < self::newest_mtime_recursive( self::find_php($root) ) ){
-                    $warnings[] = Loco::__('Source code has changed, run Sync to update POT');
+                    $warnings[] = Loco::__('Source code has been modified, run Sync to update POT');
                 }
             }
             else if( $haspot && filemtime($haspot) > filemtime($path) ){
-                $warnings[] = Loco::__('POT has changed since PO file was saved, run Sync to update');
+                $warnings[] = Loco::__('POT has been modified since PO file was saved, run Sync to update');
             }
         }
 
@@ -441,16 +440,6 @@ abstract class LocoAdmin {
         }
         return $realpath;
     }
-    
-    
-    
-    /**
-     * Establish root of package (theme/plugin) that contains this file. It doesn't have to exist
-     *
-    private static function resolve_file_package( $path ){
-        return 'todo';
-    }*/     
-    
     
     
     
@@ -653,7 +642,7 @@ abstract class LocoAdmin {
     /**
      * Generate a link to edit a po/pot file
      */
-    public static function edit_link( $root, $path, $label = '' ){
+    public static function edit_link( $root, $path, $label = '', $icon = '' ){
         $url = self::uri( array(
             'root'   => self::trim_path( $root ),
             'poedit' => str_replace( $root.'/', '', $path ),
@@ -661,7 +650,11 @@ abstract class LocoAdmin {
         if( ! $label ){
             $label = basename( $path );
         }
-        return '<a href="'.Loco::html($url).'">'.Loco::html($label).'</a>';
+        $inner = Loco::html($label);
+        if( $icon ){
+            $inner = '<span class="'.$icon.'"></span>'.$inner;
+        }
+        return '<a href="'.Loco::html($url).'">'.$inner.'</a>';
     }
     
     
@@ -733,23 +726,15 @@ abstract class LocoAdmin {
     
     
     
-// filter and action callbacks
+// admin filter and action callbacks
  
 
-/**
- * Admin init callback
- */
-function _loco_hook__admin_init(){
-    // @todo handle postdata?
-}
-
-  
 /**
  * Enqueue only admin styles we need
  */  
 function _loco_hook__admin_print_styles(){
     if( LocoAdmin::is_self() ){
-        Loco::enqueue_styles('build/poedit-compiled','loco-admin');
+        Loco::enqueue_styles('build/loco-compiled','loco-admin');
     }
 }  
 
@@ -788,7 +773,6 @@ function _lock_hook__wp_ajax(){
 
 
 
-add_action('admin_init', '_loco_hook__admin_init' );
 add_action('admin_menu', '_loco_hook__admin_menu' );
 add_action('plugin_row_meta', '_loco_hook__plugin_row_meta', 10, 2 );
 

@@ -15,8 +15,13 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
     
     <?php Loco::render('admin-nav', compact('nav') )?> 
     
-    <h3 class="title">
-        <?php Loco::h( $locale ? $locale->get_name() : Loco::__('Template file') )?>:
+    <h3 class="title"><?php 
+        if( $locale ):?> 
+        <span class="<?php echo $locale->icon_class()?>"></span>
+        <?php Loco::h( $locale->get_name() )?>:<?php
+        else:
+        echo Loco::__('Template file')?>:<?php
+        endif?> 
         <span class="loco-meta">
             <?php Loco::h( Loco::__('Updated') )?>:
             <span id="loco-po-modified">

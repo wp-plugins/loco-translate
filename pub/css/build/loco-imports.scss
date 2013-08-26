@@ -1,0 +1,16 @@
+/*!
+ * Loco CSS built for Wordpress plugin
+ */
+
+// wraps pre-built Loco CSS library to ensure WP styles are overridden
+// $ sass --style compact loco-imports.scss > loco-compiled.css
+
+.wrap {
+  
+    #loco-poedit {
+        @import "poedit-import.scss";
+    }
+    
+    @import "flags-import.scss";
+    
+}

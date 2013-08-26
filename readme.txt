@@ -3,7 +3,7 @@ Contributors: timwhitlock
 Tags: translation, translators, localization, l10n, i18n, Gettext, POEdit
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ The Loco Translate plugin provides in-browser editing of PO files used for local
 
 Features include:
 
-* POEdit style translations editor inside the Wordpress admin area
+* POEdit style translations editor within Wordpress admin
 * Extraction of translatable strings from your source code
 * Create and update langauge files directly in your project
 
@@ -89,7 +89,7 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 = 1.1.1 =
 * Added country flag icons
-* Fixed some IE8 bugs
+* Fixed major IE8 bug in editor search
 
 = 1.1.0 =
 * Added translation search filter in editor

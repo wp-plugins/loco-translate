@@ -90,6 +90,7 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 = 1.1.1 =
 * Added country flag icons
 * Fixed major IE8 bug in editor search
+* Reduced size of icon font file
 
 = 1.1.0 =
 * Added translation search filter in editor

@@ -178,7 +178,7 @@ h2 .nav-tab.nav-tab-loco:hover {
 #loco-nav button.loco-help span:before { content: "\f059"; }
 #loco-nav button.loco-fuzzy span:before { content: "\f0c2"; }
 #loco-nav button.loco-revert span:before { content: "\f0e2"; }
-#loco-nav button.loco-download span:before { content: "\f01a"; }
+#loco-nav button.loco-download span:before { content: "\f019"; }
 
 
 /* inverted version of wordpress button style */

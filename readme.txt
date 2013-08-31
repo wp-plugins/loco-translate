@@ -124,4 +124,4 @@ These features are on our todo list. There's no particular timeframe for any of 
 
 == Credits ==
 
-* Dutch translations courtesy of [Niels Geryl](hetwittepaard.be)
+* Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)

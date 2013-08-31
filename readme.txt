@@ -20,7 +20,7 @@ Features include:
 * Extraction of translatable strings from your source code
 * Create and update langauge files directly in your project
 
-Built by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>
+Built by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>. Official [Loco](https://localise.biz/) WordPress plugin.
 
 
 
@@ -82,10 +82,14 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 == Screenshots ==
 
 1. Translating strings in the browser with the Loco PO Editor.
+2. Listing of all available translation files installed.
 
 
 
 == Changelog ==
+
+= 1.1.2 =
+* Added dutch translations
 
 = 1.1.1 =
 * Added country flag icons
@@ -117,4 +121,6 @@ These features are on our todo list. There's no particular timeframe for any of 
 * Support multiple pairings of POT and PO files within a single package.
 
 
+== Credits ==
 
+* Dutch translations courtesy of [Niels Geryl](hetwittepaard.be)

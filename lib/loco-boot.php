@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.1.1';
+    const VERSION = '1.1.2';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -34,17 +34,23 @@ abstract class Loco {
      * Bootstrap localisation of self
      */
     public static function load_textdomain(){
-        static $map = array (
-            // no translations yet
-        );
-        if( preg_match('/^([a-z]{2})[\-_\s]([a-z]{2})$/i', get_locale(), $r ) ){
-            $locale = strtolower($r[1]).'_'.strtoupper($r[2]);
-            if( isset($map[$locale]) ){
-                $locale = $map[$locale];
-                $mofile = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
-                load_textdomain( Loco::NS, $mofile );
+        $locale = get_locale();
+        if( 0 === strpos($locale,'en') ){
+            return;
+        }
+        // see if MO file exists with exact name
+        $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
+        if( ! file_exists($mopath) ){
+            // Try some locale sanitization to find suitable MO file.
+            function_exists('loco_locale_resolve') or loco_require('loco-locales');
+            $locale = loco_locale_resolve($locale)->get_code();
+            $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
+            if( ! file_exists($mopath) ){
+                // translations really not found - check PO is compiled to MO
+                return;
             }
         }
+        load_textdomain( Loco::NS, $mopath );
     }
     
     
@@ -228,7 +234,7 @@ abstract class Loco {
 
 // minimum config
 Loco::$apc_enabled = function_exists('apc_fetch') && ini_get('apc.enabled');
-
+Loco::load_textdomain();
 
 
 

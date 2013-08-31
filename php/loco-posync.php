@@ -16,32 +16,46 @@
 
     // but root must
     $root = LocoAdmin::resolve_path( $root, true );
-    
-    // If file we're syncing is POT, we can only sync from sources
-    if( ! LocoAdmin::is_pot($path) ){
-            
-        // if a POT file exists, sync from that.
-        foreach( LocoAdmin::find_pot($root) as $pot_path ){
-            $export = LocoAdmin::parse_po( $pot_path );
-            if( ! $export || ( 1 === count($export) && '' === $export[0]['source'] ) ){
-                //throw new Exception( Loco::__('POT file is empty') );
-                continue;
+
+    while( true ){
+
+        // If file we're syncing is POT, we can only sync from sources
+        if( ! LocoAdmin::is_pot($path) ){
+               
+            // if a POT file exists, sync from that.
+            foreach( LocoAdmin::find_pot($root) as $pot_path ){
+                $exp = LocoAdmin::parse_po( $pot_path );
+                if( ! $exp || ( 1 === count($exp) && '' === $exp[0]['source'] ) ){
+                    //throw new Exception( Loco::__('POT file is empty') );
+                    continue;
+                }
+                $pot = basename($pot_path);
+                break 2;
             }
-            return array (
-                'pot' => basename($pot_path),
-                'exp' => $export,
-            );
+    
+        }
+    
+        // Extract from sources by default        
+        if( $exp = LocoAdmin::xgettext($root) ){
+            $pot = '';
+            break;
         }
 
-    }
-
-    
-    // Extract from sources by default        
-    $export = LocoAdmin::xgettext( $root );
-    if( ! $export ){
         throw new Exception( Loco::__('No strings could be extracted from source files') );
     }
-    return array (
-        'pot' => '',
-        'exp' => $export,
-    );
+    
+
+    // sync selected headers
+    $headers = array();
+    if( '' === $exp[0]['source'] ){
+        $keep = array('Project-Id-Version'=>'','Language-Team'=>'','POT-Creation-Date'=>'','POT-Revision-Date'=>'');
+        $head = loco_parse_po_headers( $exp[0]['target'] );
+        $headers = array_intersect_key( $head->to_array(), $keep );
+        $exp[0] = array();
+    }
+        
+
+    // sync ok.
+    return compact( 'pot', 'exp', 'headers' );
+    
+    

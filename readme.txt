@@ -90,6 +90,7 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 = 1.1.2 =
 * Added dutch translations
+* Better persistence of PO headers
 
 = 1.1.1 =
 * Added country flag icons
@@ -107,8 +108,8 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Upgrade Notice ==
 
-= 1.1.0 =
-* Bug fixes and improvements available.
+= 1.1.2 =
+* Bug fixes and minor improvements.
 
 
 

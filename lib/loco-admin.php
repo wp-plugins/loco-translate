@@ -79,9 +79,9 @@ abstract class LocoAdmin {
                     if( isset($_GET['custom-locale']) ){
                         try {
                             $locale = $_GET['custom-locale'] or $locale = $_GET['common-locale'];
-                            $po_path = self::msginit( $root, $locale, $export );
+                            $po_path = self::msginit( $root, $locale, $export, $head );
                             if( $po_path ){
-                                self::render_poeditor( $root, $po_path, $export );
+                                self::render_poeditor( $root, $po_path, $export, $head );
                                 break;
                             }
                         }
@@ -92,7 +92,7 @@ abstract class LocoAdmin {
                     }    
                     // else do a dry run to pre-empt failures
                     else {
-                        $dummy = self::msginit( $root, 'en', $export );
+                        $dummy = self::msginit( $root, 'en', $export, $head );
                     }
                     // else render msginit start screen
                     $title = Loco::__('New PO file');
@@ -106,8 +106,8 @@ abstract class LocoAdmin {
                 // Render existing file in editor if 'poedit' contains a valid file path relative to package root
                 //
                 if( isset($_GET['poedit']) && $po_path = self::resolve_path( $root.'/'.$_GET['poedit'] ) ){
-                    $export = self::parse_po( $po_path );
-                    self::render_poeditor( $root, $po_path, $export );
+                    $export = self::parse_po_with_headers( $po_path, $head );
+                    self::render_poeditor( $root, $po_path, $export, $head );
                     break;
                 }
                 
@@ -253,8 +253,8 @@ abstract class LocoAdmin {
      * Initialize a new PO file from a locale code
      * @return string path where PO file will be saved to
      */
-    private static function msginit( $root, $code, &$export ){
-
+    private static function msginit( $root, $code, &$export, &$head ){
+        $head = null;
         $locale = loco_locale_resolve( $code );
         if( ! $locale ){
             throw new Exception( Loco::__('You must specify a valid locale for a new PO file') );
@@ -265,7 +265,7 @@ abstract class LocoAdmin {
         $export = array();
         $files = self::find_po( $root );
         foreach( $files['pot'] as $pot_path ){
-            $pot = self::parse_po( $pot_path );    
+            $pot = self::parse_po_with_headers( $pot_path, $head );
             if( $pot && ! ( 1 === count($pot) && '' === $pot[0]['source'] ) ){
                 $export = $pot;
                 break;
@@ -310,6 +310,13 @@ abstract class LocoAdmin {
             }
         }
         
+        // set some default headers
+        if( ! isset($head) ){
+            $head = new LocoArray( array(
+                'Project-Id-Version' => basename($root),
+            ) );
+        }
+        
         // return path, export is set as reference
         return $po_dir.'/'.$po_name;
     }     
@@ -324,12 +331,12 @@ abstract class LocoAdmin {
      * @param string PO or PO file path
      * @param array data to load into editor
      */
-    private static function render_poeditor( $root, $path, array $data ){
+    private static function render_poeditor( $root, $path, array $data, LocoArray $head = null ){
         $pot = $po = $locale = null;
         $warnings = array();
         // remove header and check if empty
         $minlength = 1;
-        if( isset($data[0]) && $data[0]['source'] === '' ){
+        if( isset($data[0]['source']) && $data[0]['source'] === '' ){
             $data[0] = array();
             $minlength = 2;
         }
@@ -409,9 +416,24 @@ abstract class LocoAdmin {
         $path = self::trim_path( $path );
         $root = self::trim_path( $root );
         $name = basename( $path );
+        
+        // extract some PO headers
+        if( isset($head) ){
+            $proj = $head->trimmed('Project-Id-Version');
+            if( $proj && 'PACKAGE VERSION' !== $proj ){
+                $name = $proj;
+            }
+            else {
+                $head->add('Project-Id-Version', basename($root) );
+            }
+            $headers = $head->to_array();
+        }
+        else {
+            $headers = array( 'Project-Id-Version' => basename($root) );
+        }
 
         Loco::enqueue_scripts('build/admin-poedit');
-        Loco::render('admin-poedit', compact('root','path','file','po','pot','locale','name','type','modified','writable','warnings') );
+        Loco::render('admin-poedit', compact('root','path','file','po','pot','locale','headers','name','type','modified','writable','warnings') );
         return true;
     }
     

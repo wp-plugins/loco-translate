@@ -107,12 +107,8 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
     
     <script>
         loco = window.loco || {};
-        loco.conf = <?php echo json_encode( array(
-            'po'  => $po,
-            'pot' => $pot,
+        loco.conf = <?php echo json_encode( compact('po','pot','headers') + array(
             'locale' => $locale ? $locale->export() : null,
-            'writable' => $writable,
-            'modified' => $modified,
         ) )?>;
     </script>
     

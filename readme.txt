@@ -81,8 +81,8 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Screenshots ==
 
-1. Translating strings in the browser with the Loco PO Editor.
-2. Listing of all available translation files installed.
+1. Translating strings in the browser with the Loco PO Editor
+2. Listing of all available translation files installed
 
 
 

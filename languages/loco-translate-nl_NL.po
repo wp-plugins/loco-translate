@@ -1,0 +1,249 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Loco Translate 1.1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Sat Aug 31 2013 14:15:24 GMT+0100 (BST)\n"
+"PO-Revision-Date: Sat Aug 31 2013 15:04:18 GMT+0100 (BST)\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: Dutch\n"
+"Plural-Forms: nplurals=2; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 "
+"&& (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Loco-Target-Locale: nl_NL\n"
+"X-Generator: Loco - https://localise.biz/"
+
+# Translators: Bold text label in admin error messages
+msgctxt "Message label"
+msgid "Error"
+msgstr "Fout"
+
+msgctxt "Message label"
+msgid "Warning"
+msgstr "Waarschuwing"
+
+msgctxt "Message label"
+msgid "OK"
+msgstr "OK"
+
+msgid "New PO file"
+msgstr "Nieuw PO-bestand"
+
+msgid "Some files not writable"
+msgstr "Sommige bestanden hebben geen schrijfrechten"
+
+msgid "\"%s\" folder not writable"
+msgstr "Map \"%s\" heeft geen schrijfrechten"
+
+msgid "You must specify a valid locale for a new PO file"
+msgstr "Specifieer een geldige locale voor een nieuw PO-bestand"
+
+msgid "No translatable strings found"
+msgstr "Geen vertaalbare teksten gevonden"
+
+msgid "Cannot create a PO file."
+msgstr "Kan geen PO-bestand aanmaken"
+
+msgid "PO file already exists with locale %s"
+msgstr "PO-bestand bestaat al in locale %s"
+
+msgid ""
+"File cannot be created automatically. Fix the file permissions or use Download "
+"instead of Save"
+msgstr ""
+"Bestand kan niet automatisch aangemaakt worden. Verander de rechten of gebruik "
+"download en bewaar."
+
+msgid "%s file is empty"
+msgstr "Het bestand %s is leeg"
+
+msgid "Run Sync to update from source code"
+msgstr "Voer Sync uit om de broncode up te daten"
+
+msgid "No strings could be extracted from source code"
+msgstr "Er kon geen tekst uit de broncode gehaald worden"
+
+msgid "Run Sync to update from %s"
+msgstr "Gebruik Sync om vanuit %s up te daten"
+
+msgid "Source code has been modified, run Sync to update POT"
+msgstr "Broncode is veranderd. Gebruik Sync om POT up te daten"
+
+msgid "POT has been modified since PO file was saved, run Sync to update"
+msgstr "POT is veranderd sedert bewaren van het PO-bestand. Gebruik Sync om up te daten"
+
+msgid "Bad file path"
+msgstr "Foute bestandslocatie"
+
+msgid "%s%% translated"
+msgstr "%s%% vertaald"
+
+msgid "1 string"
+msgid_plural "%s strings"
+msgstr[0] "1 te vertalen tekst"
+msgstr[1] "%s te vertalen teksten"
+
+msgid "%s fuzzy"
+msgstr "%s onzeker"
+
+msgid "%s unstranslated"
+msgstr "%s onvertaald"
+
+msgid "Loco, Translation Management"
+msgstr "Loco, vertalingsbeheer"
+
+msgid "Manage Translations"
+msgstr "Beheer vertalingen"
+
+msgid "Manage translations"
+msgstr "Beheer vertalingen"
+
+msgid "Unknown language"
+msgstr "Onbekende taal"
+
+msgid "User does not have permission to manage translations"
+msgstr "Gebruik heeft geen rechten om vertalingen te beheren"
+
+msgid "Invalid data posted to server"
+msgstr "Ongeldige gegevens op server"
+
+msgid ""
+"Web server cannot create \"%s\" directory in \"%s\". Fix file permissions or create "
+"it manually."
+msgstr ""
+"Webserver kan map \"%s\" in \"%s\" niet aanmaken. Bewerk bestandsrechten of maak "
+"het zelf aan."
+
+msgid ""
+"Web server cannot create files in the \"%s\" directory. Fix file permissions or "
+"use the download function."
+msgstr ""
+"Webserver kan map \"%s\" in \"%s\" niet aanmaken. Bewerk bestandsrechten of gebruik "
+"de downloadfunctie."
+
+msgid ""
+"%s file is not writable by the web server. Fix file permissions or download and "
+"copy to \"%s/%s\"."
+msgstr ""
+"Bestand %s kan niet beschreven worden door de webserver. Bewerk de "
+"schrijfrechten of download en kopieer naar \"%s/%s\"."
+
+msgid "No strings could be extracted from source files"
+msgstr "Er konden geen te vertalen teksten uit de bronbestanden gehaald worden"
+
+msgctxt "Table header"
+msgid "Package details"
+msgstr "Pakketdetails"
+
+msgctxt "Table header"
+msgid "Translations (PO)"
+msgstr "Vertalingen (PO)"
+
+msgctxt "Table header"
+msgid "Template (POT)"
+msgstr "Sjabloon (POT)"
+
+msgctxt "Table header"
+msgid "File permissions"
+msgstr "Bestandsrechten"
+
+msgid "1 language"
+msgid_plural "%u languages"
+msgstr[0] "1 taal"
+msgstr[1] "%u talen"
+
+msgctxt "Modified time"
+msgid "Updated"
+msgstr "Geüpdated"
+
+msgctxt "Add button"
+msgid "New language"
+msgstr "Nieuwe taal"
+
+msgctxt "Add button"
+msgid "New template"
+msgstr "Nieuw sjabloon"
+
+msgid "Powered by"
+msgstr "Ondersteund door"
+
+msgid "Packages"
+msgstr "Pakketten"
+
+msgid "Template file"
+msgstr "Sjabloonbestand"
+
+msgid "Updated"
+msgstr "Geüpdated"
+
+msgid "never"
+msgstr "nooit"
+
+msgctxt "Editor button"
+msgid "Save"
+msgstr "Opslaan"
+
+msgctxt "Editor button"
+msgid "Download"
+msgstr "Downloaden"
+
+msgctxt "Editor button"
+msgid "Sync"
+msgstr "Sync"
+
+msgctxt "Editor button"
+msgid "Revert"
+msgstr "Ongedaan maken"
+
+msgctxt "Editor button"
+msgid "Add"
+msgstr "Toevoegen"
+
+msgctxt "Editor button"
+msgid "Del"
+msgstr "Verwijder"
+
+msgctxt "Editor button"
+msgid "Fuzzy"
+msgstr "Onzeker"
+
+msgid "Filter translations"
+msgstr "Filter vertalingen"
+
+msgctxt "Editor button"
+msgid "Help"
+msgstr "Help"
+
+msgid "Initialize new translations in %s"
+msgstr "Start nieuwe vertalingen in %s"
+
+msgid "Select from common languages"
+msgstr "Selecteer van gebruikelijke talen"
+
+msgctxt "Form label"
+msgid "or enter any language code"
+msgstr "of geef een taalcode op"
+
+msgctxt "Submit button"
+msgid "Start translating"
+msgstr "Start vertalen"
+
+msgid "New version available"
+msgstr "Nieuwe versie beschikbaar"
+
+msgid "Upgrade to version %s of Loco Translate"
+msgstr "Loco Translate upgraden naar versie %s"
+
+msgid "Select a plugin or theme to translate"
+msgstr "Selecteer een plug-in of thema om te vertalen"
+
+msgctxt "Package list header"
+msgid "Themes"
+msgstr "Thema's"
+
+msgctxt "Package list header"
+msgid "Plugins"
+msgstr "Plug-ins"

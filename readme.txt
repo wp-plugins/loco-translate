@@ -88,6 +88,10 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Changelog ==
 
+= 1.1.3 =
+* Improved PHP strings extraction
+* Fixed strict warning
+
 = 1.1.2 =
 * Added dutch translations
 * Better persistence of PO headers
@@ -108,7 +112,7 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Upgrade Notice ==
 
-= 1.1.2 =
+= 1.1.3 =
 * Bug fixes and minor improvements.
 
 

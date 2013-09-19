@@ -157,7 +157,7 @@ abstract class LocoAdmin {
      * initialize template arguments for a plugin or theme table row
      * @return array
      */
-    private function init_package_args( $root, $name, $type ){
+    private static function init_package_args( $root, $name, $type ){
         $files = self::find_po( $root );
         // filesystem warning. Only want one though
         $warnings = array();

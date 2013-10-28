@@ -57,12 +57,12 @@
             else if( file_exists($path) && ! is_writable($path) ){
                 throw new Exception('Cannot overwrite MO file');
             }
-            // attempt to shell out to msgfmt, assuming it's under $PATH
+            // attempt to shell out to msgfmt
             define( 'WHICH_MSGFMT', 'msgfmt' );
             function_exists('loco_compile_mo') or loco_require('build/gettext-compiled');
             $mo = loco_compile_mo( $po );
             if( ! $mo ){
-                throw new Exception('Zero bytes from msgfmt');
+                throw new Exception('Zero bytes from '.WHICH_MSGFMT);
             }
             $bytes = file_put_contents( $path, $mo );
             $response['compiled'] = $bytes;

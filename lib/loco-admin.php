@@ -35,11 +35,28 @@ abstract class LocoAdmin {
     }
     
     
+    
+    /**
+     * Admin settings page render call
+     */
+    public static function render_page_options(){
+        // update applicaion settings if posted
+        if( isset($_POST['loco']) && is_array( $update = $_POST['loco'] ) ){
+            $args = Loco::config( $update );
+            $args['success'] = Loco::__('Settings saved');
+        }
+        else {
+            $args = Loco::config();
+        }
+        Loco::render('admin-opts', $args );
+    }     
+    
+    
       
     /**
-     * Main admin page render call
+     * Admin tools page render call
      */
-    public static function render_page(){
+    public static function render_page_tools(){
         do {
             try {
                 
@@ -765,9 +782,15 @@ function _loco_hook__admin_print_styles(){
  * Admin menu registration callback
  */
 function _loco_hook__admin_menu() {
-    $page = array( 'LocoAdmin', 'render_page' );
-    $hook = add_management_page( Loco::__('Loco, Translation Management'), Loco::__('Manage Translations'), LOCO::CAPABILITY, Loco::NS, $page );
+    // Settings menu
+    $title = Loco::__('Loco, Translation Management');
+    $page = array( 'LocoAdmin', 'render_page_options' );
+    add_options_page( $title, Loco::__('Translation'), 'manage_options', Loco::NS, $page );
+    // Tools menu
+    $page = array( 'LocoAdmin', 'render_page_tools' );
+    $hook = add_management_page( $title, Loco::__('Manage Translations'), LOCO::CAPABILITY, Loco::NS, $page );
     add_action('admin_print_styles', '_loco_hook__admin_print_styles' );
+        
 }
 
 

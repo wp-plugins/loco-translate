@@ -227,6 +227,31 @@ abstract class Loco {
         return $key;
     }
     
+    
+    /**
+     * Plugin option getter/setter
+     */
+    public static function config( array $update = array() ){
+        static $conf;
+        if( ! isset($conf) ){
+            $conf = array (
+                'which_msgfmt' => '/usr/bin/msgfmt',
+            );
+            foreach( $conf as $key => $val ){
+                $conf[$key] = get_option( Loco::NS.'-'.$key);
+                if( empty($conf[$key]) && ! is_string($conf[$key]) ){
+                    $conf[$key] = $val;
+                }
+            }
+        }
+        foreach( $update as $key => $val ){
+            if( isset($conf[$key]) ){
+                update_option( Loco::NS.'-'.$key, $val );
+                $conf[$key] = $val;
+            }
+        }
+        return $conf;
+    }    
 }
 
 

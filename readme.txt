@@ -3,7 +3,7 @@ Contributors: timwhitlock
 Tags: translation, translators, localization, l10n, i18n, Gettext, POEdit
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.1.2
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,14 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Changelog ==
 
+= 1.2 =
+* Added settings screen with gettext config
+* Fixed msgfmt hanging bug
+
+= 1.1.3 =
+* Improved PHP strings extraction
+* Fixed strict warning
+
 = 1.1.2 =
 * Added dutch translations
 * Better persistence of PO headers
@@ -108,8 +116,8 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Upgrade Notice ==
 
-= 1.1.2 =
-* Bug fixes and minor improvements.
+= 1.2 =
+* Bug fixes and improvements.
 
 
 

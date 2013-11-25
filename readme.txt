@@ -3,7 +3,7 @@ Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,10 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Fixed incorrect version update message
+* Added note about Windows support in readme.txt
 
 = 1.2 =
 * Added settings screen with gettext config

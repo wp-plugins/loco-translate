@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Sat Aug 31 2013 14:15:24 GMT+0100 (BST)\n"
-"POT-Revision-Date: Sat Aug 31 2013 14:39:04 GMT+0100 (BST)\n"
+"POT-Revision-Date: Mon Oct 28 2013 18:07:30 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -28,6 +28,9 @@ msgstr ""
 
 msgctxt "Message label"
 msgid "OK"
+msgstr ""
+
+msgid "Settings saved"
 msgstr ""
 
 msgid "New PO file"
@@ -92,6 +95,9 @@ msgid "%s unstranslated"
 msgstr ""
 
 msgid "Loco, Translation Management"
+msgstr ""
+
+msgid "Translation"
 msgstr ""
 
 msgid "Manage Translations"
@@ -164,6 +170,15 @@ msgid "Powered by"
 msgstr ""
 
 msgid "Packages"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Path to msgfmt program for compiling MO files"
+msgstr ""
+
+msgid "Save settings"
 msgstr ""
 
 msgid "Template file"

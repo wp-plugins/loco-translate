@@ -1,6 +1,6 @@
 === Plugin Name ===
 Contributors: timwhitlock
-Tags: translation, translators, localization, l10n, i18n, Gettext, POEdit
+Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
 Tested up to: 3.5
 Stable tag: 1.2
@@ -40,6 +40,8 @@ If you want to create new translations for a theme or plugin, follow these steps
 
 Make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
 
+Please note that this plugin doesn’t support Windows servers.
+
 
 == Frequently Asked Questions ==
 
@@ -76,6 +78,11 @@ If you're unsure how to set file permission on your server, ask your systems adm
 If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your system, Loco Translate will automatcally create a MO file when you save a PO file.
 
 Ensure that the web server is able to write the file to disk, and also ensure that the `msgfmt` program is in a common location, such as `/usr/bin/msgfmt`.
+
+
+= Does it support Windows? =
+
+At the user end, yes you can access the interface on Windows using Internet Explorer. But Loco Translate does not support Windows versions of PHP, so if your server running Wordpress has a Windows operating system the back end won’t work.
 
 
 

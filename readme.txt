@@ -95,6 +95,11 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
+= 1.2.2 =
+* Fixed incorrect plural equation offset
+* Compacted pre-compiled locale data
+* Added settings link from plugin meta row
+
 = 1.2.1 =
 * Fixed incorrect version update message
 * Added note about Windows support in readme.txt

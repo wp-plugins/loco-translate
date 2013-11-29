@@ -158,8 +158,13 @@ abstract class LocoAdmin {
             $update = '';
             if( $updates = get_site_transient('update_plugins') ){
                 $key = Loco::NS.'/loco.php';
-                if( isset($updates->checked[$key]) && 1 === version_compare( $updates->checked[$key], Loco::VERSION ) ){
-                    $update = $updates->checked[$key];
+                if( isset($updates->checked[$key]) && isset($updates->response[$key]) ){
+                    $old = $updates->checked[$key];
+                    $new = $updates->response[$key]->new_version;
+                    if( 1 === version_compare( $new, $old ) ){
+                        // current version is lower than latest
+                        $update = $new;
+                    }
                 }
             }
             Loco::render('admin-root', compact('themes','plugins','update') );

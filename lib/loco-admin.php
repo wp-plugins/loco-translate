@@ -35,11 +35,28 @@ abstract class LocoAdmin {
     }
     
     
+    
+    /**
+     * Admin settings page render call
+     */
+    public static function render_page_options(){
+        // update applicaion settings if posted
+        if( isset($_POST['loco']) && is_array( $update = $_POST['loco'] ) ){
+            $args = Loco::config( $update );
+            $args['success'] = Loco::__('Settings saved');
+        }
+        else {
+            $args = Loco::config();
+        }
+        Loco::render('admin-opts', $args );
+    }     
+    
+    
       
     /**
-     * Main admin page render call
+     * Admin tools page render call
      */
-    public static function render_page(){
+    public static function render_page_tools(){
         do {
             try {
                 
@@ -157,7 +174,7 @@ abstract class LocoAdmin {
      * initialize template arguments for a plugin or theme table row
      * @return array
      */
-    private function init_package_args( $root, $name, $type ){
+    private static function init_package_args( $root, $name, $type ){
         $files = self::find_po( $root );
         // filesystem warning. Only want one though
         $warnings = array();
@@ -765,9 +782,15 @@ function _loco_hook__admin_print_styles(){
  * Admin menu registration callback
  */
 function _loco_hook__admin_menu() {
-    $page = array( 'LocoAdmin', 'render_page' );
-    $hook = add_management_page( Loco::__('Loco, Translation Management'), Loco::__('Manage Translations'), LOCO::CAPABILITY, Loco::NS, $page );
+    // Settings menu
+    $title = Loco::__('Loco, Translation Management');
+    $page = array( 'LocoAdmin', 'render_page_options' );
+    add_options_page( $title, Loco::__('Translation'), 'manage_options', Loco::NS, $page );
+    // Tools menu
+    $page = array( 'LocoAdmin', 'render_page_tools' );
+    $hook = add_management_page( $title, Loco::__('Manage Translations'), LOCO::CAPABILITY, Loco::NS, $page );
     add_action('admin_print_styles', '_loco_hook__admin_print_styles' );
+        
 }
 
 
@@ -777,6 +800,7 @@ function _loco_hook__admin_menu() {
 function _loco_hook__plugin_row_meta( $links, $file = '' ){
     if( false !== strpos($file,'/loco.php') ){
         $links[] = '<a href="tools.php?page='.Loco::NS.'"><strong>'.Loco::__('Manage translations').'</strong></a>';
+        $links[] = '<a href="options-general.php?page='.Loco::NS.'"><strong>'.Loco::__('Settings').'</strong></a>';
     } 
     return $links;
 }

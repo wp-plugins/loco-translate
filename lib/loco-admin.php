@@ -138,20 +138,22 @@ abstract class LocoAdmin {
             // default screen renders root page with available themes and plugins to translate
             $themes  = array();
             $plugins = array();
-            // @var $theme WP_Theme;
+            // @var WP_Theme $theme
             foreach( wp_get_themes( array( 'allowed' => true ) ) as $name => $theme ){
-                $root = $theme->get_theme_root().'/'.$name;
-                $name = $theme->get('Name');
-                $themes[] = self::init_package_args( $root, $name, 'theme' );
+                $themes[] = self::init_theme_args( $name, $theme );
             }
-            // @var $plugin array
+            // @var array $plugin
             foreach( get_plugins() as $subpath => $plugin ){
-                $root = WP_PLUGIN_DIR.'/'.dirname($subpath);
-                $name = $plugin['Name'];
-                $plugins[] = self::init_package_args( $root, $name, 'plugin' );
+                $plugins[] = self::init_plugin_args( $subpath, $plugin );
             }
-            // order most active first
+            // pick up remaining items under WP_LANG_DIR
+            $core = array();
+            $files = self::pop_lang_dir('admin-network') and $core[] = self::init_package_args( WP_LANG_DIR, $files, 'Network Admin', 'core' );
+            $files = self::pop_lang_dir('admin') and $core[] = self::init_package_args( WP_LANG_DIR, $files, 'Admin', 'core' );
+
+            // order most active packges first in each set
             $sorter = array( __CLASS__, 'sort_packages' );
+            usort( $core, $sorter );
             usort( $themes, $sorter );
             usort( $plugins, $sorter );
             // upgrade notice
@@ -167,21 +169,45 @@ abstract class LocoAdmin {
                     }
                 }
             }
-            Loco::render('admin-root', compact('themes','plugins','update') );
+            Loco::render('admin-root', compact('core','themes','plugins','update') );
         }
         while( false );
     } 
     
     
     
+    /**
+     * Initialize template arguments for a theme package
+     */    
+    private static function init_theme_args( $name, WP_Theme $theme ){
+        $root = $theme->get_theme_root().'/'.$name;
+        $name = $theme->get('Name');
+        $files = self::find_po( $root );
+        // translations may also be under wp-content/languages
+        if( $domain = $theme->get('TextDomain') ){
+            $files = self::pop_lang_dir( $domain, $files );
+        }
+        return self::init_package_args( $root, $files, $name, 'theme' );
+    }
+    
+    
+    /**
+     * Initialize template arguments for a plugin package
+     */    
+    private static function init_plugin_args( $subpath, array $plugin ){
+        $root = WP_PLUGIN_DIR.'/'.dirname($subpath);
+        $name = $plugin['Name'];
+        $files = self::find_po( $root );
+        // @todo can plugin files be under wp-content/languages?
+        return self::init_package_args( $root, $files, $name, 'theme' );
+    }
+    
     
     /**
      * initialize template arguments for a plugin or theme table row
      * @return array
      */
-    private static function init_package_args( $root, $name, $type ){
-        $files = self::find_po( $root );
-        // filesystem warning. Only want one though
+    private static function init_package_args( $root, array $files, $name, $type ){
         $warnings = array();
         foreach( $files as $ext => $paths ){
             foreach( $paths as $path ){
@@ -454,6 +480,13 @@ abstract class LocoAdmin {
             $headers = array( 'Project-Id-Version' => basename($root) );
         }
 
+        // set Last-Translator if PO file
+        if( ! $ispot ){
+            /* @var WP_User $user */
+            $user = wp_get_current_user() and
+            $headers['Last-Translator'] = $user->get('display_name').' <'.$user->get('user_email').'>';
+        }
+    
         Loco::enqueue_scripts('build/admin-poedit');
         Loco::render('admin-poedit', compact('root','path','file','po','pot','locale','headers','name','type','modified','writable','warnings') );
         return true;
@@ -510,6 +543,33 @@ abstract class LocoAdmin {
     }
     
     
+    
+    /**
+     * Recursively find PO and POT files under WP_LANG_DIR (wp-content/languages)
+     * Then remove them so after all packages are processed we can pick up orphans.
+     */
+    public static function pop_lang_dir( $domain = '', $filtered = array() ){
+        static $found;
+        if( ! isset($found) ){
+            $found = array();
+            if( defined('WP_LANG_DIR') && is_dir(WP_LANG_DIR) ){
+                $found = self::find_po( WP_LANG_DIR );
+            }
+        }
+        if( ! $domain ){
+            return $found;
+        }
+        foreach( $found as $ext => $paths ){
+            isset($filtered[$ext]) or $filtered[$ext] = array();
+            foreach( $paths as $i => $path ){
+                if( 0 === strpos( basename($path), $domain.'-' ) ){
+                    $filtered[$ext][] = $path;
+                    unset( $found[$ext][$i] );
+                }
+            }
+        }
+        return $filtered;
+    }
     
     
     
@@ -687,9 +747,18 @@ abstract class LocoAdmin {
      * Generate a link to edit a po/pot file
      */
     public static function edit_link( $root, $path, $label = '', $icon = '' ){
+        // path may be under given root
+        if( 0 === strpos($path, $root) ){
+            $path = str_replace( $root.'/', '', $path );
+        }
+        // or under WP_LANG_DIR
+        else if( defined('WP_LANG_DIR') && 0 === strpos($path, WP_LANG_DIR) ){
+            $path = str_replace( WP_LANG_DIR.'/', '', $path );
+            $root = WP_LANG_DIR;
+        }
         $url = self::uri( array(
             'root'   => self::trim_path( $root ),
-            'poedit' => str_replace( $root.'/', '', $path ),
+            'poedit' => $path,
         ) );
         if( ! $label ){
             $label = basename( $path );

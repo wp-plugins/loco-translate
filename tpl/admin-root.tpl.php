@@ -32,7 +32,7 @@ $nav = array (
 
 
     <?php if( $themes ):?> 
-    <div id="icon-themes" class="icon32"><br /></div>
+    <div class="icon32 icon-appearance"><br /></div>
     <h2>
         <?php Loco::h( Loco::_x('Themes','Package list header') )?> 
     </h2>
@@ -43,12 +43,23 @@ $nav = array (
 
 
     <?php if( $plugins ):?> 
-    <div id="icon-plugins" class="icon32"><br /></div>
+    <div class="icon32 icon-plugins"><br /></div>
     <h2>
         <?php Loco::h( Loco::_x('Plugins','Package list header') )?> 
     </h2>
     <div class="loco-list loco-list-plugins">
         <?php Loco::render( 'admin-list', array('items'=>$plugins) ) ?> 
+    </div>
+    <?php endif?> 
+
+
+    <?php if( $core ):?> 
+    <div class="icon32 icon-generic"><br /></div>
+    <h2>
+        <?php Loco::h( Loco::_x('Core','Package list header') )?> 
+    </h2>
+    <div class="loco-list loco-list-core">
+        <?php Loco::render( 'admin-list', array('items'=>$core) ) ?> 
     </div>
     <?php endif?> 
 

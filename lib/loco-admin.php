@@ -82,7 +82,7 @@ abstract class LocoAdmin {
                     $export = self::xgettext( $root, $domain );
                     // Establish best/intended location for new POT file
                     foreach( $files['po'] as $po_path ){
-                        if( self::resolve_file_domain($path) === $domain ){
+                        if( self::resolve_file_domain($po_path) === $domain ){
                             $dir = dirname( $po_path );
                             break;
                         }
@@ -278,7 +278,7 @@ abstract class LocoAdmin {
                 if( $pot && ! ( 1 === count($pot) && '' === $pot[0]['source'] ) ){
                     $export = $pot;
                     $po_dir = dirname($pot_path);
-                    $po_name = $pot_domain;
+                    $po_name = $pot_domain.'-'.$locale->get_code().'po';
                     break;
                 }
             }
@@ -308,17 +308,17 @@ abstract class LocoAdmin {
             }
             // with no matching PO files, we'll place it in the default location
             $po_dir = $root;
-            $po_name = $locale->get_code().'.po';
+            $po_name = $domain.'-'.$locale->get_code().'.po';
             if( 0 !== strpos($po_dir, WP_LANG_DIR) ){
                 $po_dir .= '/languages';
             }
             break;
         }
-        
+
         // set some default headers
         if( ! isset($head) ){
             $head = new LocoArray( array(
-                'Project-Id-Version' => basename($root),
+                //'Project-Id-Version' => basename($root),
             ) );
         }
         
@@ -420,7 +420,14 @@ abstract class LocoAdmin {
         // no longer need the full local paths
         $path = self::trim_path( $path );
         $root = self::trim_path( $root );
-        $name = basename( $path );
+        
+        // get name from package
+        if( $theme = self::resolve_file_theme($path) ){
+            $name = $theme->get('Name');
+        }
+        else {
+            $name = basename( $path );
+        }
         
         // extract some PO headers
         if( isset($head) ){
@@ -429,12 +436,12 @@ abstract class LocoAdmin {
                 $name = $proj;
             }
             else {
-                $head->add('Project-Id-Version', basename($root) );
+                $head->add('Project-Id-Version', $name );
             }
             $headers = $head->to_array();
         }
         else {
-            $headers = array( 'Project-Id-Version' => basename($root) );
+            $headers = array( 'Project-Id-Version' => $name );
         }
 
         // set Last-Translator if PO file
@@ -603,22 +610,23 @@ abstract class LocoAdmin {
      * @return array Loco's internal array format
      */
     public static function xgettext( $dir, $domain = '' ){
-        // source code may not be under the same path as PO file
+        /*/ source code may not be under the same path as PO file
         while( 0 === strpos($dir, WP_LANG_DIR ) ){
+            if( ! $domain ){
+                throw new Exception('Unknown text domain for '.$rel);
+            }
             $rel = substr_replace( $dir, '', 0, strlen(WP_LANG_DIR) );
             // may have known source location
             if( 'admin' === $domain ){
                 // @todo
             }
             // source may be a theme
-            if( preg_match('!/themes/(.+)-[a-z_]+\.po$!i', $rel, $r ) ){
-                if( $theme = wp_get_theme( $r[1] ) ){
-                    $dir = $theme->get_theme_root().'/'.$theme->get('TextDomain');
-                    break;
-                }
+            if( ( $theme = wp_get_theme($domain) ) && ! $theme->errors() ){
+                $dir = $theme->get_theme_root().'/'.$theme->get('TextDomain');
+                break;
             }
             throw new Exception("I don't know where to find source code in text domain '".$domain."'");
-        }
+        }*/
         // collect all strings
         // @todo filter on domain
         class_exists('LocoPHPExtractor') or loco_require('build/gettext-compiled');
@@ -701,6 +709,18 @@ abstract class LocoAdmin {
             $filename = str_replace('.', '', $basename ); // PHP < 5.2.0
         }
         return preg_replace('/-[a-z]{2}_[A-Z]{2}$/', '', $filename );
+    }
+    
+    
+    /**
+     * Resolve a PO file to a theme
+     * @return WP_Theme
+     */
+    public static function resolve_file_theme( $path ){
+        if( false !== strpos($path,'/themes/') ){
+            $domain = self::resolve_file_domain($path);
+            return wp_get_theme( $domain );
+        }
     }
     
      

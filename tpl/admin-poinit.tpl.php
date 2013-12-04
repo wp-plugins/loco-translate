@@ -20,7 +20,7 @@ $nav = array (
     <form action="" method="get" class="wp-core-ui" id="loco-msginit">
         <input type="hidden" name="page" value="<?php Loco::h( Loco::NS )?>" />
         <input type="hidden" name="root" value="<?php Loco::h( $root )?>" />
-        <input type="hidden" name="msginit" value="1" />
+        <input type="hidden" name="msginit" value="<?php Loco::h( $domain )?>" />
         <p>
             <select name="common-locale">
                 <option value="">

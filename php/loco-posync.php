@@ -9,12 +9,12 @@
         throw new Exception( Loco::__('Invalid data posted to server'), 422 );
     }
   
-    // path is allowed not exist
+    // path is allowed to not exist
     if( '/' !== $path{0} ){
         $path = WP_CONTENT_DIR.'/'.$path;
     }
 
-    // but root must
+    // but root must exist
     $root = LocoAdmin::resolve_path( $root, true );
 
     while( true ){

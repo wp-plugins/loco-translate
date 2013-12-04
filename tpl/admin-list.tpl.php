@@ -29,9 +29,8 @@
                 <tr class="inactive">
                     <td>
                         <ul class="loco-details">
-                            <strong><?php Loco::h($name)?></strong>
-                            <li>
-                                
+                            <li title="<?php Loco::h($domain)?>">
+                                <strong><?php Loco::h($name)?></strong>
                             </li>
                             <li>
                                 <?php Loco::h( _n( '1 language', '%u languages', $n ), $n )?>
@@ -49,7 +48,7 @@
                     <td>
                         <ul>
                             <li class="loco-add">
-                                <?php echo LocoAdmin::msginit_link( $root, Loco::_x('New language','Add button') )?> 
+                                <?php echo LocoAdmin::msginit_link( $root, $domain )?> 
                             </li><?php
                             foreach( $po as $po_data ):
                                 extract( $po_data, EXTR_PREFIX_ALL, 'po' );
@@ -78,7 +77,7 @@
                          // else no POT file
                          else:?> 
                             <li class="loco-add">
-                                <?php echo LocoAdmin::xgettext_link( $root, Loco::_x('New template','Add button') )?> 
+                                <?php echo LocoAdmin::xgettext_link( $root, $domain, $type )?> 
                             </li><?php 
                          endif;?>
                         </ul>

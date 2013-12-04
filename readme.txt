@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: timwhitlock
-Tags: translation, translators, localization, l10n, i18n, Gettext, POEdit
+Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.1.2
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,8 @@ If you want to create new translations for a theme or plugin, follow these steps
 4. Click `+ New language` and follow the on-screen prompts.
 
 Make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
+
+Please note that this plugin doesn’t support Windows servers.
 
 
 == Frequently Asked Questions ==
@@ -78,6 +80,11 @@ If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your sy
 Ensure that the web server is able to write the file to disk, and also ensure that the `msgfmt` program is in a common location, such as `/usr/bin/msgfmt`.
 
 
+= Does it support Windows? =
+
+At the user end, yes you can access the interface on Windows using Internet Explorer. But Loco Translate does not support Windows versions of PHP, so if your server running Wordpress has a Windows operating system the back end won’t work.
+
+
 
 == Screenshots ==
 
@@ -87,6 +94,28 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 
 == Changelog ==
+
+= 1.2.3 =
+* Last-Translator header added to PO files from Wordpress user
+* Experimental support for files under WP_LANG_DIR
+* Disabling cache when WP_DEBUG = true
+
+= 1.2.2 =
+* Fixed incorrect plural equation offset
+* Compacted pre-compiled locale data
+* Added settings link from plugin meta row
+
+= 1.2.1 =
+* Fixed incorrect version update message
+* Added note about Windows support in readme.txt
+
+= 1.2 =
+* Added settings screen with gettext config
+* Fixed msgfmt hanging bug
+
+= 1.1.3 =
+* Improved PHP strings extraction
+* Fixed strict warning
 
 = 1.1.2 =
 * Added dutch translations
@@ -108,8 +137,8 @@ Ensure that the web server is able to write the file to disk, and also ensure th
 
 == Upgrade Notice ==
 
-= 1.1.2 =
-* Bug fixes and minor improvements.
+= 1.2 =
+* Bug fixes and improvements.
 
 
 

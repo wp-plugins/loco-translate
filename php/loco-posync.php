@@ -28,8 +28,9 @@
         // If file we're syncing is POT, we can only sync from sources
         if( ! LocoAdmin::is_pot($path) ){
                
-            // if a POT file exists, sync from that.
-            if( $pot_path = $package->get_pot( $path ) ){
+            // if a POT file exists, sync from that
+            $domain = LocoAdmin::resolve_file_domain($path);
+            if( $pot_path = $package->get_pot($domain) ){
                 $exp = LocoAdmin::parse_po( $pot_path );
                 if( ! $exp || ( 1 === count($exp) && '' === $exp[0]['source'] ) ){
                     //throw new Exception( Loco::__('POT file is empty') );
@@ -56,9 +57,15 @@
     // sync selected headers
     $headers = array();
     if( '' === $exp[0]['source'] ){
-        $keep = array('Project-Id-Version'=>'','Language-Team'=>'','POT-Creation-Date'=>'','POT-Revision-Date'=>'');
+        $keep = array('Project-Id-Version','Language-Team','POT-Creation-Date','POT-Revision-Date');
         $head = loco_parse_po_headers( $exp[0]['target'] );
-        $headers = array_intersect_key( $head->to_array(), $keep );
+        $headers = array_intersect_key( $head->to_array(), array_flip($keep) );
+        // add prefixed header keys that can't be included above
+        foreach( $head as $key => $value ){
+            if( 0 === strpos($key, 'X-Poedit-' ) ){
+                $headers[$key] = $value;
+            }
+        }
         $exp[0] = array();
     }
         

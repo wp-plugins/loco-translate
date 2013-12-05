@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Sat Aug 31 2013 14:15:24 GMT+0100 (BST)\n"
-"POT-Revision-Date: Thu Dec 05 2013 20:58:21 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Thu Dec 05 2013 22:31:27 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -134,11 +134,7 @@ msgstr ""
 msgid "Translation"
 msgstr ""
 
-#: lib/loco-admin.php:827
-msgid "Manage Translations"
-msgstr ""
-
-#: lib/loco-admin.php:838
+#: lib/loco-admin.php:827 lib/loco-admin.php:838
 msgid "Manage translations"
 msgstr ""
 

@@ -389,9 +389,11 @@ abstract class LocoAdmin {
         
         // overwrite source location headers
         // create a relative path to target source directory from location of PO
-        $head->add('X-Poedit-Basepath', '.' );
-        foreach( $package->get_source_dirs($path) as $i => $dir ){
-            $head->add('X-Poedit-SearchPath-'.$i, $dir );
+        if( ! $head->has('X-Poedit-Basepath') ){
+            $head->add('X-Poedit-Basepath', '.' );
+            foreach( $package->get_source_dirs($path) as $i => $dir ){
+                $head->add('X-Poedit-SearchPath-'.$i, $dir );
+            }
         }
         
         // compiled keywords for running source extraction in POEdit
@@ -824,7 +826,7 @@ function _loco_hook__admin_menu() {
     add_options_page( $title, Loco::__('Translation'), 'manage_options', Loco::NS, $page );
     // Tools menu
     $page = array( 'LocoAdmin', 'render_page_tools' );
-    $hook = add_management_page( $title, Loco::__('Manage Translations'), LOCO::CAPABILITY, Loco::NS, $page );
+    $hook = add_management_page( $title, Loco::__('Manage translations'), LOCO::CAPABILITY, Loco::NS, $page );
     add_action('admin_print_styles', '_loco_hook__admin_print_styles' );
         
 }

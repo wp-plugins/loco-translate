@@ -395,7 +395,7 @@ abstract class LocoAdmin {
         }
         
         // compiled keywords for running source extraction in POEdit
-        // @todo fix this: POEdit is extracting T_STRING - do we need to force -LPHP?
+        // note that these aren't just wordpress keywords, but they're the same as we're using in self::xgettext
         $ext = new LocoPHPExtractor;
         $head->add('X-Poedit-KeywordsList', implode( ';', $ext->get_xgettext_keywords() ) );
     

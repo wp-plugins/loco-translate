@@ -6,14 +6,23 @@
  
     DOING_AJAX or die();
 
-    if( empty($path) || empty($po) ){
+    if( empty($path) || empty($po) || empty($name) || empty($type) ){
         throw new Exception( Loco::__('Invalid data posted to server'), 422 );
     }
   
+    // path is allowed to not exist yet
     if( '/' !== $path{0} ){
         $path = WP_CONTENT_DIR.'/'.$path;
     }
-    
+
+    // but package must exist so we can get POT or source
+    /* @var $package LocoPackage */
+    loco_require('loco-packages','loco-locales');
+    $package = LocoPackage::get( $name, $type );
+    if( ! $package ){
+        throw new Exception( sprintf( Loco::__('Package not found called %s'), $name ), 404 );
+    }
+
     $fname = basename($path);
     $dname = basename( dirname($path) );
     $ispot = LocoAdmin::is_pot( $fname );
@@ -46,7 +55,10 @@
         'modified' => LocoAdmin::format_datetime( filemtime($path) ),
     );
     
-    
+    // flush package from cache, so it's regenerated next list view with new stats
+    $package->uncache();
+
+   
     // attempt to write MO file also, but may fail for numerous reasons.
     if( ! $ispot ){
         try {

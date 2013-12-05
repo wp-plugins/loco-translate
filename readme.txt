@@ -95,8 +95,11 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
-= 1.2.3 =
-* Last-Translator added to PO files from Wordpress user
+= 1.3 =
+* Last-Translator header added to PO files from Wordpress user
+* Support for files under WP_LANG_DIR
+* Disabling cache when WP_DEBUG = true
+* Better POEdit integration, including source headers and file refs
 
 = 1.2.2 =
 * Fixed incorrect plural equation offset

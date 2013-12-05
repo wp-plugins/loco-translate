@@ -60,45 +60,55 @@ abstract class LocoAdmin {
         do {
             try {
                 
-                // libs required for all admin pages
-                loco_require('loco-locales');
+                // libs required for all manage translation pages
+                loco_require('loco-locales','loco-packages');
                 
-                // most actions define a package root directory.
-                $root = isset($_GET['root']) ? self::resolve_path( $_GET['root'], true ) : '';
+
+                // most actions except root listing define a single package by name and type
+                $package = null;
+                if( isset($_GET['name']) && isset($_GET['type']) ){
+                    $package = LocoPackage::get( $_GET['name'], $_GET['type'] );
+                }
 
 
                 // Extract messages if 'xgettext' is in query string
                 //
-                if( isset($_GET['xgettext']) && $root ){
-                    $name = basename($root);
-                    $files = self::find_po( $root );
-                    $pot_path = current($files['pot']);
+                if( isset($_GET['xgettext']) ){
+                    $domain = $_GET['xgettext'];
+                    if( $pot_path = $package->get_pot($domain) ){
+                        throw new Exception('POT already exists at '.$pot_path );
+                    }
                     // extract from all PHP source files
-                    $export = self::xgettext( $root );
-                    // POT could already exist if we're regenerating
-                    if( $pot_path ){
-                        // @todo: should we merge with existing?
+                    $export = self::xgettext( $package->get_source_dirs(), $domain );
+                    // Establish best/intended location for new POT file
+                    $dir = null;
+                    while( ! $dir ){
+                        foreach( $package->get_po($domain) as $po_path ){
+                            $dir = dirname( $po_path );
+                            break 2;
+                        }
+                        $dir = $package->get_root();
+                        if( 0 !== strpos($dir, WP_LANG_DIR) ){
+                            $dir .= '/languages';
+                        }
                     }
-                    // if creating a new POT file we will guess likely location
-                    else {
-                        $dir = $files['po'] ? dirname( current($files['po']) ) : $root.'/languages';
-                        $pot_path = $dir.'/'.$name.'.pot';
-                    }
-                    self::render_poeditor( $root, $pot_path, $export );
+                    $pot_path = $dir.'/'.$domain.'.pot';
+                    self::render_poeditor( $package, $pot_path, $export );
                     break;
                 }
 
 
                 // Initialize a new PO file if 'msginit' is in query string
                 //
-                if( isset($_GET['msginit']) && $root ){
+                if( isset($_GET['msginit']) ){
+                    $domain = $_GET['msginit'];
                     // handle PO file creation if locale is set
                     if( isset($_GET['custom-locale']) ){
                         try {
                             $locale = $_GET['custom-locale'] or $locale = $_GET['common-locale'];
-                            $po_path = self::msginit( $root, $locale, $export, $head );
+                            $po_path = self::msginit( $package, $domain, $locale, $export, $head );
                             if( $po_path ){
-                                self::render_poeditor( $root, $po_path, $export, $head );
+                                self::render_poeditor( $package, $po_path, $export, $head );
                                 break;
                             }
                         }
@@ -109,22 +119,22 @@ abstract class LocoAdmin {
                     }    
                     // else do a dry run to pre-empt failures
                     else {
-                        $dummy = self::msginit( $root, 'en', $export, $head );
+                        $dummy = self::msginit( $package, $domain, 'en', $export, $head );
                     }
                     // else render msginit start screen
                     $title = Loco::__('New PO file');
                     $locales = loco_require('build/locales-compiled');
                     Loco::enqueue_scripts('admin-poinit');
-                    Loco::render('admin-poinit', compact('root','title','locales') );
+                    Loco::render('admin-poinit', compact('package','domain','title','locales') );
                     break;
                 }
 
 
-                // Render existing file in editor if 'poedit' contains a valid file path relative to package root
+                // Render existing file in editor if 'poedit' contains a valid file path relative to content directory
                 //
-                if( isset($_GET['poedit']) && $po_path = self::resolve_path( $root.'/'.$_GET['poedit'] ) ){
+                if( isset($_GET['poedit']) && $po_path = self::resolve_path( $_GET['poedit'] ) ){
                     $export = self::parse_po_with_headers( $po_path, $head );
-                    self::render_poeditor( $root, $po_path, $export, $head );
+                    self::render_poeditor( $package, $po_path, $export, $head );
                     break;
                 }
                 
@@ -136,28 +146,42 @@ abstract class LocoAdmin {
             }
             
             // default screen renders root page with available themes and plugins to translate
-            $themes  = array();
-            $plugins = array();
+    
             // @var WP_Theme $theme
+            $themes = array();
             foreach( wp_get_themes( array( 'allowed' => true ) ) as $name => $theme ){
-                $themes[] = self::init_theme_args( $name, $theme );
+                $package = LocoPackage::get( $name, 'theme' ) and
+                $themes[] = $package;
             }
             // @var array $plugin
-            foreach( get_plugins() as $subpath => $plugin ){
-                $plugins[] = self::init_plugin_args( $subpath, $plugin );
+            $plugins = array();
+            foreach( get_plugins() as $plugin_file => $plugin ){
+                $package = LocoPackage::get( $plugin_file, 'plugin' ) and
+                $plugins[] = $package;
             }
             // pick up remaining items under WP_LANG_DIR
             $core = array();
-            $files = self::pop_lang_dir('admin-network') and $core[] = self::init_package_args( WP_LANG_DIR, $files, 'Network Admin', 'core' );
-            $files = self::pop_lang_dir('admin') and $core[] = self::init_package_args( WP_LANG_DIR, $files, 'Admin', 'core' );
-
+            /*
+            $cores = array (
+                //'admin-network'     => 'Network',
+                'admin'             => 'Admin Network',
+                'continents-cities' => 'Timezones',
+                'ms'                => 'Multisite',
+                ''                  => 'Other',
+            );
+            foreach( $cores as $domain => $name ){
+                if( $package = LocoPackage::get_core( $domain, $name ) ){
+                    $core[] = self::init_package_args( $package, 'core' );
+                }
+            }
+            */ 
             // order most active packges first in each set
-            $sorter = array( __CLASS__, 'sort_packages' );
-            usort( $core, $sorter );
-            usort( $themes, $sorter );
-            usort( $plugins, $sorter );
+            $args = array (
+                'themes'  => LocoPackage::sort_modified( $themes ),
+                'plugins' => LocoPackage::sort_modified( $plugins ),
+                'core'    => LocoPackage::sort_modified( $core ),
+            );
             // upgrade notice
-            $update = '';
             if( $updates = get_site_transient('update_plugins') ){
                 $key = Loco::NS.'/loco.php';
                 if( isset($updates->checked[$key]) && isset($updates->response[$key]) ){
@@ -165,123 +189,17 @@ abstract class LocoAdmin {
                     $new = $updates->response[$key]->new_version;
                     if( 1 === version_compare( $new, $old ) ){
                         // current version is lower than latest
-                        $update = $new;
+                        $args['update'] = $new;
                     }
                 }
             }
-            Loco::render('admin-root', compact('core','themes','plugins','update') );
+            Loco::render('admin-root', $args );
         }
         while( false );
     } 
     
     
     
-    /**
-     * Initialize template arguments for a theme package
-     */    
-    private static function init_theme_args( $name, WP_Theme $theme ){
-        $root = $theme->get_theme_root().'/'.$name;
-        $name = $theme->get('Name');
-        $files = self::find_po( $root );
-        // translations may also be under wp-content/languages
-        if( $domain = $theme->get('TextDomain') ){
-            $files = self::pop_lang_dir( $domain, $files );
-        }
-        return self::init_package_args( $root, $files, $name, 'theme' );
-    }
-    
-    
-    /**
-     * Initialize template arguments for a plugin package
-     */    
-    private static function init_plugin_args( $subpath, array $plugin ){
-        $root = WP_PLUGIN_DIR.'/'.dirname($subpath);
-        $name = $plugin['Name'];
-        $files = self::find_po( $root );
-        // @todo can plugin files be under wp-content/languages?
-        return self::init_package_args( $root, $files, $name, 'theme' );
-    }
-    
-    
-    /**
-     * initialize template arguments for a plugin or theme table row
-     * @return array
-     */
-    private static function init_package_args( $root, array $files, $name, $type ){
-        $warnings = array();
-        foreach( $files as $ext => $paths ){
-            foreach( $paths as $path ){
-                $dir = dirname($path);
-                if( ! is_writable($path) ){
-                    $warnings[] = Loco::__('Some files not writable');
-                    break 2;
-                }
-            }
-        }
-        if( ! $warnings ){
-            if( ! isset($dir) ){
-                $dir = $root.'/languages';
-            }
-            if( ! is_writable($dir) ){
-                $warnings[] = sprintf( Loco::__('"%s" folder not writable'), basename($dir) );
-            }
-        }
-        // find newest file in package to establish cache invalidation
-        $mtime = self::newest_mtime_recursive( $files['po'], $files['pot'] );
-        // get meta data or re-generate meta data from files
-        $mkey = $type.'_'.$name;
-        $meta = Loco::cached( $mkey );
-        if( ! $meta || $mtime > $meta['mtime'] || Loco::VERSION !== $meta['v'] ){
-            $pot = $po = array();
-            foreach( $files['pot'] as $pot_path ){
-                $pot[] = array (
-                    'path' => $pot_path,
-                );
-            }
-            // get progress and locale for each PO file
-            foreach( $files['po'] as $po_path ){
-                try {
-                    unset($headers);    
-                    $export = self::parse_po_with_headers( $po_path, $headers );
-                    $stats  = loco_po_stats( $export );
-                }
-                catch( Exception $Ex ){
-                    // self::warning( $Ex->getMessage() );
-                    continue;
-                }
-                $po[] = array (
-                    'path'   => $po_path,
-                    'name'   => str_replace( array('.po',$name), array('',''), basename($po_path) ),
-                    'stats'  => $stats,
-                    'status' => self::format_progress_summary($stats),
-                    'length' => count( $export ),
-                    'locale' => LocoAdmin::resolve_file_locale($po_path),
-                );
-            }
-            $meta = compact('mtime','po','pot');
-            $meta['v'] = Loco::VERSION;
-            Loco::cache( $mkey, $meta );
-        }
-        return $meta + compact('root','warnings','name');
-    }    
-    
-
-    
-    /**
-     * Sort packages according to most recently updated language files
-     */
-    private static function sort_packages( array $a, array $b ){
-        if( $a['mtime'] > $b['mtime'] ){
-            return -1;
-        }
-        if( $b['mtime'] > $a['mtime'] ){
-            return 1;
-        }
-        return 0;
-    }    
-
-
-
     /**
      * utility gets newest file modification from an array of files
      */
@@ -301,71 +219,60 @@ abstract class LocoAdmin {
      * Initialize a new PO file from a locale code
      * @return string path where PO file will be saved to
      */
-    private static function msginit( $root, $code, &$export, &$head ){
+    private static function msginit( LocoPackage $package, $domain = '', $code, &$export, &$head ){
         $head = null;
-        $locale = loco_locale_resolve( $code );
+        $export = array();
+        $locale = $code ? loco_locale_resolve($code) : null;
         if( ! $locale ){
             throw new Exception( Loco::__('You must specify a valid locale for a new PO file') );
         }
-        
-        // extract POT if possible, falling back to source code if empty
-        $pot_path = '';
-        $export = array();
-        $files = self::find_po( $root );
-        foreach( $files['pot'] as $pot_path ){
+        // default domain and PO file name
+        if( ! $domain ){
+            $domain = $package->get_domain();
+        }
+        $po_dir = '';
+        $po_name = $domain.'-'.$locale->get_code().'.po';
+
+        // extract from POT if possible
+        if( $pot_path = $package->get_pot( $domain ) ){
             $pot = self::parse_po_with_headers( $pot_path, $head );
             if( $pot && ! ( 1 === count($pot) && '' === $pot[0]['source'] ) ){
                 $export = $pot;
-                break;
+                $po_dir = dirname($pot_path);
             }
         }
+
+        // else extract from source code when no POT
         if( ! $export ){
-            $export = self::xgettext( $root );
+            $export = self::xgettext( $package->get_source_dirs() );
             if( ! $export ){
                 throw new Exception( Loco::__('No translatable strings found').'. '.Loco::__('Cannot create a PO file.') );
             }
         }
 
-        // decide on location for PO file and check it does't exist already
-        $po_name = $po_dir = '';
-        foreach( $files['po'] as $po_path ){
-            if( $existing = self::resolve_file_locale( $po_path ) ){
-                if( $locale->equal_to($existing) ){
-                    throw new Exception( sprintf(Loco::__('PO file already exists with locale %s'), $existing->get_code() ) );
+        // If no POT file was found, establish best location for new PO file
+        while( ! $po_dir ){
+            foreach( $package->get_po($domain) as $po_code => $po_path ){
+                // have po file in domain, but could be locale conflict
+                $po_locale = loco_locale_resolve( $po_code );
+                if( $locale->equal_to($po_locale) ){
+                    throw new Exception( sprintf(Loco::__('PO file already exists with locale %s'), $po_code ) );
                 }
-                // attempt to name new file according to this one
-                if( ! $po_name ){
-                    $pattern = '/(^|[^a-z])'.$existing->preg().'([^a-z]|$)/i';
-                    $basename = preg_replace( $pattern, '\\1'.$locale->get_code().'\\2', basename($po_path), 1, $count );
-                    if( $count ){
-                        $po_name = $basename;
-                        $po_dir  = dirname($po_path);
-                    }
-                }
+                // attempt to place new file along-side existing one
+                $po_dir = dirname($po_path);
+                break 2;
             }
+            // with no matching PO files, we'll place it in default location
+            // @todo check multiple locations for first writable directory
+            $po_dir = $package->get_root();
+            if( 0 !== strpos($po_dir, WP_LANG_DIR) ){
+                $po_dir .= '/languages';
+            }
+            break;
         }
 
-        // ok to create PO file, but we may not have a suitable name
-        if( ! $po_name ){
-            if( $pot_path ){
-                $po_dir = dirname($pot_path);
-                $po_name = str_replace( '.pot', '-'.$locale->get_code().'.po', basename($pot_path) );
-            }
-            // with no POT file and no PO files, we'll place it in the default location
-            else {
-                $po_dir = $root.'/languages';
-                $po_name = $locale->get_code().'.po';
-            }
-        }
-        
-        // set some default headers
-        if( ! isset($head) ){
-            $head = new LocoArray( array(
-                'Project-Id-Version' => basename($root),
-            ) );
-        }
-        
-        // return path, export is set as reference
+        // return path, export and head set as references
+        $head or $head = new LocoArray;
         return $po_dir.'/'.$po_name;
     }     
     
@@ -379,7 +286,7 @@ abstract class LocoAdmin {
      * @param string PO or PO file path
      * @param array data to load into editor
      */
-    private static function render_poeditor( $root, $path, array $data, LocoArray $head = null ){
+    private static function render_poeditor( LocoPackage $package, $path, array $data, LocoArray $head = null ){
         $pot = $po = $locale = null;
         $warnings = array();
         // remove header and check if empty
@@ -399,7 +306,8 @@ abstract class LocoAdmin {
             $po = $data;
             $type = 'PO';
             $locale = self::resolve_file_locale($path);
-            $haspot = self::find_pot( $root ) and $haspot = current($haspot);
+            $domain = self::resolve_file_domain($path);
+            $haspot = $package->get_pot( $domain );
         }
         // path may not exist if we're creating a new one
         if( file_exists($path) ){
@@ -451,7 +359,8 @@ abstract class LocoAdmin {
         // warning if file needs syncing
         else if( $modified ){
             if( $ispot ){
-                if( filemtime($path) < self::newest_mtime_recursive( self::find_php($root) ) ){
+                $sources = $package->get_source_files();
+                if( $sources && filemtime($path) < self::newest_mtime_recursive($sources) ){
                     $warnings[] = Loco::__('Source code has been modified, run Sync to update POT');
                 }
             }
@@ -460,35 +369,49 @@ abstract class LocoAdmin {
             }
         }
 
-        // no longer need the full local paths
-        $path = self::trim_path( $path );
-        $root = self::trim_path( $root );
-        $name = basename( $path );
-        
         // extract some PO headers
-        if( isset($head) ){
+        if( $head instanceof LocoArray ){
             $proj = $head->trimmed('Project-Id-Version');
             if( $proj && 'PACKAGE VERSION' !== $proj ){
                 $name = $proj;
             }
-            else {
-                $head->add('Project-Id-Version', basename($root) );
-            }
-            $headers = $head->to_array();
         }
         else {
-            $headers = array( 'Project-Id-Version' => basename($root) );
+            $head = new LocoArray;
         }
-
+        
         // set Last-Translator if PO file
         if( ! $ispot ){
             /* @var WP_User $user */
             $user = wp_get_current_user() and
-            $headers['Last-Translator'] = $user->get('display_name').' <'.$user->get('user_email').'>';
+            $head->add( 'Last-Translator', $user->get('display_name').' <'.$user->get('user_email').'>' );
         }
+        
+        // overwrite source location headers
+        // create a relative path to target source directory from location of PO
+        $head->add('X-Poedit-Basepath', '.' );
+        foreach( $package->get_source_dirs($path) as $i => $dir ){
+            $head->add('X-Poedit-SearchPath-'.$i, $dir );
+        }
+        
+        // compiled keywords for running source extraction in POEdit
+        // note that these aren't just wordpress keywords, but they're the same as we're using in self::xgettext
+        $ext = new LocoPHPExtractor;
+        $head->add('X-Poedit-KeywordsList', implode( ';', $ext->get_xgettext_keywords() ) );
     
+        // ensure nice name for project
+        if( ! isset($name) ){
+            $meta = $package->meta();
+            $name = $meta['name'];
+        }
+        $head->add( 'Project-Id-Version', $name );
+        $headers = $head->to_array();
+
+        // no longer need the full local paths
+        $path = self::trim_path( $path );
+
         Loco::enqueue_scripts('build/admin-poedit');
-        Loco::render('admin-poedit', compact('root','path','file','po','pot','locale','headers','name','type','modified','writable','warnings') );
+        Loco::render('admin-poedit', compact('package','path','po','pot','locale','headers','name','type','modified','writable','warnings') );
         return true;
     }
     
@@ -552,7 +475,7 @@ abstract class LocoAdmin {
         static $found;
         if( ! isset($found) ){
             $found = array();
-            if( defined('WP_LANG_DIR') && is_dir(WP_LANG_DIR) ){
+            if( is_dir(WP_LANG_DIR) ){
                 $found = self::find_po( WP_LANG_DIR );
             }
         }
@@ -619,16 +542,16 @@ abstract class LocoAdmin {
     
     /**
      * @internal
+     * @param string path to start with no trailing slash
+     * @param string path pattern to match, e.g. "/*.po"
+     * @param int optional GLOB_* options
+     * @param array existing collation to add to in recursion
+     * @return array collection of paths grouped by extension, { po: [..], pot: [..] }
      */
     private static function find_recursive( $dir, $pattern, $options, array $found ){
-        $files = glob( $dir.$pattern, GLOB_NOSORT|$options );
-        if( is_array($files) ){
-            foreach( $files as $path ){
-                $ext = strtolower( pathinfo($path,PATHINFO_EXTENSION ) );
-                $found[$ext][] = $path;
-            }
-        }
-        // recurse
+        // collect files in this directory level
+        $found = self::find_grouped( $dir.$pattern, GLOB_NOSORT|$options, $found ); 
+        // recurse to subdirectories
         $sub = glob( $dir.'/*', GLOB_ONLYDIR|GLOB_NOSORT );
         if( is_array($sub) ){
             foreach( $sub as $dir ){
@@ -639,20 +562,38 @@ abstract class LocoAdmin {
     }
     
     
+    /**
+     * @internal
+     */
+    public static function find_grouped( $pattern, $options = 0, $found = array() ){
+        $files = glob( $pattern, $options );
+        if( is_array($files) ){
+            foreach( $files as $path ){
+                $ext = strtolower( pathinfo($path,PATHINFO_EXTENSION ) );
+                $found[$ext][] = $path;
+            }
+        }
+        return $found;
+    }    
+    
+    
     
     /**
      * Perform xgettext style extraction from PHP source files
      * @todo JavaScript files too
+     * @todo filter on TextDomain?
      * @return array Loco's internal array format
      */
-    public static function xgettext( $dir ){
+    public static function xgettext( array $dirs ){
         class_exists('LocoPHPExtractor') or loco_require('build/gettext-compiled');
         $extractor = new LocoPHPExtractor;
         $export = array();
-        foreach( self::find_php($dir) as $path ){
-            $source = file_get_contents($path) and
-            $tokens = token_get_all($source) and
-            $export = $extractor->extract( $tokens );
+        foreach( $dirs as $dir ){
+            foreach( self::find_php($dir) as $path ){
+                $source = file_get_contents($path) and
+                $tokens = token_get_all($source) and
+                $export = $extractor->extract( $tokens, str_replace( $dir.'/', '', $path ) );
+            }
         }
         return $export;
     }
@@ -674,7 +615,7 @@ abstract class LocoAdmin {
     /**
      * Parse PO or POT file, placing header object into argument
      */
-    private static function parse_po_with_headers( $path, &$headers ){
+    public static function parse_po_with_headers( $path, &$headers ){
         $export = self::parse_po( $path );
         if( ! isset($export[0]) ){
             throw new Exception('Empty or invalid PO file');
@@ -715,6 +656,31 @@ abstract class LocoAdmin {
     }
     
     
+    /**
+     * Resolve a PO file path or file name to TextDomain
+     * @param string e.g. "blah/mytheme-fr_FR.po"
+     * @return string e.fg. "mytheme"
+     */
+    public static function resolve_file_domain( $path ){
+        extract( pathinfo($path) );
+        if( ! isset($filename) ){
+            $filename = str_replace('.', '', $basename ); // PHP < 5.2.0
+        }
+        return preg_replace('/-[a-z]{2}_[A-Z]{2}$/', '', $filename );
+    }
+    
+    
+    /**
+     * Resolve a PO file to a theme
+     * @return WP_Theme
+     */
+    public static function resolve_file_theme( $path ){
+        if( false !== strpos($path,'/themes/') ){
+            $domain = self::resolve_file_domain($path);
+            return wp_get_theme( $domain );
+        }
+    }
+    
      
     /**
      * Generate an admin page URI with custom args
@@ -746,19 +712,9 @@ abstract class LocoAdmin {
     /**
      * Generate a link to edit a po/pot file
      */
-    public static function edit_link( $root, $path, $label = '', $icon = '' ){
-        // path may be under given root
-        if( 0 === strpos($path, $root) ){
-            $path = str_replace( $root.'/', '', $path );
-        }
-        // or under WP_LANG_DIR
-        else if( defined('WP_LANG_DIR') && 0 === strpos($path, WP_LANG_DIR) ){
-            $path = str_replace( WP_LANG_DIR.'/', '', $path );
-            $root = WP_LANG_DIR;
-        }
-        $url = self::uri( array(
-            'root'   => self::trim_path( $root ),
-            'poedit' => $path,
+    public static function edit_link( LocoPackage $package, $path, $label = '', $icon = '' ){
+        $url = self::uri( $package->get_query() + array (
+            'poedit' => self::trim_path( $path ),
         ) );
         if( ! $label ){
             $label = basename( $path );
@@ -773,13 +729,15 @@ abstract class LocoAdmin {
     
     
     /**
-     * Generate a link to edit/update a POT file
+     * Generate a link to generate a new POT file
      */
-    public static function xgettext_link( $root, $label ){
-        $url = self::uri( array(
-            'root'     => self::trim_path( $root ),
-            'xgettext' => '1',
+    public static function xgettext_link( LocoPackage $package, $domain = '', $label = '' ){
+        $url = self::uri( $package->get_query() + array(
+            'xgettext' => $domain ? $domain : $package->get_domain(),
         ) );
+        if( ! $label ){
+            $label = Loco::_x('New template','Add button') ;
+        }
         return '<a href="'.Loco::html($url).'">'.Loco::html($label).'</a>';
         
     }
@@ -787,13 +745,18 @@ abstract class LocoAdmin {
     
     
     /**
-     * Generate a link to create a new PO file
+     * Generate a link to create a new PO file for a not-yet-specified locale
      */
-    public static function msginit_link( $root, $label ){
-        $url = self::uri( array(
-            'root'    => self::trim_path( $root ),
-            'msginit' => '1',
+    public static function msginit_link( LocoPackage $package, $domain = '', $label = '' ){
+        if( ! $domain ){
+            $domain = $package->get_domain();
+        }
+        $url = self::uri(  $package->get_query() + array (
+            'msginit' => $domain ? $domain : $package->get_domain(),
         ) );
+        if( ! $label ){
+            $label = Loco::_x('New language','Add button');
+        }
         return '<a href="'.Loco::html($url).'">'.Loco::html($label).'</a>';
         
     }
@@ -836,9 +799,8 @@ abstract class LocoAdmin {
 }
 
 
-    
-    
-    
+
+
 // admin filter and action callbacks
  
 
@@ -847,7 +809,7 @@ abstract class LocoAdmin {
  */  
 function _loco_hook__admin_print_styles(){
     if( LocoAdmin::is_self() ){
-        Loco::enqueue_styles('build/loco-compiled','loco-admin');
+        Loco::enqueue_styles('loco-admin');
     }
 }  
 
@@ -899,3 +861,9 @@ add_action('plugin_row_meta', '_loco_hook__plugin_row_meta', 10, 2 );
 // ajax hooks all going through one central function
 add_action('wp_ajax_loco-posave', '_lock_hook__wp_ajax' );
 add_action('wp_ajax_loco-posync', '_lock_hook__wp_ajax' );
+
+// WP_LANG_DIR was introduced in Wordpress 2.1.0.
+if( ! defined('WP_LANG_DIR') ){
+    define('WP_LANG_DIR', WP_CONTENT_DIR.'/languages' );
+} 
+ 

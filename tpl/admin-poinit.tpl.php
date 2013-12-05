@@ -7,20 +7,26 @@ $nav = array (
     $title => '',
 );  
 
+/* @var $package LocoPackage */
+$argpair = $package->get_query();
+
 ?>
-<div class="wrap loco-admin loco-init">
+<div class="wrap loco-admin loco-init"><?php 
+
+    // Main navigation
+    Loco::render('admin-nav', compact('nav') )?> 
     
-    <?php Loco::render('admin-nav', compact('nav') )?> 
-    
-    <h2>
-        <?php Loco::h( Loco::__('Initialize new translations in %s'), basename($root) )?>
+    <h2><?php 
+        Loco::h( Loco::__('Initialize new translations in %s'), $domain )?> 
     </h2>
     
     
     <form action="" method="get" class="wp-core-ui" id="loco-msginit">
         <input type="hidden" name="page" value="<?php Loco::h( Loco::NS )?>" />
-        <input type="hidden" name="root" value="<?php Loco::h( $root )?>" />
-        <input type="hidden" name="msginit" value="1" />
+        <input type="hidden" name="msginit" value="<?php Loco::h( $domain )?>" /><?php
+        foreach( $argpair as $k => $v ):?> 
+        <input type="hidden" name="<?php Loco::h($k)?>" value="<?php Loco::h($v)?>" /><?php
+        endforeach?> 
         <p>
             <select name="common-locale">
                 <option value="">

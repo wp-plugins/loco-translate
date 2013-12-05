@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.2.3';
+    const VERSION = '1.3';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -188,6 +188,9 @@ abstract class Loco {
      * @return mixed 
      */
     public static function cached( $key ){
+        if( WP_DEBUG ){
+            return null;
+        }
         $key = self::cache_key($key);
         if( self::$apc_enabled ){
             return apc_fetch( $key );
@@ -213,6 +216,20 @@ abstract class Loco {
         }
         set_transient( $key, $value, $ttl );
     }    
+     
+     
+    /**
+     * Abstraction of cache removal
+     * @return void
+     */ 
+    public static function uncache( $key ){
+        $key = self::cache_key($key);
+        if( self::$apc_enabled ){
+            apc_delete( $key );
+            return;
+        }
+        delete_transient( $key );
+    }     
 
      
      
@@ -220,7 +237,11 @@ abstract class Loco {
      * Sanitize a cache key
      */    
     private static function cache_key( $key ){
-        $key = 'loco_'.preg_replace('/[^a-z]+/','_', strtolower($key) );
+        static $prefix;
+        if( ! isset($prefix) ){
+            $prefix = 'loco_'.str_replace('.','_',Loco::VERSION).'_';
+        }
+        $key = $prefix.preg_replace('/[^a-z]+/','_', strtolower($key) );
         if( isset($key{45}) ){
             $key = 'loco_'.md5($key);
         }        

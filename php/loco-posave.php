@@ -47,7 +47,10 @@
         'modified' => LocoAdmin::format_datetime( filemtime($path) ),
     );
     
-    
+    // flush package from cache, so it's regenerated next list view with new stats
+    $package->uncache();
+
+   
     // attempt to write MO file also, but may fail for numerous reasons.
     if( ! $ispot ){
         try {

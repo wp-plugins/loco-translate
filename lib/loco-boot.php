@@ -216,6 +216,20 @@ abstract class Loco {
         }
         set_transient( $key, $value, $ttl );
     }    
+     
+     
+    /**
+     * Abstraction of cache removal
+     * @return void
+     */ 
+    public static function uncache( $key ){
+        $key = self::cache_key($key);
+        if( self::$apc_enabled ){
+            apc_delete( $key );
+            return;
+        }
+        delete_transient( $key );
+    }     
 
      
      

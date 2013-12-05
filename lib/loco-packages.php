@@ -247,8 +247,19 @@ class LocoPackage {
     /**
      * Get all source root directories
      */
-    public function get_source_dirs(){
-        return $this->src;
+    public function get_source_dirs( $relative_to = '' ){
+        if( ! $relative_to ){
+            return $this->src;
+        }
+        // calculate path from location of given file (which may not exist)
+        if( pathinfo($relative_to,PATHINFO_EXTENSION) ){
+            $relative_to = dirname($relative_to);
+        }
+        $dirs = array();
+        foreach( $this->src as $target_dir ){
+            $dirs[] = loco_relative_path( $relative_to, $target_dir );
+        }
+        return $dirs;
     }
     
     
@@ -296,9 +307,13 @@ class LocoPackage {
 
     /**
      * Clear this package from the cache. Called to invalidate when something updates
+     * @return LocoPackage
      */
     public function uncache(){
         $key = $this->get_type().'_'.$this->handle;
+        Loco::uncache( $key );
+        $this->_meta = null;
+        return $this;
     }
 
 

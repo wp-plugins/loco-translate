@@ -388,9 +388,9 @@ abstract class LocoAdmin {
         }
         
         // overwrite source location headers
-        $head->add('X-Poedit-Basepath', WP_CONTENT_DIR );
-        foreach( $package->get_source_dirs() as $i => $dir ){
-            $dir = str_replace( WP_CONTENT_DIR.'/', '', $dir );
+        // create a relative path to target source directory from location of PO
+        $head->add('X-Poedit-Basepath', '.' );
+        foreach( $package->get_source_dirs($path) as $i => $dir ){
             $head->add('X-Poedit-SearchPath-'.$i, $dir );
         }
         

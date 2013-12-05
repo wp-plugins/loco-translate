@@ -39,19 +39,23 @@ abstract class Loco {
             return;
         }
         // see if MO file exists with exact name
-        $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
-        if( ! file_exists($mopath) ){
-            // Try some locale sanitization to find suitable MO file.
-            function_exists('loco_locale_resolve') or loco_require('loco-locales');
-            $locale = loco_locale_resolve($locale)->get_code();
-            $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
-            if( ! file_exists($mopath) ){
-                // translations really not found - check PO is compiled to MO
-                return;
-            }
-        }
-        load_textdomain( Loco::NS, $mopath );
+        $plugin_rel_path = basename( self::basedir() );
+        load_plugin_textdomain( Loco::NS, false, $plugin_rel_path );
     }
+    
+    
+    /**
+     * Get path to this file, accounting for symlink problem
+     */
+    private static function __file(){
+        $here = __FILE__;
+        if( 0 !== strpos( WP_PLUGIN_DIR, $here ) ){
+            // something along this path has been symlinked into the document tree
+            // temporary measure assumes name of plugin folder is unchanged.
+            $here = WP_PLUGIN_DIR.'/'.Loco::NS.'/loco.php';
+        }
+        return $here;
+    }     
     
     
     /**
@@ -59,7 +63,7 @@ abstract class Loco {
      */
     public static function basedir(){
         static $dir;
-        isset($dir) or $dir = dirname(__FILE__);
+        isset($dir) or $dir = dirname( self::__file() );
         return $dir;    
     }
     
@@ -69,15 +73,7 @@ abstract class Loco {
      */
     public static function baseurl(){
         static $url;
-        if( ! isset($url) ){
-            $here = __FILE__;
-            if( 0 !== strpos( WP_PLUGIN_DIR, $here ) ){
-                // something along this path has been symlinked into the document tree
-                // temporary measure assumes name of plugin folder is unchanged.
-                $here = WP_PLUGIN_DIR.'/'.Loco::NS.'/loco.php';
-            }
-            $url = plugins_url( '', $here );
-        }
+        isset($url) or $url = plugins_url( '', self::__file() );
         return $url;
     }
     
@@ -87,7 +83,7 @@ abstract class Loco {
      */
     public static function render( $tpl, array $arguments = array() ){
         extract( $arguments );
-        include loco_basedir().'/tpl/'.$tpl.'.tpl.php';
+        include Loco::basedir().'/tpl/'.$tpl.'.tpl.php';
     }
 
  

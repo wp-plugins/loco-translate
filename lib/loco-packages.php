@@ -359,7 +359,7 @@ class LocoPackage {
                 $package->add_po( $files, $domain );
             }
             // find additional plugin PO under WP_LANG_DIR
-            $pattern = WP_LANG_DIR.'/'.$domain.'{-*.po,.pot}';
+            $pattern = WP_LANG_DIR.'/plugins/'.$domain.'{-*.po,.pot}';
             $files = LocoAdmin::find_grouped( $pattern, GLOB_NOSORT|GLOB_BRACE ) and
             $package->add_po( $files );
             return $package;

@@ -848,7 +848,7 @@ function _loco_hook__plugin_row_meta( $links, $file = '' ){
 function _lock_hook__wp_ajax(){
     extract( Loco::postdata() );
     if( isset($action) ){
-        require loco_basedir().'/php/loco-ajax.php';
+        require Loco::basedir().'/php/loco-ajax.php';
     }
 }
 

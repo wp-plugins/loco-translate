@@ -10,24 +10,14 @@ Author URI: http://localise.biz/help/wordpress/translate-plugin
 
 
 
-/**
- * Get plugin local base directory in case __DIR__ isn't available (php<5.3)
- */
-function loco_basedir(){
-    static $dir;
-    isset($dir) or $dir = dirname(__FILE__);
-    return $dir;    
-}
-
-
-
 /** 
  * Include a component from lib subdirectory
  * @param string $subpath e.g. "loco-admin"
  * @return mixed value from last included file
  */
 function loco_require(){
-    $dir = loco_basedir();
+    static $dir;
+    isset($dir) or $dir = dirname(__FILE__);    
     $ret = '';
     foreach( func_get_args() as $subpath ){
         $ret = require_once $dir.'/lib/'.$subpath.'.php';

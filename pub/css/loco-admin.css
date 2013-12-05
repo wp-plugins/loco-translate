@@ -1,19 +1,20 @@
 /**
- * Loco Wordpress admin page styles
+ * Loco Wordpress admin page styles.
+ * Additional styles are loaded in a compiled form from loco core
  */
 
 
 /**
- * Font Awesome:    
+ * Modified Font:    
  * @license http://fortawesome.github.io/Font-Awesome/license/ 
  */
 @font-face {
-  font-family:'IconFont';
-  src:url('../font/IconFont.eot');
-  src:url('../font/IconFont.eot?#iefix') format('embedded-opentype'),
-      url('../font/IconFont.woff') format('woff'),
-      url('../font/IconFont.ttf') format('truetype'),
-      url('../font/IconFont.svg#IconFont') format('svg');
+  font-family:'loco';
+  src:url('../font/loco.eot');
+  src:url('../font/loco.eot?#iefix') format('embedded-opentype'),
+      url('../font/loco.woff') format('woff'),
+      url('../font/loco.ttf') format('truetype'),
+      url('../font/loco.svg#loco') format('svg');
   font-weight:normal;
   font-style:normal;
 }
@@ -46,7 +47,7 @@ h2 .nav-tab.nav-tab-loco:hover {
 .wrap .loco-list li > a:before,
 .wrap .loco-list li > span:before {
     padding-right: 0.5em;
-    font-family: IconFont;
+    font-family: loco;
 }
 .wrap .loco-list li.loco-add a {
     color: #666666;
@@ -54,23 +55,15 @@ h2 .nav-tab.nav-tab-loco:hover {
 .wrap .loco-list li.loco-add a:hover {
     color: #000;
 }
-.wrap .loco-list li.loco-add a:before {
-    content: "\f055";
-}
 .wrap .loco-list li.loco-edit-po .flag {
     margin-right: 6px;
 }
-.wrap .loco-list li.loco-edit-pot a:before {
-    content: "\f040";
-}
 
 .wrap .loco-list li.loco-warn > span:before {
-    content: "\f071";
     color: #cc0000;
 }
 
 .wrap .loco-list li.loco-ok > span:before {
-    content: "\f058";
     color: #006600;
 }
 
@@ -168,18 +161,8 @@ h2 .nav-tab.nav-tab-loco:hover {
 
 #loco-nav button span:before {
     padding-right: 0.5em;
-    font-family: IconFont;
+    font-family: loco;
 }
-
-#loco-nav button.loco-add span:before { content: "\f055"; }
-#loco-nav button.loco-del span:before { content: "\f056"; }
-#loco-nav button.loco-save span:before { content: "\f0c7"; }
-#loco-nav button.loco-sync span:before { content: "\f021"; }
-#loco-nav button.loco-help span:before { content: "\f059"; }
-#loco-nav button.loco-fuzzy span:before { content: "\f0c2"; }
-#loco-nav button.loco-revert span:before { content: "\f0e2"; }
-#loco-nav button.loco-download span:before { content: "\f019"; }
-
 
 /* inverted version of wordpress button style */
 .wp-core-ui button.loco-inverted,

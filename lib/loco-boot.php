@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.2.3';
+    const VERSION = '1.3';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -225,7 +225,7 @@ abstract class Loco {
     private static function cache_key( $key ){
         static $prefix;
         if( ! isset($prefix) ){
-            $prefix = 'loco_'.str_replace('.','_',Loco::VERSION);
+            $prefix = 'loco_'.str_replace('.','_',Loco::VERSION).'_';
         }
         $key = $prefix.preg_replace('/[^a-z]+/','_', strtolower($key) );
         if( isset($key{45}) ){

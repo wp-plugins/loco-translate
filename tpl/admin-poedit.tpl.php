@@ -8,12 +8,13 @@ $nav = array (
 );  
 
 $phpbase = Loco::html( Loco::baseurl() ).'/php';
-//$relpath = str_replace( $root.'/', '', $path );
+$argpair = $package->get_query();
 
 ?>
-<div class="wrap loco-admin loco-edit">
-    
-    <?php Loco::render('admin-nav', compact('nav') )?> 
+<div class="wrap loco-admin loco-edit"><?php 
+
+    // Main navigation
+    Loco::render('admin-nav', compact('nav') )?> 
     
     <h3 class="title"><?php 
         if( $locale ):?> 
@@ -47,8 +48,11 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
         <nav id="loco-nav" class="wp-core-ui">
             <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
                 <input type="hidden" name="po" value="" />
-                <input type="hidden" name="action" value="loco-posave" />
                 <input type="hidden" name="path" value="<?php Loco::h($path)?>" />
+                <input type="hidden" name="action" value="loco-posave" /><?php
+                foreach( $argpair as $k => $v ):?> 
+                <input type="hidden" name="<?php Loco::h($k)?>" value="<?php Loco::h($v)?>" /><?php
+                endforeach?> 
                 <button class="button loco-save" data-loco="save" type="submit" disabled>
                     <span><?php Loco::h( Loco::_x('Save','Editor button') )?></span>
                 </button>
@@ -61,9 +65,11 @@ $phpbase = Loco::html( Loco::baseurl() ).'/php';
                 </button>
             </form>
             <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
-                <input type="hidden" name="action" value="loco-posync" />
-                <input type="hidden" name="root" value="<?php Loco::h($root)?>" />
                 <input type="hidden" name="path" value="<?php Loco::h($path)?>" />
+                <input type="hidden" name="action" value="loco-posync" /><?php
+                foreach( $argpair as $k => $v ):?> 
+                <input type="hidden" name="<?php Loco::h($k)?>" value="<?php Loco::h($v)?>" /><?php
+                endforeach?> 
                 <button class="button loco-sync" data-loco="sync" disabled>
                     <span><?php Loco::h( Loco::_x('Sync','Editor button') )?></span>
                 </button>

@@ -10,6 +10,7 @@
         throw new Exception( Loco::__('Invalid data posted to server'), 422 );
     }
   
+    // path is allowed to not exist yet
     if( '/' !== $path{0} ){
         $path = WP_CONTENT_DIR.'/'.$path;
     }

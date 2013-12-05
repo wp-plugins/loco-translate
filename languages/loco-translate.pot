@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate 1.1.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Sat Aug 31 2013 14:15:24 GMT+0100 (BST)\n"
-"POT-Revision-Date: Mon Oct 28 2013 18:07:30 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Thu Dec 05 2013 16:37:56 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,7 +15,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Loco - https://localise.biz/"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-Basepath: /Users/animal/vhosts/voices/httpdocs/wp-content\n"
+"X-Poedit-SearchPath-0: plugins/loco-translate\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;"
+"_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;"
+"_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;"
+"esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;"
+"comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2"
 
 # Translators: Bold text label in admin error messages
 msgctxt "Message label"
@@ -34,12 +41,6 @@ msgid "Settings saved"
 msgstr ""
 
 msgid "New PO file"
-msgstr ""
-
-msgid "Some files not writable"
-msgstr ""
-
-msgid "\"%s\" folder not writable"
 msgstr ""
 
 msgid "You must specify a valid locale for a new PO file"
@@ -80,6 +81,14 @@ msgstr ""
 msgid "Bad file path"
 msgstr ""
 
+msgctxt "Add button"
+msgid "New template"
+msgstr ""
+
+msgctxt "Add button"
+msgid "New language"
+msgstr ""
+
 msgid "%s%% translated"
 msgstr ""
 
@@ -106,7 +115,16 @@ msgstr ""
 msgid "Manage translations"
 msgstr ""
 
+msgid "Settings"
+msgstr ""
+
 msgid "Unknown language"
+msgstr ""
+
+msgid "Some files not writable"
+msgstr ""
+
+msgid "\"%s\" folder not writable"
 msgstr ""
 
 msgid "User does not have permission to manage translations"
@@ -128,6 +146,9 @@ msgstr ""
 msgid ""
 "%s file is not writable by the web server. Fix file permissions or download and "
 "copy to \"%s/%s\"."
+msgstr ""
+
+msgid "Package not found called %s"
 msgstr ""
 
 msgid "No strings could be extracted from source files"
@@ -158,21 +179,10 @@ msgctxt "Modified time"
 msgid "Updated"
 msgstr ""
 
-msgctxt "Add button"
-msgid "New language"
-msgstr ""
-
-msgctxt "Add button"
-msgid "New template"
-msgstr ""
-
 msgid "Powered by"
 msgstr ""
 
 msgid "Packages"
-msgstr ""
-
-msgid "Settings"
 msgstr ""
 
 msgid "Path to msgfmt program for compiling MO files"
@@ -254,4 +264,8 @@ msgstr ""
 
 msgctxt "Package list header"
 msgid "Plugins"
+msgstr ""
+
+msgctxt "Package list header"
+msgid "Core"
 msgstr ""

@@ -809,7 +809,7 @@ abstract class LocoAdmin {
  */  
 function _loco_hook__admin_print_styles(){
     if( LocoAdmin::is_self() ){
-        Loco::enqueue_styles('loco-admin-compiled','loco-admin');
+        Loco::enqueue_styles('loco-admin');
     }
 }  
 

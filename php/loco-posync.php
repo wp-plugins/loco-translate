@@ -60,12 +60,12 @@
         $keep = array('Project-Id-Version','Language-Team','POT-Creation-Date','POT-Revision-Date');
         $head = loco_parse_po_headers( $exp[0]['target'] );
         $headers = array_intersect_key( $head->to_array(), array_flip($keep) );
-        // add prefixed header keys that can't be included above
+        /*/ add prefixed header keys that can't be included above
         foreach( $head as $key => $value ){
             if( 0 === strpos($key, 'X-Poedit-' ) ){
                 $headers[$key] = $value;
             }
-        }
+        }*/
         $exp[0] = array();
     }
         

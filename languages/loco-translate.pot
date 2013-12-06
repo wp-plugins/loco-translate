@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: Fri Dec 06 2013 13:47:49 GMT+0000 (GMT)\n"
-"POT-Revision-Date: Fri Dec 06 2013 13:48:12 GMT+0000 (GMT)\n"
+"POT-Creation-Date: Fri Dec 06 2013 17:56:11 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Fri Dec 06 2013 17:56:40 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -44,101 +44,101 @@ msgstr ""
 msgid "Settings saved"
 msgstr ""
 
-#: ../lib/loco-admin.php:115
+#: ../lib/loco-admin.php:120
 msgid "New PO file"
 msgstr ""
 
-#: ../lib/loco-admin.php:225
+#: ../lib/loco-admin.php:230
 msgid "You must specify a valid locale for a new PO file"
 msgstr ""
 
-#: ../lib/loco-admin.php:247 ../lib/loco-admin.php:337
+#: ../lib/loco-admin.php:252 ../lib/loco-admin.php:342
 msgid "No translatable strings found"
 msgstr ""
 
-#: ../lib/loco-admin.php:247
+#: ../lib/loco-admin.php:252
 msgid "Cannot create a PO file."
 msgstr ""
 
-#: ../lib/loco-admin.php:254
+#: ../lib/loco-admin.php:259
 msgid "PO file already exists with locale %s"
 msgstr ""
 
-#: ../lib/loco-admin.php:307
+#: ../lib/loco-admin.php:312
 msgid ""
 "File cannot be created automatically. Fix the file permissions or use Download "
 "instead of Save"
 msgstr ""
 
-#: ../lib/loco-admin.php:316 ../lib/loco-admin.php:325
+#: ../lib/loco-admin.php:321 ../lib/loco-admin.php:330
 msgid "%s file is empty"
 msgstr ""
 
-#: ../lib/loco-admin.php:317 ../lib/loco-admin.php:332
+#: ../lib/loco-admin.php:322 ../lib/loco-admin.php:337
 msgid "Run Sync to update from source code"
 msgstr ""
 
-#: ../lib/loco-admin.php:321
+#: ../lib/loco-admin.php:326
 msgid "No strings could be extracted from source code"
 msgstr ""
 
-#: ../lib/loco-admin.php:328
+#: ../lib/loco-admin.php:333
 msgid "Run Sync to update from %s"
 msgstr ""
 
-#: ../lib/loco-admin.php:347
+#: ../lib/loco-admin.php:352
 msgid "Source code has been modified, run Sync to update POT"
 msgstr ""
 
-#: ../lib/loco-admin.php:351
+#: ../lib/loco-admin.php:356
 msgid "POT has been modified since PO file was saved, run Sync to update"
 msgstr ""
 
-#: ../lib/loco-admin.php:424
+#: ../lib/loco-admin.php:429
 msgid "Bad file path"
 msgstr ""
 
-#: ../lib/loco-admin.php:726
+#: ../lib/loco-admin.php:731
 msgctxt "Add button"
 msgid "New template"
 msgstr ""
 
-#: ../lib/loco-admin.php:745
+#: ../lib/loco-admin.php:750
 msgctxt "Add button"
 msgid "New language"
 msgstr ""
 
-#: ../lib/loco-admin.php:784
+#: ../lib/loco-admin.php:789
 msgid "%s%% translated"
 msgstr ""
 
-#: ../lib/loco-admin.php:784
+#: ../lib/loco-admin.php:789
 msgid "1 string"
 msgid_plural "%s strings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/loco-admin.php:787
+#: ../lib/loco-admin.php:792
 msgid "%s fuzzy"
 msgstr ""
 
-#: ../lib/loco-admin.php:790
+#: ../lib/loco-admin.php:795
 msgid "%s unstranslated"
 msgstr ""
 
-#: ../lib/loco-admin.php:821
+#: ../lib/loco-admin.php:826
 msgid "Loco, Translation Management"
 msgstr ""
 
-#: ../lib/loco-admin.php:823
+#: ../lib/loco-admin.php:828
 msgid "Translation"
 msgstr ""
 
-#: ../lib/loco-admin.php:826 ../lib/loco-admin.php:837
+#: ../lib/loco-admin.php:831 ../lib/loco-admin.php:842
 msgid "Manage translations"
 msgstr ""
 
-#: ../lib/loco-admin.php:838 ../tpl/admin-fscheck.tpl.php:7 ../tpl/admin-opts.tpl.php:7 ../tpl/admin-poedit.tpl.php:8 ../tpl/admin-poinit.tpl.php:8 ../tpl/admin-root.tpl.php:7
+#: ../lib/loco-admin.php:843 ../tpl/admin-fscheck.tpl.php:7 ../tpl/admin-opts.tpl.php:7 ../tpl/admin-poedit.tpl.php:8 ../tpl/admin-poinit.tpl.php:8 ../tpl/admin-root.tpl.php:7
 msgid "Settings"
 msgstr ""
 
@@ -146,35 +146,35 @@ msgstr ""
 msgid "Unknown language"
 msgstr ""
 
-#: ../lib/loco-packages.php:223 ../lib/loco-packages.php:229
+#: ../lib/loco-packages.php:240 ../lib/loco-packages.php:246
 msgid "Some files not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:232
+#: ../lib/loco-packages.php:249
 msgid "Some files missing"
 msgstr ""
 
-#: ../lib/loco-packages.php:238
+#: ../lib/loco-packages.php:255
 msgid "\"%s\" folder not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:249
+#: ../lib/loco-packages.php:266
 msgid "Folder not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:251
+#: ../lib/loco-packages.php:268
 msgid "POT file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:255
+#: ../lib/loco-packages.php:272
 msgid "PO file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:257
+#: ../lib/loco-packages.php:274
 msgid "MO file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:257
+#: ../lib/loco-packages.php:274
 msgid "MO file not found"
 msgstr ""
 
@@ -206,6 +206,18 @@ msgstr ""
 msgid ""
 "%s file is not writable by the web server. Fix file permissions or download and "
 "copy to \"%s/%s\"."
+msgstr ""
+
+#: ../php/loco-posave.php:81
+msgid "Cannot create MO file"
+msgstr ""
+
+#: ../php/loco-posave.php:84
+msgid "Cannot overwrite MO file"
+msgstr ""
+
+#: ../php/loco-posave.php:97
+msgid "Failed to compile MO file with %s, check your settings"
 msgstr ""
 
 #: ../php/loco-posync.php:53
@@ -279,58 +291,63 @@ msgstr ""
 msgid "Save settings"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:25
+#: ../tpl/admin-poedit.tpl.php:31
 msgid "Template file"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:28
+#: ../tpl/admin-poedit.tpl.php:39
+msgctxt "Dropdown label"
+msgid "Switch to..."
+msgstr ""
+
+#: ../tpl/admin-poedit.tpl.php:57
 msgid "Updated"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:33
+#: ../tpl/admin-poedit.tpl.php:62
 msgid "never"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:58
+#: ../tpl/admin-poedit.tpl.php:87
 msgctxt "Editor button"
 msgid "Save"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:65
+#: ../tpl/admin-poedit.tpl.php:94
 msgctxt "Editor button"
 msgid "Download"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:75
+#: ../tpl/admin-poedit.tpl.php:104
 msgctxt "Editor button"
 msgid "Sync"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:80
+#: ../tpl/admin-poedit.tpl.php:109
 msgctxt "Editor button"
 msgid "Revert"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:85
+#: ../tpl/admin-poedit.tpl.php:114
 msgctxt "Editor button"
 msgid "Add"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:90
+#: ../tpl/admin-poedit.tpl.php:119
 msgctxt "Editor button"
 msgid "Del"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:95
+#: ../tpl/admin-poedit.tpl.php:124
 msgctxt "Editor button"
 msgid "Fuzzy"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:99
+#: ../tpl/admin-poedit.tpl.php:128
 msgid "Filter translations"
 msgstr ""
 
-#: ../tpl/admin-poedit.tpl.php:103
+#: ../tpl/admin-poedit.tpl.php:132
 msgctxt "Editor button"
 msgid "Help"
 msgstr ""

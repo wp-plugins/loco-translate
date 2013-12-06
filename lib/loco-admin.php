@@ -139,6 +139,14 @@ abstract class LocoAdmin {
                 }
                 
                 
+                // Show filesystem check if 'fscheck' in query
+                //
+                if( isset($_GET['fscheck']) ){
+                    $meta = $package->meta();
+                    Loco::render('admin-fscheck', $meta + compact('package') );
+                    break;
+                }
+                
                 
             }
             catch( Exception $Ex ){
@@ -448,7 +456,7 @@ abstract class LocoAdmin {
     /**
      * remove wp-content from path for more compact display in urls and such
      */
-    private static function trim_path( $path ){
+    public static function trim_path( $path ){
         return str_replace( WP_CONTENT_DIR.'/', '', $path );
     }    
     
@@ -760,9 +768,21 @@ abstract class LocoAdmin {
             $label = Loco::_x('New language','Add button');
         }
         return '<a href="'.Loco::html($url).'">'.Loco::html($label).'</a>';
-        
     }
     
+    
+    /**
+     * Generate a link to check file permissions on a packge
+     */
+    public static function fscheck_link( LocoPackage $package, $domain = '', $label ){
+        if( ! $domain ){
+            $domain = $package->get_domain();
+        }
+        $url = self::uri(  $package->get_query() + array (
+            'fscheck' => $domain ? $domain : $package->get_domain(),
+        ) );
+        return '<a href="'.Loco::html($url).'">'.Loco::html($label).'</a>';
+    }    
      
      
     /**

@@ -88,14 +88,14 @@
                     <td>
                         <ul><?php 
                         try {
-                            $package->check_paths();?> 
+                            $package->check_permissions();?> 
                             <li class="loco-ok">
-                                <span>OK</span>
+                                <?php echo LocoAdmin::fscheck_link( $package, $domain, Loco::__('OK') )?> 
                             </li><?php
                         }
                         catch( Exception $Ex ){?> 
                             <li class="loco-warn">
-                                <span><?php Loco::h( $Ex->getMessage() )?></span> 
+                                <?php echo LocoAdmin::fscheck_link( $package, $domain, $Ex->getMessage() )?> 
                             </li><?php
                         }?> 
                         </ul>

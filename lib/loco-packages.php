@@ -186,7 +186,7 @@ class LocoPackage {
      * Check PO/POT paths are writable.
      * Called when generating root list view for simple error indicators.
      */    
-    public function check_paths(){
+    public function check_permissions(){
         foreach( $this->pot as $path ){
             if( ! is_writable($path) ){
                 throw new Exception( Loco::__('Some files not writable') );
@@ -197,6 +197,9 @@ class LocoPackage {
                 if( ! is_writable($path) ){
                     throw new Exception( Loco::__('Some files not writable') );
                 }
+                if( ! file_exists( preg_replace('/\.po$/', '.mo', $path) ) ){
+                    throw new Exception( Loco::__('Some files missing') );
+                }
             }
         }
         $dir = $this->lang_dir();
@@ -204,6 +207,27 @@ class LocoPackage {
             throw new Exception( sprintf( Loco::__('"%s" folder not writable'), basename($dir) ) );
         }
     }    
+    
+    
+    /**
+     * Get file permission for every important file path in package 
+     */
+    public function get_permission_errors(){
+        $paths = array();
+        $dir = $this->lang_dir();
+        $paths[$dir] = is_writable($dir) ? '' : Loco::__('Folder not writable');
+        foreach( $this->pot as $path ){
+            $paths[$path] = is_writable($path) ? '' : Loco::__('POT file not writable');
+        }
+        foreach( $this->po as $pos ){
+            foreach( $pos as $path ){
+                $paths[$path] = is_writable($path) ? '' : Loco::__('PO file not writable');
+                $path = preg_replace('/\.po$/', '.mo', $path );
+                $paths[$path] = file_exists($path) ? ( is_writeable($path) ? '' : Loco::__('MO file not writable') ) : Loco::__('MO file not found');
+            }
+        }
+        return $paths;    
+    }   
     
     
     /**

@@ -8,9 +8,8 @@ $nav = array (
 ); 
 ?>
 
-<div class="wrap">
+<div class="wrap loco-admin loco-settings">
     
-
     <?php Loco::render('admin-nav', compact('nav') )?> 
     
     <div>&nbsp;</div>

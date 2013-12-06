@@ -252,7 +252,7 @@ abstract class Loco {
         static $conf;
         if( ! isset($conf) ){
             $conf = array (
-                'which_msgfmt' => '/usr/bin/msgfmt',
+                'which_msgfmt' => false,
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);

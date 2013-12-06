@@ -47,6 +47,11 @@ abstract class LocoAdmin {
         }
         else {
             $args = Loco::config();
+            // establish a default msgfmt if possible
+            if( false === $args['which_msgfmt'] ){
+                function_exists('loco_find_executable') or loco_require('build/shell-compiled');
+                $args['which_msgfmt'] = loco_find_executable('msgfmt');
+            }
         }
         Loco::render('admin-opts', $args );
     }     

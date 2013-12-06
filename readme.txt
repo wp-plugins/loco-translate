@@ -101,6 +101,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 * Disabling cache when WP_DEBUG = true
 * Better POEdit integration, including source headers and file refs
 * Added editor dropdown for switching between files
+* Guessing of msgfmt path when not in settings
 
 = 1.2.2 =
 * Fixed incorrect plural equation offset

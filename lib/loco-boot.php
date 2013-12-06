@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.2.3';
+    const VERSION = '1.3';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -38,20 +38,23 @@ abstract class Loco {
         if( 0 === strpos($locale,'en') ){
             return;
         }
-        // see if MO file exists with exact name
-        $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
-        if( ! file_exists($mopath) ){
-            // Try some locale sanitization to find suitable MO file.
-            function_exists('loco_locale_resolve') or loco_require('loco-locales');
-            $locale = loco_locale_resolve($locale)->get_code();
-            $mopath = loco_basedir().'/languages/'.Loco::NS.'-'.$locale.'.mo';
-            if( ! file_exists($mopath) ){
-                // translations really not found - check PO is compiled to MO
-                return;
-            }
-        }
-        load_textdomain( Loco::NS, $mopath );
+        $plugin_rel_path = basename( self::basedir() );
+        load_plugin_textdomain( Loco::NS, false, $plugin_rel_path );
     }
+    
+    
+    /**
+     * Get path to this file, accounting for symlink problem
+     */
+    private static function __file(){
+        $here = __FILE__;
+        if( 0 !== strpos( WP_PLUGIN_DIR, $here ) ){
+            // something along this path has been symlinked into the document tree
+            // temporary measure assumes name of plugin folder is unchanged.
+            $here = WP_PLUGIN_DIR.'/'.Loco::NS.'/loco.php';
+        }
+        return $here;
+    }     
     
     
     /**
@@ -59,7 +62,7 @@ abstract class Loco {
      */
     public static function basedir(){
         static $dir;
-        isset($dir) or $dir = dirname(__FILE__);
+        isset($dir) or $dir = dirname( self::__file() );
         return $dir;    
     }
     
@@ -69,15 +72,7 @@ abstract class Loco {
      */
     public static function baseurl(){
         static $url;
-        if( ! isset($url) ){
-            $here = __FILE__;
-            if( 0 !== strpos( WP_PLUGIN_DIR, $here ) ){
-                // something along this path has been symlinked into the document tree
-                // temporary measure assumes name of plugin folder is unchanged.
-                $here = WP_PLUGIN_DIR.'/'.Loco::NS.'/loco.php';
-            }
-            $url = plugins_url( '', $here );
-        }
+        isset($url) or $url = plugins_url( '', self::__file() );
         return $url;
     }
     
@@ -87,7 +82,7 @@ abstract class Loco {
      */
     public static function render( $tpl, array $arguments = array() ){
         extract( $arguments );
-        include loco_basedir().'/tpl/'.$tpl.'.tpl.php';
+        include Loco::basedir().'/tpl/'.$tpl.'.tpl.php';
     }
 
  
@@ -188,6 +183,9 @@ abstract class Loco {
      * @return mixed 
      */
     public static function cached( $key ){
+        if( WP_DEBUG ){
+            return null;
+        }
         $key = self::cache_key($key);
         if( self::$apc_enabled ){
             return apc_fetch( $key );
@@ -213,6 +211,20 @@ abstract class Loco {
         }
         set_transient( $key, $value, $ttl );
     }    
+     
+     
+    /**
+     * Abstraction of cache removal
+     * @return void
+     */ 
+    public static function uncache( $key ){
+        $key = self::cache_key($key);
+        if( self::$apc_enabled ){
+            apc_delete( $key );
+            return;
+        }
+        delete_transient( $key );
+    }     
 
      
      
@@ -220,7 +232,11 @@ abstract class Loco {
      * Sanitize a cache key
      */    
     private static function cache_key( $key ){
-        $key = 'loco_'.preg_replace('/[^a-z]+/','_', strtolower($key) );
+        static $prefix;
+        if( ! isset($prefix) ){
+            $prefix = 'loco_'.str_replace('.','_',Loco::VERSION).'_';
+        }
+        $key = $prefix.preg_replace('/[^a-z]+/','_', strtolower($key) );
         if( isset($key{45}) ){
             $key = 'loco_'.md5($key);
         }        
@@ -235,7 +251,7 @@ abstract class Loco {
         static $conf;
         if( ! isset($conf) ){
             $conf = array (
-                'which_msgfmt' => '/usr/bin/msgfmt',
+                'which_msgfmt' => false,
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);

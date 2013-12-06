@@ -4,20 +4,9 @@ Plugin Name: Loco Translate
 Plugin URI: http://wordpress.org/extend/plugins/loco-translate
 Description: Translate Wordpress plugins and themes directly in your browser
 Author: Tim Whitlock
-Version: 1.2.3
+Version: 1.3
 Author URI: http://localise.biz/help/wordpress/translate-plugin
 */
-
-
-
-/**
- * Get plugin local base directory in case __DIR__ isn't available (php<5.3)
- */
-function loco_basedir(){
-    static $dir;
-    isset($dir) or $dir = dirname(__FILE__);
-    return $dir;    
-}
 
 
 
@@ -27,7 +16,8 @@ function loco_basedir(){
  * @return mixed value from last included file
  */
 function loco_require(){
-    $dir = loco_basedir();
+    static $dir;
+    isset($dir) or $dir = dirname(__FILE__);    
     $ret = '';
     foreach( func_get_args() as $subpath ){
         $ret = require_once $dir.'/lib/'.$subpath.'.php';

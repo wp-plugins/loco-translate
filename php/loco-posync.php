@@ -43,11 +43,11 @@
         }
     
         // Extract from sources by default     
-        if( $dirs = $package->get_source_dirs() ){
-            if( $exp = LocoAdmin::xgettext($dirs) ){
-                $pot = '';
-                break;
-            }
+        $relative_to = dirname($path);
+        //$relative_to = $pot_path ? dirname($pot_path) : $package->get_root();
+        if( $exp = LocoAdmin::xgettext( $package, $relative_to ) ){
+            $pot = '';
+            break;
         }
 
         throw new Exception( Loco::__('No strings could be extracted from source files') );

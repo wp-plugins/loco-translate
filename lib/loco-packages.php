@@ -74,6 +74,14 @@ class LocoPackage {
     }   
     
     /**
+     * Get default system languages directory
+     */    
+    protected function _lang_dir(){
+        return WP_LANG_DIR;
+    }    
+    
+    
+    /**
      * Get package type, defaults to 'core'
      */
     public function get_type(){
@@ -155,19 +163,42 @@ class LocoPackage {
     /**
      * Get most likely intended language folder
      */    
-    public function lang_dir(){
-        foreach( $this->pot as $path ){
-            return dirname($path);
+    public function lang_dir( $domain = '' ){
+        $dirs = array();
+        foreach( $this->pot as $d => $path ){
+            if( ! $domain || $d === $domain ){
+                $path = dirname($path);
+                if( is_writable($path) ){
+                    return $path;
+                }
+                $dirs[] = $path;
+            }
         }
-        foreach( $this->po as $paths ){
-            foreach( $paths as $path ){
-                return dirname($path);
+        foreach( $this->po as $d => $paths ){
+            if( ! $domain || $d === $domain ){
+                foreach( $paths as $path ){
+                    $path = dirname($path);
+                    if( is_writable($path) ){
+                        return $path;
+                    }
+                    $dirs[] = $path;
+                }
             }
         }
         foreach( $this->src as $path ){
-            return dirname($path).'/languages';
+            $path .= '/languages';
+            if( is_writable($path) ){
+                return $path;
+            }
+            $dirs[] = $path;
         }
-        return WP_LANG_DIR;
+        $path = $this->_lang_dir();
+        if( is_writable($path) ){
+            return $path;
+        }
+        $dirs[] = $path;
+        // failed to get writable directory, so we'll just return the highest priority
+        return array_shift( $dirs );
     }
     
     
@@ -465,6 +496,9 @@ class LocoPackage {
  * Extended package class for themes
  */
 class LocoThemePackage extends LocoPackage {
+    protected function _lang_dir(){
+        return WP_LANG_DIR.'/themes';
+    }
     public function get_type(){
         return 'theme';
     }      
@@ -475,6 +509,9 @@ class LocoThemePackage extends LocoPackage {
  * Extended package class for plugins
  */
 class LocoPluginPackage extends LocoPackage {
+    protected function _lang_dir(){
+        return WP_LANG_DIR.'/plugins';
+    }
     public function get_type(){
         return 'plugin';
     }      

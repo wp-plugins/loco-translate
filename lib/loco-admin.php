@@ -78,21 +78,11 @@ abstract class LocoAdmin {
                     if( $pot_path = $package->get_pot($domain) ){
                         throw new Exception('POT already exists at '.$pot_path );
                     }
-                    // extract from all PHP source files
-                    $export = self::xgettext( $package->get_source_dirs(), $domain );
                     // Establish best/intended location for new POT file
-                    $dir = null;
-                    while( ! $dir ){
-                        foreach( $package->get_po($domain) as $po_path ){
-                            $dir = dirname( $po_path );
-                            break 2;
-                        }
-                        $dir = $package->get_root();
-                        if( 0 !== strpos($dir, WP_LANG_DIR) ){
-                            $dir .= '/languages';
-                        }
-                    }
+                    $dir = $package->lang_dir( $domain );
                     $pot_path = $dir.'/'.$domain.'.pot';
+                    // extract from all PHP source files
+                    $export = self::xgettext( $package, $dir );
                     self::render_poeditor( $package, $pot_path, $export );
                     break;
                 }
@@ -238,7 +228,7 @@ abstract class LocoAdmin {
         if( ! $domain ){
             $domain = $package->get_domain();
         }
-        $po_dir = '';
+        $po_dir = $package->lang_dir( $domain );
         $po_name = $domain.'-'.$locale->get_code().'.po';
 
         // extract from POT if possible
@@ -252,36 +242,21 @@ abstract class LocoAdmin {
 
         // else extract from source code when no POT
         if( ! $export ){
-            $export = self::xgettext( $package->get_source_dirs() );
+            $export = self::xgettext( $package, $po_dir );
             if( ! $export ){
                 throw new Exception( Loco::__('No translatable strings found').'. '.Loco::__('Cannot create a PO file.') );
             }
         }
-
-        // If no POT file was found, establish best location for new PO file
-        while( ! $po_dir ){
-            foreach( $package->get_po($domain) as $po_code => $po_path ){
-                // have po file in domain, but could be locale conflict
-                $po_locale = loco_locale_resolve( $po_code );
-                if( $locale->equal_to($po_locale) ){
-                    throw new Exception( sprintf(Loco::__('PO file already exists with locale %s'), $po_code ) );
-                }
-                // attempt to place new file along-side existing one
-                $po_dir = dirname($po_path);
-                break 2;
-            }
-            // with no matching PO files, we'll place it in default location
-            // @todo check multiple locations for first writable directory
-            $po_dir = $package->get_root();
-            if( 0 !== strpos($po_dir, WP_LANG_DIR) ){
-                $po_dir .= '/languages';
-            }
-            break;
+        
+        // check for PO conflict as this is msginit, not a sync.
+        $po_path = $po_dir.'/'.$po_name;
+        if( file_exists($po_path) ){
+            throw new Exception( sprintf(Loco::__('PO file already exists with locale %s'), $po_code ) );
         }
 
         // return path, export and head set as references
         $head or $head = new LocoArray;
-        return $po_dir.'/'.$po_name;
+        return $po_path;
     }     
     
     
@@ -400,6 +375,7 @@ abstract class LocoAdmin {
         if( ! $head->has('X-Poedit-Basepath') ){
             $head->add('X-Poedit-Basepath', '.' );
             foreach( $package->get_source_dirs($path) as $i => $dir ){
+                $dir or $dir = '.';
                 $head->add('X-Poedit-SearchPath-'.$i, $dir );
             }
         }
@@ -594,15 +570,16 @@ abstract class LocoAdmin {
      * @todo filter on TextDomain?
      * @return array Loco's internal array format
      */
-    public static function xgettext( array $dirs ){
+    public static function xgettext( LocoPackage $package, $relative_to = '' ){
         class_exists('LocoPHPExtractor') or loco_require('build/gettext-compiled');
         $extractor = new LocoPHPExtractor;
         $export = array();
-        foreach( $dirs as $dir ){
+        foreach( $package->get_source_dirs() as $dir ){
+            $fileref = loco_relative_path( $relative_to, $dir );
             foreach( self::find_php($dir) as $path ){
                 $source = file_get_contents($path) and
                 $tokens = token_get_all($source) and
-                $export = $extractor->extract( $tokens, str_replace( $dir.'/', '', $path ) );
+                $export = $extractor->extract( $tokens, str_replace( $dir, $fileref, $path ) );
             }
         }
         return $export;

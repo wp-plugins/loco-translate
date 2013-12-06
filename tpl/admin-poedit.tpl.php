@@ -4,8 +4,8 @@
  */
 $nav = array (
     Loco::__('Packages') => LocoAdmin::uri(),
-    Loco::__('Settings') => str_replace( 'tools', 'options-general', LocoAdmin::uri() ),
     $name => '',
+    Loco::__('Settings') => str_replace( 'tools', 'options-general', LocoAdmin::uri() ),
 );  
 
 $phpbase = Loco::html( Loco::baseurl() ).'/php';

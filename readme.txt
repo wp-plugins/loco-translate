@@ -2,8 +2,8 @@
 Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 1.2.2
+Tested up to: 3.7.1
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,8 +96,8 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 == Changelog ==
 
 = 1.3 =
-* Last-Translator header added to PO files from Wordpress user
 * Support for files under WP_LANG_DIR
+* Last-Translator header added to PO files from Wordpress user
 * Disabling cache when WP_DEBUG = true
 * Better POEdit integration, including source headers and file refs
 * Added editor dropdown for switching between files

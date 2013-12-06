@@ -38,7 +38,6 @@ abstract class Loco {
         if( 0 === strpos($locale,'en') ){
             return;
         }
-        // see if MO file exists with exact name
         $plugin_rel_path = basename( self::basedir() );
         load_plugin_textdomain( Loco::NS, false, $plugin_rel_path );
     }

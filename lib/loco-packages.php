@@ -211,6 +211,23 @@ class LocoPackage {
         }
         return WP_LANG_DIR;        
     }   
+    
+    
+    /**
+     * Get all PO an POT files
+     */
+    public function get_gettext_files(){
+        $files = array();
+        foreach( $this->pot as $domain => $path ){
+            $files[] = $path;
+        }
+        foreach( $this->po as $domain => $paths ){
+            foreach( $paths as $path ){
+                $files[] = $path;
+            }
+        }
+        return $files;
+    }
      
     
     /**

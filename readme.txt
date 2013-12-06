@@ -100,6 +100,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 * Support for files under WP_LANG_DIR
 * Disabling cache when WP_DEBUG = true
 * Better POEdit integration, including source headers and file refs
+* Added editor dropdown for switching between files
 
 = 1.2.2 =
 * Fixed incorrect plural equation offset
@@ -138,7 +139,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.2 =
+= 1.3 =
 * Bug fixes and improvements.
 
 

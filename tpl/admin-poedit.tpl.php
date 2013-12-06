@@ -11,19 +11,48 @@ $nav = array (
 $phpbase = Loco::html( Loco::baseurl() ).'/php';
 $argpair = $package->get_query();
 
-?>
+// whether to show file switcher
+$pofiles = $package->get_gettext_files();
+$modified or $pofiles[] = $path;
+
+?> 
 <div class="wrap loco-admin loco-edit"><?php 
 
     // Main navigation
     Loco::render('admin-nav', compact('nav') )?> 
     
     <h3 class="title"><?php 
+
+        // print flag or template indicator
         if( $locale ):?> 
-        <span class="<?php echo $locale->icon_class()?>"></span>
-        <?php Loco::h( $locale->get_name() )?>:<?php
+        <span class="<?php echo $locale->icon_class()?>"></span> <?php 
+        Loco::h( $locale->get_name() )?>:<?php
         else:
-        echo Loco::__('Template file')?>:<?php
+        Loco::h( Loco::__('Template file') )?>: <?php
+        endif;
+        
+        // print switcher if more than one file available
+        if( 1 < count($pofiles) ):?> 
+        <form action="#" class="loco-switcher">
+            <select onchange="void function(u){ u && location.assign(u) }( this.options[this.options.selectedIndex].value);">
+                <option value="">
+                    <?php Loco::h(Loco::_x('Switch to...','Dropdown label'))?> 
+                </option><?php
+                // drop down of files in package
+                $poname = basename( $path );
+                foreach( $pofiles as $_path ):
+                    $label = basename($_path);
+                    $poedit = LocoAdmin::trim_path($_path);
+                    $url = LocoAdmin::uri( $package->get_query() + compact('poedit') );
+                ?> 
+                <option value="<?php Loco::h($url)?>" <?php $poname === $label and print('selected')?>>
+                    <?php Loco::h($label)?> 
+                </option><?php
+                endforeach?> 
+            </select>
+        </form><?php
         endif?> 
+        
         <span class="loco-meta">
             <?php Loco::h( Loco::__('Updated') )?>:
             <span id="loco-po-modified">

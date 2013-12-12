@@ -8,10 +8,15 @@ $nav = array (
 ); 
 ?>
 
-<div class="wrap">
+<div class="wrap loco-admin loco-settings">
     
-
     <?php Loco::render('admin-nav', compact('nav') )?> 
+    
+    <div>&nbsp;</div>
+    <div class="icon32 icon-settings"><br /></div>
+    <h2>
+        <?php Loco::h( Loco::__('Configure Loco Translate') )?> 
+    </h2>
     
     <?php isset($success) and LocoAdmin::success( $success )?> 
 
@@ -26,6 +31,7 @@ $nav = array (
         </p>
         <p class="submit">
             <input type="submit" class="button-primary" value="<?php Loco::h( Loco::__('Save settings') )?>" />
+            <a class="button" href="http://wordpress.org/support/plugin/<?php echo Loco::NS?>" target="_blank">Get help</a>
         </p>
     </form>
     

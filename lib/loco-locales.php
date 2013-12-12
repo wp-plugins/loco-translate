@@ -6,6 +6,8 @@
 
 
 /**
+ * Match locale to code at end of string.
+ * @param string e.g. "something-fr_FR"
  * @return LocoLocale
  */
 function loco_locale_resolve( $s ){

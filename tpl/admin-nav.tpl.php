@@ -16,7 +16,7 @@
             </a>
             <?php endif?> 
         <?php endforeach?> 
-        <a href="http://localise.biz/?<?php echo Loco::utm_query('nav')?>" class="nav-tab nav-tab-loco">
+        <a href="https://localise.biz/about/gettext?<?php echo Loco::utm_query('nav')?>" class="nav-tab nav-tab-loco" target="_blank">
             <strong><?php echo Loco::html(Loco::__('Powered by'))?> Loco</strong>
             &ndash; Translation Management
         </a>

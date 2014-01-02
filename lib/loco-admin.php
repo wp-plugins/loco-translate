@@ -47,11 +47,11 @@ abstract class LocoAdmin {
         }
         else {
             $args = Loco::config();
-            // establish a default msgfmt if possible
-            if( false === $args['which_msgfmt'] ){
-                function_exists('loco_find_executable') or loco_require('build/shell-compiled');
-                $args['which_msgfmt'] = loco_find_executable('msgfmt');
-            }
+        }
+        // establish a default msgfmt if required and possible
+        if( $args['use_msgfmt'] && ! $args['which_msgfmt'] ){
+            function_exists('loco_find_executable') or loco_require('build/shell-compiled');
+            $args['which_msgfmt'] = loco_find_executable('msgfmt');// and Loco::config( $args );
         }
         Loco::render('admin-opts', $args );
     }     
@@ -429,7 +429,8 @@ abstract class LocoAdmin {
             self::error( Loco::__('Bad file path').' '.var_export($path,1) );
             return '';
         }
-        return $realpath;
+        // returning original path in case something was symlinked outside the web root
+        return $path;
     }
     
     
@@ -581,6 +582,7 @@ abstract class LocoAdmin {
         $export = array();
         foreach( $package->get_source_dirs() as $dir ){
             $fileref = loco_relative_path( $relative_to, $dir );
+            error_log( json_encode( array( $relative_to, $dir, $fileref ) ), 0 );
             foreach( self::find_php($dir) as $path ){
                 $source = file_get_contents($path) and
                 $tokens = token_get_all($source) and
@@ -792,7 +794,7 @@ abstract class LocoAdmin {
             $extra[] = sprintf( Loco::__('%s fuzzy'), number_format($f) );
         }   
         if( $u ){
-            $extra[] = sprintf( Loco::__('%s unstranslated'), number_format($f) );
+            $extra[] = sprintf( Loco::__('%s untranslated'), number_format($f) );
         }
         if( $extra ){
             $text .= ' ('.implode(', ',$extra).')';

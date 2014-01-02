@@ -60,33 +60,27 @@
 
    
     // attempt to write MO file also, but may fail for numerous reasons.
-    if( ! $ispot ){
+    while( ! $ispot ){
         try {
+
+            // check target MO path before compiling
+            $mopath = preg_replace( '/\.po$/', '.mo', $path );
+            if( ! file_exists($mopath) && ! is_writable( dirname($mopath) ) ){
+                throw new Exception( Loco::__('Cannot create MO file') );
+            }
+            else if( file_exists($mopath) && ! is_writable($mopath) ){
+                throw new Exception( Loco::__('Cannot overwrite MO file') );
+            }
 
             // establish msgfmt settings
             $conf = Loco::config();
 
-            // attempt to find an appropriate msgfmt if never set
-            if( false === $conf['which_msgfmt'] ){
-                function_exists('loco_find_executable') or loco_require('build/shell-compiled');
-                $conf['which_msgfmt'] = loco_find_executable('msgfmt') and
-                Loco::config( $conf );
-            }
-            
-            if( $conf['which_msgfmt'] ){
-                define( 'WHICH_MSGFMT', $conf['which_msgfmt'] );
-                // check target MO path before compiling
-                $mopath = preg_replace( '/\.po$/', '.mo', $path );
-                if( ! file_exists($mopath) && ! is_writable( dirname($mopath) ) ){
-                    throw new Exception( Loco::__('Cannot create MO file') );
-                }
-                else if( file_exists($mopath) && ! is_writable($mopath) ){
-                    throw new Exception( Loco::__('Cannot overwrite MO file') );
-                }
-                // attempt to compile MO direct to file via shell
+            // attempt to compile MO direct to file via shell
+            if( $conf['use_msgfmt'] && $conf['which_msgfmt'] ){
                 try {
                     $bytes = 0;
-                    function_exists('loco_compile_mo_file') or loco_require('build/shell-compiled');
+                    loco_require('build/shell-compiled');
+                    define( 'WHICH_MSGFMT', $conf['which_msgfmt'] );
                     $mopath = loco_compile_mo_file( $path, $mopath );
                     $bytes  = $mopath && file_exists($mopath) ? filesize($mopath) : 0;
                 }
@@ -97,10 +91,29 @@
                     throw new Exception( sprintf( Loco::__('Failed to compile MO file with %s, check your settings'), WHICH_MSGFMT ) );
                 }
                 $response['compiled'] = $bytes;
+                break;
             }
+            
+            // Fall back to in-built MO compiler - requires PO is parsed too
+            try {
+                $bytes = 0;
+                loco_require('build/gettext-compiled');
+                $mo = loco_msgfmt( $po );
+                $bytes = file_put_contents( $mopath, $mo );
+            }
+            catch( Exception $Ex ){
+                error_log( $Ex->getMessage(), 0 );
+            }
+            if( ! $bytes ){
+                throw new Exception( sprintf( Loco::__('Failed to compile MO file with built-in compiler') ) );
+            }
+            $response['compiled'] = $bytes;
+            break;
+
         }
         catch( Exception $e ){
             $response['compiled'] = $e->getMessage();
+            break;
         }
     }
     

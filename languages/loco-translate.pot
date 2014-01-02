@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: Fri Dec 06 2013 17:56:11 GMT+0000 (GMT)\n"
-"POT-Revision-Date: Fri Dec 06 2013 17:56:40 GMT+0000 (GMT)\n"
+"POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Thu Jan 02 2014 17:41:39 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -98,47 +98,47 @@ msgstr ""
 msgid "Bad file path"
 msgstr ""
 
-#: ../lib/loco-admin.php:731
+#: ../lib/loco-admin.php:733
 msgctxt "Add button"
 msgid "New template"
 msgstr ""
 
-#: ../lib/loco-admin.php:750
+#: ../lib/loco-admin.php:752
 msgctxt "Add button"
 msgid "New language"
 msgstr ""
 
-#: ../lib/loco-admin.php:789
+#: ../lib/loco-admin.php:791
 msgid "%s%% translated"
 msgstr ""
 
-#: ../lib/loco-admin.php:789
+#: ../lib/loco-admin.php:791
 msgid "1 string"
 msgid_plural "%s strings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/loco-admin.php:792
+#: ../lib/loco-admin.php:794
 msgid "%s fuzzy"
 msgstr ""
 
-#: ../lib/loco-admin.php:795
-msgid "%s unstranslated"
-msgstr ""
-
-#: ../lib/loco-admin.php:826
-msgid "Loco, Translation Management"
+#: ../lib/loco-admin.php:797
+msgid "%s untranslated"
 msgstr ""
 
 #: ../lib/loco-admin.php:828
+msgid "Loco, Translation Management"
+msgstr ""
+
+#: ../lib/loco-admin.php:830
 msgid "Translation"
 msgstr ""
 
-#: ../lib/loco-admin.php:831 ../lib/loco-admin.php:842
+#: ../lib/loco-admin.php:833 ../lib/loco-admin.php:844
 msgid "Manage translations"
 msgstr ""
 
-#: ../lib/loco-admin.php:843 ../tpl/admin-fscheck.tpl.php:7 ../tpl/admin-opts.tpl.php:7 ../tpl/admin-poedit.tpl.php:8 ../tpl/admin-poinit.tpl.php:8 ../tpl/admin-root.tpl.php:7
+#: ../lib/loco-admin.php:845 ../tpl/admin-fscheck.tpl.php:7 ../tpl/admin-opts.tpl.php:7 ../tpl/admin-poedit.tpl.php:8 ../tpl/admin-poinit.tpl.php:8 ../tpl/admin-root.tpl.php:7
 msgid "Settings"
 msgstr ""
 
@@ -208,16 +208,20 @@ msgid ""
 "copy to \"%s/%s\"."
 msgstr ""
 
-#: ../php/loco-posave.php:81
+#: ../php/loco-posave.php:69
 msgid "Cannot create MO file"
 msgstr ""
 
-#: ../php/loco-posave.php:84
+#: ../php/loco-posave.php:72
 msgid "Cannot overwrite MO file"
 msgstr ""
 
-#: ../php/loco-posave.php:97
+#: ../php/loco-posave.php:91
 msgid "Failed to compile MO file with %s, check your settings"
+msgstr ""
+
+#: ../php/loco-posave.php:108
+msgid "Failed to compile MO file with built-in compiler"
 msgstr ""
 
 #: ../php/loco-posync.php:53
@@ -283,12 +287,28 @@ msgstr ""
 msgid "Configure Loco Translate"
 msgstr ""
 
-#: ../tpl/admin-opts.tpl.php:27
-msgid "Path to msgfmt program for compiling MO files"
+#: ../tpl/admin-opts.tpl.php:27 ../tpl/admin-opts.tpl.php:31
+msgid "Compiling MO files"
 msgstr ""
 
-#: ../tpl/admin-opts.tpl.php:33
+#: ../tpl/admin-opts.tpl.php:36
+msgid "Use built-in MO compiler."
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:42
+msgid "Use external command:"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:47
+msgid "Enter path to msgfmt on server"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:57
 msgid "Save settings"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:59
+msgid "Get help"
 msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:31

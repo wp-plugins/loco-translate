@@ -52,32 +52,33 @@ No. It's for manually entering your own translations, but we do intend to be int
 
 = Why can't it extract any translatable strings from my code? =
 
-The extraction process looks fo Wordpress translation functions with string literal arguments, such as `__('Foo')`.
+The extraction process looks for Wordpress translation functions with string literal arguments, such as `__('Foo')`.
 
 Using your own custom functions like `myTranslate('Foo')` won't work. Neither will using variables, such as `__( $foo )`.
 
 
 = Do I need to create a POT file? =
 
-There are some good reasons to, but you don't have to in order to use this plugin.
+There are some good reasons to do so, but you don't have to in order to use this plugin.
 
 Loco Translate allows you to work purely with PO files and keep them up to date with the source code without the interim step of maintaining a POT file.
 
 
-= Why do I get errors when I try to save files? =
+= Why do I get errors when I try to save translations? =
 
-To be able to save PO files directly to your project, the files must be writable by the web server. 
+To save PO files directly to your project, the files must be writable by the web server. 
 
-You shouldn't do this in a live server, only for developing your theme or plugin on a local server.
+You shouldn't do this on a live server, only for developing your theme or plugin on a local server.
 
-If you're unsure how to set file permission on your server, ask your systems administrator. 
+If you're unsure how to set file permission on your server, ask your system administrator.
 
 
 = How do I create MO files? =
 
-If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your system, Loco Translate will automatcally create a MO file when you save a PO file.
+Every time you save a PO file Loco tries to compile a MO file in the same location if it can. As above, ensure that the web server is able to write to disk, otherwise MO compilation will fail.
 
-Ensure that the web server is able to write the file to disk, and also ensure that the `msgfmt` program is in a common location, such as `/usr/bin/msgfmt`.
+If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your server you can use this instead of Loco's built-in compiler. 
+You can configure the path to the `msgfmt` program in the Settings tab.
 
 
 = Does it support Windows? =
@@ -94,6 +95,10 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 
 == Changelog ==
+
+= 1.3.2 =
+* Added native MO compiler
+* Fixed some translations and added German
 
 = 1.3.1 =
 * style tweak for wp 3.8
@@ -144,7 +149,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.3.1 =
+= 1.3.2 =
 * Bug fixes and improvements.
 
 
@@ -161,3 +166,4 @@ These features are on our todo list. There's no particular timeframe for any of 
 == Credits ==
 
 * Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)
+* German translations courtesy of [Sebastian König](http://aykutmania.de)

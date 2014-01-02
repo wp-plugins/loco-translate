@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.3';
+    const VERSION = '1.3.2';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -35,11 +35,11 @@ abstract class Loco {
      */
     public static function load_textdomain(){
         $locale = get_locale();
-        if( 0 === strpos($locale,'en') ){
+        if( ! $locale || 0 === strpos($locale,'en') ){
             return;
         }
         $plugin_rel_path = basename( self::basedir() );
-        load_plugin_textdomain( Loco::NS, false, $plugin_rel_path );
+        load_plugin_textdomain( Loco::NS, false, $plugin_rel_path.'/languages' );
     }
     
     
@@ -251,11 +251,13 @@ abstract class Loco {
         static $conf;
         if( ! isset($conf) ){
             $conf = array (
-                'which_msgfmt' => false,
+                // whether to use external msgfmt command (1), or internal (default)
+                'use_msgfmt' => false,
+                'which_msgfmt' => '',
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);
-                if( empty($conf[$key]) && ! is_string($conf[$key]) ){
+                if( ! is_string($conf[$key]) ){
                     $conf[$key] = $val;
                 }
             }
@@ -265,6 +267,10 @@ abstract class Loco {
                 update_option( Loco::NS.'-'.$key, $val );
                 $conf[$key] = $val;
             }
+        }
+        // force msgfmt usage if path is set (legacy installs/upgrades)
+        if( false === $conf['use_msgfmt'] ){
+            $conf['use_msgfmt'] = $conf['which_msgfmt'] ? '1' : '0';
         }
         return $conf;
     }    

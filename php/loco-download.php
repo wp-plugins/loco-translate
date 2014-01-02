@@ -53,8 +53,17 @@ try {
         try {
             loco_require('build/shell-compiled');
             define( 'WHICH_MSGFMT', $conf['which_msgfmt'] );
-            // @todo use temp file if over max stdin size
-            $mo = loco_compile_mo( $po );
+            // use temp file if possible, due to stdin size restrictions
+            if( $popath = tempnam( sys_get_temp_dir(), 'loco-' ) ){
+                register_shutdown_function( 'unlink', $popath );
+                file_put_contents( $popath, $po );
+                $mopath = loco_compile_mo_file( $popath, $mopath );
+                register_shutdown_function( 'unlink', $mopath );
+                $mo = file_get_contents( $mopath );
+            }
+            else {
+                $mo = loco_compile_mo( $po );
+            }
         }
         catch( Exception $Ex ){
             error_log( $Ex->getMessage(), 0 );

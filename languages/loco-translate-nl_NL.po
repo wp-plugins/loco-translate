@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Thu Jan 02 2014 17:42:49 GMT+0000 (GMT)\n"
+"PO-Revision-Date: Thu Jan 02 2014 20:44:06 GMT+0000 (GMT)\n"
 "Last-Translator: admin <animal@animal.local>\n"
 "Language-Team: \n"
 "Language: Dutch\n"
@@ -23,17 +23,17 @@ msgstr ""
 "X-Poedit-SearchPath-0: .."
 
 # Translators: Bold text label in admin error messages
-#: ../lib/loco-admin.php:15
+#: ../lib/loco-admin.php:15 ../pub/js/lang/dummy.php:7
 msgctxt "Message label"
 msgid "Error"
 msgstr "Fout"
 
-#: ../lib/loco-admin.php:24
+#: ../lib/loco-admin.php:24 ../pub/js/lang/dummy.php:6
 msgctxt "Message label"
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../lib/loco-admin.php:33
+#: ../lib/loco-admin.php:33 ../pub/js/lang/dummy.php:5
 msgctxt "Message label"
 msgid "OK"
 msgstr "OK"
@@ -233,6 +233,50 @@ msgstr ""
 #: ../php/loco-posync.php:53
 msgid "No strings could be extracted from source files"
 msgstr "Er konden geen te vertalen teksten uit de bronbestanden gehaald worden"
+
+#: ../pub/js/lang/dummy.php:8
+msgid "Unknown error"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:9
+msgid "PO file saved"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:10
+msgid "and MO file compiled"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:11
+msgid "Merged from %s"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:12
+msgid "Merged from source code"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:13
+msgid "Already up to date with %s"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:14
+msgid "Already up to date with source code"
+msgstr ""
+
+#: ../pub/js/lang/dummy.php:15
+msgid "1 new string added"
+msgid_plural "%s new strings added"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../pub/js/lang/dummy.php:16
+msgid "1 obsolete string removed"
+msgid_plural "%s obsolete strings removed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../pub/js/lang/dummy.php:17
+msgid "Your changes will be lost if you continue without saving"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:6 ../tpl/admin-opts.tpl.php:6 ../tpl/admin-poedit.tpl.php:6 ../tpl/admin-poinit.tpl.php:6 ../tpl/admin-root.tpl.php:6
 msgid "Packages"

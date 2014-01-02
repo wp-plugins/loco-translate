@@ -115,7 +115,12 @@ abstract class Loco {
         $stubs = func_get_args();
         if( ! isset($v) ){
             $v = WP_DEBUG ? time() : Loco::VERSION;
-            // @todo enqueue JavaScript translations here
+            // enqueue JavaScript translations once
+            $trans = 'lang/dummy';
+            $locale = get_locale() and
+                0 !== strpos( $locale, 'en' ) and 
+                    file_exists( Loco::basedir().'/pub/js/lang/'.Loco::NS.'-'.$locale.'.js' ) and
+                        array_unshift( $stubs, 'lang/'.Loco::NS.'-'.$locale );
         }
         foreach( $stubs as $stub ){
             $js = Loco::baseurl().'/pub/js/'.$stub.'.js';

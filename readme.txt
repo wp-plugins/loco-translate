@@ -17,10 +17,11 @@ The Loco Translate plugin provides in-browser editing of PO files used for local
 Features include:
 
 * POEdit style translations editor within Wordpress admin
+* Create and update langauge files directly in your theme or plugin
 * Extraction of translatable strings from your source code
-* Create and update langauge files directly in your project
+* Native MO file compilation without the need for Gettext on your system
 
-Built by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>. Official [Loco](https://localise.biz/) WordPress plugin.
+Official [Loco](https://localise.biz/) WordPress plugin by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>
 
 
 
@@ -75,7 +76,7 @@ If you're unsure how to set file permission on your server, ask your system admi
 
 = How do I create MO files? =
 
-Every time you save a PO file Loco tries to compile a MO file in the same location if it can. As above, ensure that the web server is able to write to disk, otherwise MO compilation will fail.
+Every time you save a PO file, Loco tries to compile a MO file in the same location. As above, ensure that the web server is able to write to disk, otherwise MO compilation will fail.
 
 If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your server you can use this instead of Loco's built-in compiler. 
 You can configure the path to the `msgfmt` program in the Settings tab.

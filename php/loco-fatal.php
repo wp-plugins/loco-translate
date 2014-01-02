@@ -6,7 +6,7 @@ $status  = $Ex->getCode() or $status = 500;
 $message = $Ex->getMessage();
 
 
-if( ( isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHttpRequest' === $_SERVER['HTTP_X_REQUESTED_WITH'] ) || ( defined('DOING_AJAX') && DOING_AJAX ) ){
+if( ( isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHttpRequest' === $_SERVER['HTTP_X_REQUESTED_WITH'] ) ){
     $type = 'application/json; charset=UTF-8';
     $body = json_encode( compact('status','message') );
 }

@@ -99,6 +99,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 = 1.3.2 =
 * Added native MO compiler
+* Added direct MO download from editor
 * Fixed some translations and added German
 
 = 1.3.1 =

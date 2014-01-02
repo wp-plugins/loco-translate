@@ -87,13 +87,24 @@ $modified or $pofiles[] = $path;
                     <span><?php Loco::h( Loco::_x('Save','Editor button') )?></span>
                 </button>
             </form>
-            <form action="<?php echo $phpbase?>/loco-download.php" method="post">
+            <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
                 <input type="hidden" name="po" value="" />
+                <input type="hidden" name="action" value="loco-download" />
                 <input type="hidden" name="path" value="<?php Loco::h($path)?>" />
-                <button class="button loco-download" data-loco="download" type="submit" disabled>
-                    <span><?php Loco::h( Loco::_x('Download','Editor button') )?></span>
+                <button class="button loco-download" data-loco="download_po" type="submit" disabled title="<?php Loco::h( Loco::_x('Download','Editor button') )?> PO">
+                    <span><?php echo $locale ? 'PO' : 'POT' ?></span>
                 </button>
-            </form>
+            </form><?php
+            if( $locale ):?> 
+            <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
+                <input type="hidden" name="po" value="" />
+                <input type="hidden" name="action" value="loco-download" />
+                <input type="hidden" name="path" value="<?php Loco::h( preg_replace('/\.po$/','.mo',$path) )?>" />
+                <button class="button loco-download" data-loco="download_mo" type="submit" disabled title="<?php Loco::h( Loco::_x('Download','Editor button') )?> MO">
+                    <span>MO</span>
+                </button>
+            </form><?php 
+            endif?> 
             <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
                 <input type="hidden" name="path" value="<?php Loco::h($path)?>" />
                 <input type="hidden" name="action" value="loco-posync" /><?php

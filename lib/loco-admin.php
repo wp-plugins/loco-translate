@@ -75,7 +75,6 @@ abstract class LocoAdmin {
                     $package = LocoPackage::get( $_GET['name'], $_GET['type'] );
                 }
 
-
                 // Extract messages if 'xgettext' is in query string
                 //
                 if( isset($_GET['xgettext']) ){
@@ -851,7 +850,7 @@ function _loco_hook__plugin_row_meta( $links, $file = '' ){
 /**
  * execute ajax actions
  */
-function _lock_hook__wp_ajax(){
+function _loco_hook__wp_ajax(){
     extract( Loco::postdata() );
     if( isset($action) ){
         require Loco::basedir().'/php/loco-ajax.php';
@@ -859,14 +858,26 @@ function _lock_hook__wp_ajax(){
 }
 
 
+/** 
+ * execute file download actions
+ */
+function _loco_hook__wp_ajax_download(){
+    extract( Loco::postdata() );
+    if( isset($action) ){
+        require Loco::basedir().'/php/loco-download.php';
+        die( __('File download failed') );
+    }
+}
+
 
 
 add_action('admin_menu', '_loco_hook__admin_menu' );
 add_action('plugin_row_meta', '_loco_hook__plugin_row_meta', 10, 2 );
 
 // ajax hooks all going through one central function
-add_action('wp_ajax_loco-posave', '_lock_hook__wp_ajax' );
-add_action('wp_ajax_loco-posync', '_lock_hook__wp_ajax' );
+add_action('wp_ajax_loco-posave', '_loco_hook__wp_ajax' );
+add_action('wp_ajax_loco-posync', '_loco_hook__wp_ajax' );
+add_action('wp_ajax_loco-download', '_loco_hook__wp_ajax_download' );
 
 // WP_LANG_DIR was introduced in Wordpress 2.1.0.
 if( ! defined('WP_LANG_DIR') ){

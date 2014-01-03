@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"POT-Revision-Date: Thu Jan 02 2014 23:00:04 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Fri Jan 03 2014 00:21:30 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -186,11 +186,11 @@ msgstr ""
 msgid "User does not have permission to manage translations"
 msgstr ""
 
-#: ../php/loco-download.php:63 ../php/loco-posave.php:91
+#: ../php/loco-download.php:72 ../php/loco-posave.php:91
 msgid "Failed to compile MO file with %s, check your settings"
 msgstr ""
 
-#: ../php/loco-download.php:77 ../php/loco-posave.php:108
+#: ../php/loco-download.php:86 ../php/loco-posave.php:108
 msgid "Failed to compile MO file with built-in compiler"
 msgstr ""
 

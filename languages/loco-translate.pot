@@ -1,11 +1,11 @@
-# Loco Gettext template
+#. Loco Gettext template
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"POT-Revision-Date: Fri Jan 03 2014 00:21:30 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Fri Jan 03 2014 13:24:44 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -24,7 +24,7 @@ msgstr ""
 "comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Generator: Loco - https://localise.biz/"
 
-# Translators: Bold text label in admin error messages
+#. Translators: Bold text label in admin error messages
 #: ../lib/loco-admin.php:15 ../pub/js/lang/dummy.php:7
 msgctxt "Message label"
 msgid "Error"
@@ -292,6 +292,10 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:58
+msgid "Get help"
+msgstr ""
+
 #: ../tpl/admin-list.tpl.php:11
 msgctxt "Table header"
 msgid "Package details"
@@ -353,10 +357,6 @@ msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:57
 msgid "Save settings"
-msgstr ""
-
-#: ../tpl/admin-opts.tpl.php:59
-msgid "Get help"
 msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:31

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Fri Jan 03 2014 13:07:40 GMT+0000 (GMT)\n"
+"PO-Revision-Date: Fri Jan 03 2014 13:24:54 GMT+0000 (GMT)\n"
 "Last-Translator: admin <support@localise.biz>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -146,7 +146,7 @@ msgstr "Einstellungen"
 
 #: ../lib/loco-admin.php:868
 msgid "File download failed"
-msgstr ""
+msgstr "Dateidownload ist fehlgeschlagen"
 
 #: ../lib/loco-locales.php:70
 msgid "Unknown language"
@@ -194,7 +194,7 @@ msgstr "Kompilieren der MO-Datei fehlgeschlagen. Bitte prüfe Deine Einstellunge
 
 #: ../php/loco-download.php:86 ../php/loco-posave.php:108
 msgid "Failed to compile MO file with built-in compiler"
-msgstr ""
+msgstr "Kompilieren der MO-Datei mit dem internen Kompilierer fehlgeschlagen."
 
 #: ../php/loco-posave.php:10 ../php/loco-posync.php:9
 msgid "Invalid data posted to server"
@@ -243,47 +243,47 @@ msgstr "Es konnten keine Zeichenketten aus der Quelle extrahiert werden"
 
 #: ../pub/js/lang/dummy.php:8
 msgid "Unknown error"
-msgstr ""
+msgstr "Unbekannter Fehler"
 
 #: ../pub/js/lang/dummy.php:9
 msgid "PO file saved"
-msgstr ""
+msgstr "PO-Datei gespeichert"
 
 #: ../pub/js/lang/dummy.php:10
 msgid "and MO file compiled"
-msgstr ""
+msgstr "und MO-Datei kompiliert"
 
 #: ../pub/js/lang/dummy.php:11
 msgid "Merged from %s"
-msgstr ""
+msgstr "Aus %s zusammengeführt"
 
 #: ../pub/js/lang/dummy.php:12
 msgid "Merged from source code"
-msgstr ""
+msgstr "Aus Quelle zusammengeführt"
 
 #: ../pub/js/lang/dummy.php:13
 msgid "Already up to date with %s"
-msgstr ""
+msgstr "Bereit auf dem aktuellen Stand mit %s"
 
 #: ../pub/js/lang/dummy.php:14
 msgid "Already up to date with source code"
-msgstr ""
+msgstr "Bereit mit der Quelle auf dem aktuellen Stand"
 
 #: ../pub/js/lang/dummy.php:15
 msgid "1 new string added"
 msgid_plural "%s new strings added"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 neue Zeichenkette hinzugefügt"
+msgstr[1] "%s neue Zeichenketten hinzugefügt"
 
 #: ../pub/js/lang/dummy.php:16
 msgid "1 obsolete string removed"
 msgid_plural "%s obsolete strings removed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 veraltete Zeichenkette entfernt"
+msgstr[1] "%s veraltete Zeichenketten entfernt"
 
 #: ../pub/js/lang/dummy.php:17
 msgid "Your changes will be lost if you continue without saving"
-msgstr ""
+msgstr "Deine Änderungen gehen verloren, wenn du fortsetzt ohne zu Speichern"
 
 #: ../tpl/admin-fscheck.tpl.php:6 ../tpl/admin-opts.tpl.php:6 ../tpl/admin-poedit.tpl.php:6 ../tpl/admin-poinit.tpl.php:6 ../tpl/admin-root.tpl.php:6
 msgid "Packages"
@@ -300,6 +300,10 @@ msgstr "Dateisystem-Rechte für %s"
 #: ../tpl/admin-fscheck.tpl.php:40
 msgid "Back"
 msgstr "Zurück"
+
+#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:58
+msgid "Get help"
+msgstr "Hilfe erhalten"
 
 #: ../tpl/admin-list.tpl.php:11
 msgctxt "Table header"
@@ -346,15 +350,15 @@ msgstr "Konfiguriere Loco Translate"
 
 #: ../tpl/admin-opts.tpl.php:27 ../tpl/admin-opts.tpl.php:31
 msgid "Compiling MO files"
-msgstr ""
+msgstr "MO-Dateien kompilieren"
 
 #: ../tpl/admin-opts.tpl.php:36
 msgid "Use built-in MO compiler."
-msgstr ""
+msgstr "Benutze internen MO-Kompilierer"
 
 #: ../tpl/admin-opts.tpl.php:42
 msgid "Use external command:"
-msgstr ""
+msgstr "Benutze externes Befehlsprogramm:"
 
 #: ../tpl/admin-opts.tpl.php:47
 msgid "Enter path to msgfmt on server"
@@ -363,10 +367,6 @@ msgstr "Pfad zum msgfmt-Programm"
 #: ../tpl/admin-opts.tpl.php:57
 msgid "Save settings"
 msgstr "Einstellungen speichern"
-
-#: ../tpl/admin-opts.tpl.php:59
-msgid "Get help"
-msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:31
 msgid "Template file"

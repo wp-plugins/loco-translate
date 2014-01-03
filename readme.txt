@@ -17,7 +17,7 @@ The Loco Translate plugin provides in-browser editing of PO files used for local
 Features include:
 
 * POEdit style translations editor within Wordpress admin
-* Create and update langauge files directly in your theme or plugin
+* Create and update language files directly in your theme or plugin
 * Extraction of translatable strings from your source code
 * Native MO file compilation without the need for Gettext on your system
 
@@ -39,7 +39,7 @@ If you want to create new translations for a theme or plugin, follow these steps
 3. Find the theme or plugin in the list at *Tools > Manage Translations*
 4. Click `+ New language` and follow the on-screen prompts.
 
-Make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
+A quick guide on using the plugin is [available here](https://localise.biz/help/wordpress/translate-plugin), but make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
 
 Please note that this plugin doesn’t support Windows servers.
 

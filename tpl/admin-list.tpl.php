@@ -35,7 +35,7 @@
                                 <strong><?php Loco::h($name)?></strong>
                             </li>
                             <li><?php 
-                                Loco::h( _n( '1 language', '%u languages', $n ), $n )?> 
+                                Loco::h( Loco::_n( '1 language', '%u languages', $n ), $n )?> 
                             </li><?php 
                             if( $mtime ):?> 
                             <li class="loco-mtime">

@@ -72,15 +72,12 @@
                 throw new Exception( Loco::__('Cannot overwrite MO file') );
             }
 
-            // establish msgfmt settings
-            $conf = Loco::config();
-
             // attempt to compile MO direct to file via shell
-            if( $conf['use_msgfmt'] && $conf['which_msgfmt'] ){
+            if( $msgfmt = LocoAdmin::msgfmt_command() ){
                 try {
                     $bytes = 0;
                     loco_require('build/shell-compiled');
-                    define( 'WHICH_MSGFMT', $conf['which_msgfmt'] );
+                    define( 'WHICH_MSGFMT', $msgfmt );
                     $mopath = loco_compile_mo_file( $path, $mopath );
                     $bytes  = $mopath && file_exists($mopath) ? filesize($mopath) : 0;
                 }
@@ -95,17 +92,10 @@
             }
             
             // Fall back to in-built MO compiler - requires PO is parsed too
-            try {
-                $bytes = 0;
-                loco_require('build/gettext-compiled');
-                $mo = loco_msgfmt( $po );
-                $bytes = file_put_contents( $mopath, $mo );
-            }
-            catch( Exception $Ex ){
-                error_log( $Ex->getMessage(), 0 );
-            }
+            $mo = LocoAdmin::msgfmt_native($po);
+            $bytes = file_put_contents( $mopath, $mo );
             if( ! $bytes ){
-                throw new Exception( sprintf( Loco::__('Failed to compile MO file with built-in compiler') ) );
+                throw new Exception( Loco::__('Failed to write MO file') );
             }
             $response['compiled'] = $bytes;
             break;

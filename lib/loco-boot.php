@@ -259,7 +259,10 @@ abstract class Loco {
             $conf = array (
                 // whether to use external msgfmt command (1), or internal (default)
                 'use_msgfmt' => false,
+                // which external msgfmt command to use
                 'which_msgfmt' => '',
+                // whether to compile hash table into mo files
+                'gen_hash' => '0',
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);

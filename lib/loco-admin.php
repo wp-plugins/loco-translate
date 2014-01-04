@@ -42,6 +42,7 @@ abstract class LocoAdmin {
     public static function render_page_options(){
         // update applicaion settings if posted
         if( isset($_POST['loco']) && is_array( $update = $_POST['loco'] ) ){
+            $update += array( 'gen_hash' => '0' );
             $args = Loco::config( $update );
             $args['success'] = Loco::__('Settings saved');
         }
@@ -799,7 +800,47 @@ abstract class LocoAdmin {
         }
         return $text;
     }
+    
+    
+    /**
+     * get configured path to external msgfmt command, including --no-hash argument 
+     * @return string 
+     */
+    public static function msgfmt_command(){
+        $conf = Loco::config();
+        if( ! $conf['use_msgfmt'] || ! $conf['which_msgfmt'] ){
+            return '';
+        }
+        $cmd = escapeshellarg( trim( $conf['which_msgfmt'] ) );
+        if( ! $conf['gen_hash'] ){
+            $cmd .= ' --no-hash';
+        }
+        return $cmd;
+    }
+    
+    
+    /**
+     * Execute native msgfmt command
+     * @param string po source
+     * @return string binary mo source
+     */
+    public static function msgfmt_native( $po ){
+        try {
+            $conf = Loco::config();
+            loco_require('build/gettext-compiled');
+            $gen_hash = (bool) $conf['gen_hash'];
+            $mo = loco_msgfmt( $po, $gen_hash );
+        }
+        catch( Exception $Ex ){
+            error_log( $Ex->getMessage(), 0 );
+        }
+        if( ! $mo ){
+            throw new Exception( sprintf( Loco::__('Failed to compile MO file with built-in compiler') ) );
+        }
+        return $mo;    
+    }     
 
+    
 }
 
 

@@ -48,6 +48,12 @@ $nav = array (
                                     </li>
                                 </ul>
                             </p>
+                            <p>
+                                <label for="loco--gen-hash">
+                                    <input type="checkbox" name="loco[gen_hash]" value="1" id="loco--gen-hash"<?php echo $gen_hash ? ' checked' : '';?> />
+                                    <?php Loco::h( Loco::__('Generate hash tables') )?> 
+                                </label>
+                            </p>
                         </fieldset>
                     </td>
                 </tr>

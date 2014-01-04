@@ -44,15 +44,11 @@ try {
     }
 
 
-    // Else compile binary MO file
-
-    $conf = Loco::config();
-
-    // attempt to compile MO direct to file via shell
-    if( $conf['use_msgfmt'] && $conf['which_msgfmt'] ){
+    // Attempt to compile MO direct to file via shell
+    if( $msgfmt = LocoAdmin::msgfmt_command() ){
         try {
             loco_require('build/shell-compiled');
-            define( 'WHICH_MSGFMT', $conf['which_msgfmt'] );
+            define( 'WHICH_MSGFMT', $msgfmt );
             // use temp file if possible, due to stdin size restrictions
             if( $popath = tempnam( sys_get_temp_dir(), 'loco-' ) ){
                 register_shutdown_function( 'unlink', $popath );
@@ -75,16 +71,7 @@ try {
 
     // Fall back to in-built MO compiler - requires PO is parsed too
     else {
-        try {
-            loco_require('build/gettext-compiled');
-            $mo = loco_msgfmt( $po );
-        }
-        catch( Exception $Ex ){
-            error_log( $Ex->getMessage(), 0 );
-        }
-        if( ! $mo ){
-            throw new Exception( sprintf( Loco::__('Failed to compile MO file with built-in compiler') ) );
-        }
+        $mo = LocoAdmin::msgfmt_native($po);
     }
 
     // exit with binary MO    

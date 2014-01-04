@@ -581,7 +581,6 @@ abstract class LocoAdmin {
         $export = array();
         foreach( $package->get_source_dirs() as $dir ){
             $fileref = loco_relative_path( $relative_to, $dir );
-            error_log( json_encode( array( $relative_to, $dir, $fileref ) ), 0 );
             foreach( self::find_php($dir) as $path ){
                 $source = file_get_contents($path) and
                 $tokens = token_get_all($source) and

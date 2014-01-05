@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.4';
+    const VERSION = '1.4.1';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */

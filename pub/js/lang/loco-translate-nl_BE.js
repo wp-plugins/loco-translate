@@ -3,7 +3,7 @@
  * Project: loco.js conversion
  * Release: Working copy
  * Locale: nl_BE, Dutch (Belgium)
- * Exported at: Sat, 04 Jan 2014 20:46:53 +0000 
+ * Exported at: Sun, 05 Jan 2014 11:52:38 +0000 
  */
 loco = window.loco||{}, loco.t = function( pairs ){
     

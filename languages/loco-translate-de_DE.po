@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Sat Jan 04 2014 20:45:42 GMT+0000 (GMT)\n"
+"PO-Revision-Date: Sun Jan 05 2014 11:41:28 GMT+0000 (GMT)\n"
 "Last-Translator: admin <support@localise.biz>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -239,7 +239,7 @@ msgstr "Überschreiben der MO-Datei fehlgeschlagen"
 
 #: ../php/loco-posave.php:98
 msgid "Failed to write MO file"
-msgstr ""
+msgstr "Fehler beim Schreiben der MO-Datei"
 
 #: ../php/loco-posync.php:53
 msgid "No strings could be extracted from source files"
@@ -370,7 +370,7 @@ msgstr "Pfad zum msgfmt-Programm"
 
 #: ../tpl/admin-opts.tpl.php:54
 msgid "Generate hash tables"
-msgstr ""
+msgstr "Erzeuge Hashtabellen"
 
 #: ../tpl/admin-opts.tpl.php:63
 msgid "Save settings"

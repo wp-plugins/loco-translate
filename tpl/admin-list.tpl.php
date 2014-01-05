@@ -22,19 +22,20 @@
                 </tr>
             </thead>
             <tbody><?php 
-            foreach( $items as $r ): 
-                extract( $r );
-                $n = count($po);
+            /* @var $package LocoPackage */
+            foreach( $items as $package ): 
+                extract( $package->meta() );
+                $mtime = $package->get_modified();
+                $n = count( $po );
                 ?> 
                 <tr class="inactive">
                     <td>
                         <ul class="loco-details">
-                            <strong><?php Loco::h($name)?></strong>
-                            <li>
-                                
+                            <li title="<?php Loco::h($domain)?>">
+                                <strong><?php Loco::h($name)?></strong>
                             </li>
-                            <li>
-                                <?php Loco::h( _n( '1 language', '%u languages', $n ), $n )?>
+                            <li><?php 
+                                Loco::h( Loco::_n( '1 language', '%u languages', $n ), $n )?> 
                             </li><?php 
                             if( $mtime ):?> 
                             <li class="loco-mtime">
@@ -49,15 +50,16 @@
                     <td>
                         <ul>
                             <li class="loco-add">
-                                <?php echo LocoAdmin::msginit_link( $root, Loco::_x('New language','Add button') )?> 
+                                <?php echo LocoAdmin::msginit_link( $package, $domain )?> 
                             </li><?php
+                            /* @var $po_locale LocoLocale */
                             foreach( $po as $po_data ):
                                 extract( $po_data, EXTR_PREFIX_ALL, 'po' );
                                 $code = $po_locale->get_code();
                                 $label = $code ? $code.' : '.$po_locale->get_name() : $po_name;
                             ?> 
                             <li class="loco-edit-po">
-                                <?php echo LocoAdmin::edit_link( $root, $po_path, $label, $po_locale->icon_class() )?> 
+                                <?php echo LocoAdmin::edit_link( $package, $po_path, $label, $po_locale->icon_class() )?> 
                                 <small class="loco-progress">
                                     <?php echo $po_stats['p']?>%
                                 </small>
@@ -72,28 +74,30 @@
                                 extract( $pot_data, EXTR_PREFIX_ALL, 'pot' );
                             ?> 
                             <li class="loco-edit-pot">
-                                <?php echo LocoAdmin::edit_link( $root, $pot_path )?> 
+                                <?php echo LocoAdmin::edit_link( $package, $pot_path )?> 
                             </li><?php
                             endforeach;
                          // else no POT file
                          else:?> 
                             <li class="loco-add">
-                                <?php echo LocoAdmin::xgettext_link( $root, Loco::_x('New template','Add button') )?> 
+                                <?php echo LocoAdmin::xgettext_link( $package )?> 
                             </li><?php 
                          endif;?>
                         </ul>
                     </td>
                     <td>
-                        <ul>
-                            <?php if( $warnings ): foreach( $warnings as $warning ):?> 
-                            <li class="loco-warn">
-                                <span><?php Loco::h( $warning )?></span> 
-                            </li>                                
-                            <?php endforeach; else:?> 
+                        <ul><?php 
+                        try {
+                            $package->check_permissions();?> 
                             <li class="loco-ok">
-                                <span>OK</span>
-                            </li>
-                            <?php endif?> 
+                                <?php echo LocoAdmin::fscheck_link( $package, $domain, Loco::__('OK') )?> 
+                            </li><?php
+                        }
+                        catch( Exception $Ex ){?> 
+                            <li class="loco-warn">
+                                <?php echo LocoAdmin::fscheck_link( $package, $domain, $Ex->getMessage() )?> 
+                            </li><?php
+                        }?> 
                         </ul>
                     </td>
                 </tr><?php 

@@ -2,8 +2,8 @@
 Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 1.2.2
+Tested up to: 3.8
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,10 +17,11 @@ The Loco Translate plugin provides in-browser editing of PO files used for local
 Features include:
 
 * POEdit style translations editor within Wordpress admin
+* Create and update language files directly in your theme or plugin
 * Extraction of translatable strings from your source code
-* Create and update langauge files directly in your project
+* Native MO file compilation without the need for Gettext on your system
 
-Built by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>. Official [Loco](https://localise.biz/) WordPress plugin.
+Official [Loco](https://localise.biz/) WordPress plugin by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>
 
 
 
@@ -38,7 +39,7 @@ If you want to create new translations for a theme or plugin, follow these steps
 3. Find the theme or plugin in the list at *Tools > Manage Translations*
 4. Click `+ New language` and follow the on-screen prompts.
 
-Make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
+A quick guide on using the plugin is [available here](https://localise.biz/help/wordpress/translate-plugin), but make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
 
 Please note that this plugin doesn’t support Windows servers.
 
@@ -52,32 +53,33 @@ No. It's for manually entering your own translations, but we do intend to be int
 
 = Why can't it extract any translatable strings from my code? =
 
-The extraction process looks fo Wordpress translation functions with string literal arguments, such as `__('Foo')`.
+The extraction process looks for Wordpress translation functions with string literal arguments, such as `__('Foo')`.
 
 Using your own custom functions like `myTranslate('Foo')` won't work. Neither will using variables, such as `__( $foo )`.
 
 
 = Do I need to create a POT file? =
 
-There are some good reasons to, but you don't have to in order to use this plugin.
+There are some good reasons to do so, but you don't have to in order to use this plugin.
 
 Loco Translate allows you to work purely with PO files and keep them up to date with the source code without the interim step of maintaining a POT file.
 
 
-= Why do I get errors when I try to save files? =
+= Why do I get errors when I try to save translations? =
 
-To be able to save PO files directly to your project, the files must be writable by the web server. 
+To save PO files directly to your project, the files must be writable by the web server. 
 
-You shouldn't do this in a live server, only for developing your theme or plugin on a local server.
+You shouldn't do this on a live server, only for developing your theme or plugin on a local server.
 
-If you're unsure how to set file permission on your server, ask your systems administrator. 
+If you're unsure how to set file permission on your server, ask your system administrator.
 
 
 = How do I create MO files? =
 
-If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your system, Loco Translate will automatcally create a MO file when you save a PO file.
+Every time you save a PO file, Loco tries to compile a MO file in the same location. As above, ensure that the web server is able to write to disk, otherwise MO compilation will fail.
 
-Ensure that the web server is able to write the file to disk, and also ensure that the `msgfmt` program is in a common location, such as `/usr/bin/msgfmt`.
+If you have [Gettext](http://www.gnu.org/software/gettext/) installed on your server you can use this instead of Loco's built-in compiler. 
+You can configure the path to the `msgfmt` program in the Settings tab.
 
 
 = Does it support Windows? =
@@ -95,8 +97,23 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
-= 1.2.3 =
-* Last-Translator added to PO files from Wordpress user
+= 1.4 =
+* Added native MO compiler
+* Added hash generation config option
+* Added direct MO download from editor
+* Fixed some translations and added German
+
+= 1.3.1 =
+* style tweak for wp 3.8
+* suppressing exception when proc_open fails
+
+= 1.3 =
+* Support for files under WP_LANG_DIR
+* Last-Translator header added to PO files from Wordpress user
+* Disabling cache when WP_DEBUG = true
+* Better POEdit integration, including source headers and file refs
+* Added editor dropdown for switching between files
+* Guessing of msgfmt path when not in settings
 
 = 1.2.2 =
 * Fixed incorrect plural equation offset
@@ -135,7 +152,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.2 =
+= 1.4 =
 * Bug fixes and improvements.
 
 
@@ -152,3 +169,4 @@ These features are on our todo list. There's no particular timeframe for any of 
 == Credits ==
 
 * Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)
+* German translations courtesy of [Sebastian König](http://aykutmania.de)

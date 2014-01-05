@@ -3,7 +3,7 @@ Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
 Tested up to: 3.8
-Stable tag: 1.3.1
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
-= 1.3.2 =
+= 1.4 =
 * Added native MO compiler
 * Added hash generation config option
 * Added direct MO download from editor
@@ -152,7 +152,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.3.2 =
+= 1.4 =
 * Bug fixes and improvements.
 
 

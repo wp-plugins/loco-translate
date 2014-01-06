@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Sun Jan 05 2014 11:41:28 GMT+0000 (GMT)\n"
-"Last-Translator: admin <support@localise.biz>\n"
+"PO-Revision-Date: Mon Jan 06 2014 12:22:10 GMT+0100\n"
+"Last-Translator: seayko <admin@aykutmania.de>\n"
 "Language-Team: \n"
 "Language: German\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -21,6 +21,14 @@ msgstr ""
 "comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Generator: Loco - https://localise.biz/\n"
 "X-Loco-Target-Locale: de_DE"
+
+#: ../php/loco-posave.php:98
+msgid "Failed to write MO file"
+msgstr "Fehler beim Schreiben der MO-Datei"
+
+#: ../tpl/admin-opts.tpl.php:54
+msgid "Generate hash tables"
+msgstr "Erzeuge Hashtabellen"
 
 #. Translators: Bold text label in admin error messages
 #: ../lib/loco-admin.php:15 ../pub/js/lang/dummy.php:7
@@ -237,10 +245,6 @@ msgstr "Erstellen der MO-Datei fehlgeschlagen."
 msgid "Cannot overwrite MO file"
 msgstr "Überschreiben der MO-Datei fehlgeschlagen"
 
-#: ../php/loco-posave.php:98
-msgid "Failed to write MO file"
-msgstr "Fehler beim Schreiben der MO-Datei"
-
 #: ../php/loco-posync.php:53
 msgid "No strings could be extracted from source files"
 msgstr "Es konnten keine Zeichenketten aus der Quelle extrahiert werden"
@@ -267,11 +271,11 @@ msgstr "Aus Quelle zusammengeführt"
 
 #: ../pub/js/lang/dummy.php:13
 msgid "Already up to date with %s"
-msgstr "Bereit auf dem aktuellen Stand mit %s"
+msgstr "Bereits auf dem aktuellen Stand mit %s"
 
 #: ../pub/js/lang/dummy.php:14
 msgid "Already up to date with source code"
-msgstr "Bereit mit der Quelle auf dem aktuellen Stand"
+msgstr "Bereits mit der Quelle auf dem aktuellen Stand"
 
 #: ../pub/js/lang/dummy.php:15
 msgid "1 new string added"
@@ -367,10 +371,6 @@ msgstr "Benutze externes Befehlsprogramm:"
 #: ../tpl/admin-opts.tpl.php:47
 msgid "Enter path to msgfmt on server"
 msgstr "Pfad zum msgfmt-Programm"
-
-#: ../tpl/admin-opts.tpl.php:54
-msgid "Generate hash tables"
-msgstr "Erzeuge Hashtabellen"
 
 #: ../tpl/admin-opts.tpl.php:63
 msgid "Save settings"

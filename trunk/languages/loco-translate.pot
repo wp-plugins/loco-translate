@@ -1,13 +1,16 @@
+#. Loco Gettext template
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Wed Jan 15 2014 00:10:04 GMT+0000 (GMT)\n"
-"Last-Translator: admin <support@localise.biz>\n"
+"POT-Revision-Date: Sat Jan 04 2014 20:45:33 GMT+0000 (GMT)\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
 "Language-Team: \n"
-"Language: German\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,465 +22,453 @@ msgstr ""
 "_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;"
 "esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;"
 "comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
-"X-Generator: Loco - https://localise.biz/\n"
-"X-Loco-Target-Locale: de_DE"
-
-#: ../php/loco-posave.php:98
-msgid "Failed to write MO file"
-msgstr "Fehler beim Schreiben der MO-Datei"
-
-#: ../tpl/admin-opts.tpl.php:54
-msgid "Generate hash tables"
-msgstr "Erzeuge Hashtabellen"
+"X-Generator: Loco - https://localise.biz/"
 
 #. Translators: Bold text label in admin error messages
 #: ../lib/loco-admin.php:15 ../pub/js/lang/dummy.php:7
 msgctxt "Message label"
 msgid "Error"
-msgstr "Fehler"
+msgstr ""
 
 #: ../lib/loco-admin.php:24 ../pub/js/lang/dummy.php:6
 msgctxt "Message label"
 msgid "Warning"
-msgstr "Warnung"
+msgstr ""
 
 #: ../lib/loco-admin.php:33 ../pub/js/lang/dummy.php:5
 msgctxt "Message label"
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: ../lib/loco-admin.php:47
 msgid "Settings saved"
-msgstr "Einstellungen gespeichert"
+msgstr ""
 
 #: ../lib/loco-admin.php:120
 msgid "New PO file"
-msgstr "Neue PO-Datei"
+msgstr ""
 
 #: ../lib/loco-admin.php:230
 msgid "You must specify a valid locale for a new PO file"
-msgstr "Du musst einen gültigen Pfad für die PO-Datei angeben"
+msgstr ""
 
 #: ../lib/loco-admin.php:252 ../lib/loco-admin.php:342
 msgid "No translatable strings found"
-msgstr "Keine übersetzbaren Zeichenketten gefunden"
+msgstr ""
 
 #: ../lib/loco-admin.php:252
 msgid "Cannot create a PO file."
-msgstr "Erstellen der PO-Datei fehlgeschlagen."
+msgstr ""
 
 #: ../lib/loco-admin.php:259
 msgid "PO file already exists with locale %s"
-msgstr "PO-Datei existiert schon unter %s"
+msgstr ""
 
 #: ../lib/loco-admin.php:312
 msgid ""
 "File cannot be created automatically. Fix the file permissions or use Download "
 "instead of Save"
 msgstr ""
-"Datei kann nicht automatisch erstellt werden. Setze die Datei-Zugriffsrechte "
-"oder benutze Download anstatt Speichern"
 
 #: ../lib/loco-admin.php:321 ../lib/loco-admin.php:330
 msgid "%s file is empty"
-msgstr "Datei (%s) ist leer"
+msgstr ""
 
 #: ../lib/loco-admin.php:322 ../lib/loco-admin.php:337
 msgid "Run Sync to update from source code"
-msgstr "Benutze Sync, um von der Quelle zu aktualisieren"
+msgstr ""
 
 #: ../lib/loco-admin.php:326
 msgid "No strings could be extracted from source code"
-msgstr "Es konnten keine Zeichenketten vom Quellcode extrahiert werden"
+msgstr ""
 
 #: ../lib/loco-admin.php:333
 msgid "Run Sync to update from %s"
-msgstr "Benutze Sync, um aus %s zu aktualisieren"
+msgstr ""
 
 #: ../lib/loco-admin.php:352
 msgid "Source code has been modified, run Sync to update POT"
-msgstr "Quellcode wurde geändert, benutze Sync um POT zu aktualisieren"
+msgstr ""
 
 #: ../lib/loco-admin.php:356
 msgid "POT has been modified since PO file was saved, run Sync to update"
 msgstr ""
-"POT wurde aktualisiert bevor die PO-Datei gespeichert wurde. Benutze Sync zum "
-"Aktualisieren."
 
 #: ../lib/loco-admin.php:429
 msgid "Bad file path"
-msgstr "Falscher Dateipfad"
+msgstr ""
 
 #: ../lib/loco-admin.php:732
 msgctxt "Add button"
 msgid "New template"
-msgstr "Neues Template"
+msgstr ""
 
 #: ../lib/loco-admin.php:751
 msgctxt "Add button"
 msgid "New language"
-msgstr "Neue Sprache"
+msgstr ""
 
 #: ../lib/loco-admin.php:790
 msgid "%s%% translated"
-msgstr "%s%% übersetzt"
+msgstr ""
 
 #: ../lib/loco-admin.php:790
 msgid "1 string"
 msgid_plural "%s strings"
-msgstr[0] "1 Zeichenkette"
-msgstr[1] "%s Zeichenketten"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/loco-admin.php:793
 msgid "%s fuzzy"
-msgstr "%s undeutlich"
+msgstr ""
 
 #: ../lib/loco-admin.php:796
 msgid "%s untranslated"
-msgstr "%s nicht übersetzt"
+msgstr ""
 
 #: ../lib/loco-admin.php:838
 msgid "Failed to compile MO file with built-in compiler"
-msgstr "Kompilieren der MO-Datei mit dem internen Kompilierer fehlgeschlagen."
+msgstr ""
 
 #: ../lib/loco-admin.php:867
 msgid "Loco, Translation Management"
-msgstr "Loco, Translation Management"
+msgstr ""
 
 #: ../lib/loco-admin.php:869
 msgid "Translation"
-msgstr "Übersetzung"
+msgstr ""
 
 #: ../lib/loco-admin.php:872 ../lib/loco-admin.php:883
 msgid "Manage translations"
-msgstr "Übersetzungen verwalten"
+msgstr ""
 
 #: ../lib/loco-admin.php:884 ../tpl/admin-fscheck.tpl.php:7 ../tpl/admin-opts.tpl.php:7 ../tpl/admin-poedit.tpl.php:8 ../tpl/admin-poinit.tpl.php:8 ../tpl/admin-root.tpl.php:7
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr ""
 
 #: ../lib/loco-admin.php:908
 msgid "File download failed"
-msgstr "Dateidownload ist fehlgeschlagen"
+msgstr ""
 
 #: ../lib/loco-locales.php:70
 msgid "Unknown language"
-msgstr "Unbekannte Sprache"
+msgstr ""
 
 #: ../lib/loco-packages.php:240 ../lib/loco-packages.php:246
 msgid "Some files not writable"
-msgstr "Einige Dateien nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:249
 msgid "Some files missing"
-msgstr "Einige Dateien fehlen"
+msgstr ""
 
 #: ../lib/loco-packages.php:255
 msgid "\"%s\" folder not writable"
-msgstr "Ordner \"%s\" nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:266
 msgid "Folder not writable"
-msgstr "Ordner nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:268
 msgid "POT file not writable"
-msgstr "POT-Datei nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:272
 msgid "PO file not writable"
-msgstr "PO-Datei nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:274
 msgid "MO file not writable"
-msgstr "MO-Datei nicht schreibbar"
+msgstr ""
 
 #: ../lib/loco-packages.php:274
 msgid "MO file not found"
-msgstr "MO-Datei nicht gefunden"
+msgstr ""
 
 #: ../php/loco-ajax.php:17 ../php/loco-download.php:21
 msgid "User does not have permission to manage translations"
-msgstr "Benutzer hat keine Rechte die Übersetzungen zu verwalten"
+msgstr ""
 
 #: ../php/loco-download.php:68 ../php/loco-posave.php:88
 msgid "Failed to compile MO file with %s, check your settings"
-msgstr "Kompilieren der MO-Datei fehlgeschlagen. Bitte prüfe Deine Einstellungen"
+msgstr ""
 
 #: ../php/loco-posave.php:10 ../php/loco-posync.php:9
 msgid "Invalid data posted to server"
-msgstr "Ungültige Daten zum Server gesendet"
+msgstr ""
 
 #: ../php/loco-posave.php:23 ../php/loco-posync.php:22
 msgid "Package not found called %s"
-msgstr "Paket %s nicht gefunden"
+msgstr ""
 
 #: ../php/loco-posave.php:37
 msgid ""
 "Web server cannot create \"%s\" directory in \"%s\". Fix file permissions or create "
 "it manually."
 msgstr ""
-"Webserver kann Ordner \"%s\" nicht in \"%s\" erstellen. Setze die Zugriffsrechte "
-"oder erstelle den Ordner selbst."
 
 #: ../php/loco-posave.php:40
 msgid ""
 "Web server cannot create files in the \"%s\" directory. Fix file permissions or "
 "use the download function."
 msgstr ""
-"Webserver kann keine Dateien im Ordner \"%s\" erstellen. Setze die Datei-"
-"Zugriffsrechte oder benutze Download anstatt Speichern."
 
 #: ../php/loco-posave.php:48
 msgid ""
 "%s file is not writable by the web server. Fix file permissions or download and "
 "copy to \"%s/%s\"."
 msgstr ""
-"Datei %s ist vom Webserver nicht schreibbar. Setze die Datei-Zugriffsrechte "
-"oder benutze Download anstatt Speichern und speichere die Datei auf dem Server "
-"unter \"%s/%s\" ab."
 
 #: ../php/loco-posave.php:69
 msgid "Cannot create MO file"
-msgstr "Erstellen der MO-Datei fehlgeschlagen."
+msgstr ""
 
 #: ../php/loco-posave.php:72
 msgid "Cannot overwrite MO file"
-msgstr "Überschreiben der MO-Datei fehlgeschlagen"
+msgstr ""
+
+#: ../php/loco-posave.php:98
+msgid "Failed to write MO file"
+msgstr ""
 
 #: ../php/loco-posync.php:53
 msgid "No strings could be extracted from source files"
-msgstr "Es konnten keine Zeichenketten aus der Quelle extrahiert werden"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:8
 msgid "Unknown error"
-msgstr "Unbekannter Fehler"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:9
 msgid "PO file saved"
-msgstr "PO-Datei gespeichert"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:10
 msgid "and MO file compiled"
-msgstr "und MO-Datei kompiliert"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:11
 msgid "Merged from %s"
-msgstr "Aus %s zusammengeführt"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:12
 msgid "Merged from source code"
-msgstr "Aus Quelle zusammengeführt"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:13
 msgid "Already up to date with %s"
-msgstr "Bereits auf dem aktuellen Stand mit %s"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:14
 msgid "Already up to date with source code"
-msgstr "Bereits mit der Quelle auf dem aktuellen Stand"
+msgstr ""
 
 #: ../pub/js/lang/dummy.php:15
 msgid "1 new string added"
 msgid_plural "%s new strings added"
-msgstr[0] "1 neue Zeichenkette hinzugefügt"
-msgstr[1] "%s neue Zeichenketten hinzugefügt"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../pub/js/lang/dummy.php:16
 msgid "1 obsolete string removed"
 msgid_plural "%s obsolete strings removed"
-msgstr[0] "1 veraltete Zeichenkette entfernt"
-msgstr[1] "%s veraltete Zeichenketten entfernt"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../pub/js/lang/dummy.php:17
 msgid "Your changes will be lost if you continue without saving"
-msgstr "Deine Änderungen gehen verloren, wenn du fortsetzt ohne zu Speichern"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:6 ../tpl/admin-opts.tpl.php:6 ../tpl/admin-poedit.tpl.php:6 ../tpl/admin-poinit.tpl.php:6 ../tpl/admin-root.tpl.php:6
 msgid "Packages"
-msgstr "Pakete"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:8
 msgid "File check"
-msgstr "Dateiprüfung"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:17
 msgid "File system permissions for %s"
-msgstr "Dateisystem-Rechte für %s"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:40
 msgid "Back"
-msgstr "Zurück"
+msgstr ""
 
 #: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:64
 msgid "Get help"
-msgstr "Hilfe erhalten"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:11
 msgctxt "Table header"
 msgid "Package details"
-msgstr "Paketdetails"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:14
 msgctxt "Table header"
 msgid "Translations (PO)"
-msgstr "Übersetzungen (PO)"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:17
 msgctxt "Table header"
 msgid "Template (POT)"
-msgstr "Template (POT)"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:20
 msgctxt "Table header"
 msgid "File permissions"
-msgstr "Dateizugriffsrechte"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:38
 msgid "1 language"
 msgid_plural "%u languages"
-msgstr[0] "1 Sprache"
-msgstr[1] "%u Sprachen"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../tpl/admin-list.tpl.php:43
 msgctxt "Modified time"
 msgid "Updated"
-msgstr "Aktualisiert"
+msgstr ""
 
 #: ../tpl/admin-list.tpl.php:93
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: ../tpl/admin-nav.tpl.php:20
 msgid "Powered by"
-msgstr "Präsentiert von"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:18
 msgid "Configure Loco Translate"
-msgstr "Konfiguriere Loco Translate"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:27 ../tpl/admin-opts.tpl.php:31
 msgid "Compiling MO files"
-msgstr "MO-Dateien kompilieren"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:36
 msgid "Use built-in MO compiler."
-msgstr "Benutze internen MO-Kompilierer"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:42
 msgid "Use external command:"
-msgstr "Benutze externes Befehlsprogramm:"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:47
 msgid "Enter path to msgfmt on server"
-msgstr "Pfad zum msgfmt-Programm"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:54
+msgid "Generate hash tables"
+msgstr ""
 
 #: ../tpl/admin-opts.tpl.php:63
 msgid "Save settings"
-msgstr "Einstellungen speichern"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:31
 msgid "Template file"
-msgstr "Templatedatei"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:39
 msgctxt "Dropdown label"
 msgid "Switch to..."
-msgstr "Wechsle zu..."
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:57
 msgid "Updated"
-msgstr "Aktualisiert"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:62
 msgid "never"
-msgstr "niemals"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:87
 msgctxt "Editor button"
 msgid "Save"
-msgstr "Speichern"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:94 ../tpl/admin-poedit.tpl.php:103
 msgctxt "Editor button"
 msgid "Download"
-msgstr "Download"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:115
 msgctxt "Editor button"
 msgid "Sync"
-msgstr "Sync"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:120
 msgctxt "Editor button"
 msgid "Revert"
-msgstr "zurücksetzen"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:125
 msgctxt "Editor button"
 msgid "Add"
-msgstr "Hinzufügen"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:130
 msgctxt "Editor button"
 msgid "Del"
-msgstr "Löschen"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:135
 msgctxt "Editor button"
 msgid "Fuzzy"
-msgstr "Undeutlich"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:139
 msgid "Filter translations"
-msgstr "Übersetzungen filtern"
+msgstr ""
 
 #: ../tpl/admin-poedit.tpl.php:143
 msgctxt "Editor button"
 msgid "Help"
-msgstr "Hilfe"
+msgstr ""
 
 #: ../tpl/admin-poinit.tpl.php:21
 msgid "Initialize new translations in %s"
-msgstr "Initialisiere neue Übersetzung in %s"
+msgstr ""
 
 #: ../tpl/admin-poinit.tpl.php:34
 msgid "Select from common languages"
-msgstr "Wähle aus den Standardsprachen"
+msgstr ""
 
 #: ../tpl/admin-poinit.tpl.php:45
 msgctxt "Form label"
 msgid "or enter any language code"
-msgstr "oder trage den Sprach-Code ein"
+msgstr ""
 
 #: ../tpl/admin-poinit.tpl.php:51
 msgctxt "Submit button"
 msgid "Start translating"
-msgstr "Starte Übersetzung"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:18
 msgid "New version available"
-msgstr "Neue Version verfügbar"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:21
 msgid "Upgrade to version %s of Loco Translate"
-msgstr "Bitte upgrade Loco Translate auf Version %s"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:31
 msgid "Select a plugin or theme to translate"
-msgstr "Wähle ein Plugin oder Theme zum Übersetzen"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:40
 msgctxt "Package list header"
 msgid "Themes"
-msgstr "Themes"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:53
 msgctxt "Package list header"
 msgid "Plugins"
-msgstr "Plugins"
+msgstr ""
 
 #: ../tpl/admin-root.tpl.php:66
 msgctxt "Package list header"
 msgid "Core"
-msgstr "Core"
+msgstr ""

@@ -34,6 +34,14 @@ try {
         $ext = strtolower( pathinfo( $name, PATHINFO_EXTENSION ) );
     }
     
+    
+    // Undo magic quotes if enabled
+    $magic = ini_get('magic_quotes_gpc');
+    if( $magic && 0 !== strcasecmp('off', $magic) ){
+        $po = stripslashes( $po );
+    }
+    
+    
     // Simple post-through for PO and POT
     if( 'mo' !== $ext ){
         header('Content-Type: application/x-gettext; charset=UTF-8', true );        

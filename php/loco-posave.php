@@ -41,6 +41,11 @@
         }
     }
     
+    // Undo magic quotes if enabled
+    $magic = ini_get('magic_quotes_gpc');
+    if( $magic && 0 !== strcasecmp('off', $magic) ){
+        $po = stripslashes( $po );
+    }
     
     // attempt to write PO file
     $bytes = file_put_contents( $path, $po );

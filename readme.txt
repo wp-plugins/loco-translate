@@ -100,6 +100,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 = 1.4.1 =
 * Cache invalidation
+* Magic quotes stripping from po save
 
 = 1.4 =
 * Added native MO compiler

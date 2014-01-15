@@ -36,8 +36,7 @@ try {
     
     
     // Undo magic quotes if enabled
-    $magic = ini_get('magic_quotes_gpc');
-    if( $magic && 0 !== strcasecmp('off', $magic) ){
+    if( get_magic_quotes_gpc() ){
         $po = stripslashes( $po );
     }
     

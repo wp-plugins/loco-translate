@@ -45,7 +45,13 @@ class LocoPackage {
      * Paths under which there may be source code in any of our domains
      * @var array
      */    
-    private $src = array();    
+    private $src = array();
+    
+    /** 
+     * Directories last modification times, used for cache invalidation
+     * @var array
+     */    
+    private $dirs = array();
     
     /**
      * @var int
@@ -122,9 +128,36 @@ class LocoPackage {
         if( filesize($path) ){
             $this->mtime = max( $this->mtime, filemtime($path) );
             $this->nfiles++;
+            $this->add_dir( dirname($path) );
             return true;
         }
-    }     
+    }
+
+    
+    /**
+     * Add directory and remember last modification time
+     */
+    private function add_dir( $path ){
+        if( ! isset($this->dirs[$path]) ){
+            $this->dirs[$path] = filemtime($path);
+        }
+    }
+    
+    
+    /**
+     * find additional plugin PO under WP_LANG_DIR
+     */
+    private function add_lang_dir( $langdir, $domain ){      
+        $pattern = $langdir.'/'.$domain.'{-*.po,.pot}';
+        $nfiles = $this->nfiles;
+        $files = LocoAdmin::find_grouped( $pattern, GLOB_NOSORT|GLOB_BRACE ) and
+        $this->add_po( $files );
+        // add $langdir if files added
+        if( $nfiles !== $this->nfiles ){
+            $this->add_dir( $langdir );
+        }
+    }
+     
 
     
     /**
@@ -389,6 +422,18 @@ class LocoPackage {
     }
 
 
+    /**
+     * Invalidate cache based on last modification of directories
+     * @return bool whether cache should be invalidated
+     */
+    private function invalidate(){
+        foreach( $this->dirs as $path => $mtime ){
+            if( ! is_dir($path) || filemtime($path) !== $mtime ){
+                return true;
+            }
+        }
+    }
+
 
     /**
      * construct package object from theme
@@ -405,10 +450,8 @@ class LocoPackage {
             if( $files = LocoAdmin::find_po($root) ){
                 $package->add_po( $files, $domain );
             }
-            // find additional theme PO under WP_LANG_DIR
-            $pattern = WP_LANG_DIR.'/themes/'.$domain.'{-*.po,.pot}';
-            $files = LocoAdmin::find_grouped( $pattern, GLOB_NOSORT|GLOB_BRACE ) and
-            $package->add_po( $files );
+            // find additional theme PO under WP_LANG_DIR/themes
+            $package->add_lang_dir(  WP_LANG_DIR.'/themes', $domain );
             return $package;
         }
     }    
@@ -430,10 +473,8 @@ class LocoPackage {
             if( $files = LocoAdmin::find_po($root) ){
                 $package->add_po( $files, $domain );
             }
-            // find additional plugin PO under WP_LANG_DIR
-            $pattern = WP_LANG_DIR.'/plugins/'.$domain.'{-*.po,.pot}';
-            $files = LocoAdmin::find_grouped( $pattern, GLOB_NOSORT|GLOB_BRACE ) and
-            $package->add_po( $files );
+            // find additional plugin PO under WP_LANG_DIR/plugin
+            $package->add_lang_dir(  WP_LANG_DIR.'/plugins', $domain );
             return $package;
         }
     }
@@ -466,11 +507,16 @@ class LocoPackage {
     public static function get( $handle, $type ){
         $key = $type.'_'.$handle;
         $package = Loco::cached($key);
+        if( $package instanceof LocoPackage ){
+            if( $package->invalidate() ){
+                $package = null;
+            }
+        }
         if( ! $package instanceof LocoPackage ){
             $getter = array( __CLASS__, 'get_'.$type );
             $package = call_user_func( $getter, $handle );
             if( $package ){
-                // @todo init meta
+                $package->meta();
                 Loco::cache( $key, $package );
             }
         }

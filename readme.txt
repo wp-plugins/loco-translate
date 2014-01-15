@@ -97,6 +97,10 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
+
+= 1.4.1 =
+* Cache invalidation
+
 = 1.4 =
 * Added native MO compiler
 * Added hash generation config option
@@ -152,7 +156,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.4 =
+= 1.4.1 =
 * Bug fixes and improvements.
 
 

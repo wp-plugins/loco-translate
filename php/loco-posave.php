@@ -24,22 +24,51 @@
     }
 
     $fname = basename($path);
-    $dname = basename( dirname($path) );
+    $podir = dirname( $path );
+    $dname = basename( $podir );
     $ispot = LocoAdmin::is_pot( $fname );
     $ftype = $ispot ? 'POT' : 'PO';
 
 
-    // construct directory tree if file does not exist
-    if( ! file_exists($path) ){
-        $dir = dirname($path);
-        if( ! file_exists($dir) && ! mkdir( $path, 0775, true ) ){
-            $pname = basename( dirname($dir) );
-            throw new Exception( sprintf(Loco::__('Web server cannot create "%s" directory in "%s". Fix file permissions or create it manually.'), $dname, $pname ) );
+    // handle file backups if file exists and enabled
+    if( file_exists($path) ){
+        $conf = Loco::config();
+        $num = (int) $conf['num_backups'];
+        if( is_writable($podir) ){
+            $dest = preg_replace('/\.(pot?)$/i', '-backup-', $path );
+            // delete oldest backups until we have $num-1 remaining
+            if( $prev = glob( $dest.'*' ) ){
+                function _loco_sort_backups( $f1, $f2 ){
+                    $t1 = filemtime($f1);
+                    $t2 = filemtime($f2);
+                    return $t1 < $t2 ? -1 : ( $t2 < $t1 ? 1 : 0 );
+                }
+                usort( $prev, '_loco_sort_backups' );
+                foreach( array_slice( $prev, max(0,$num-1) ) as $oldpath ){
+                    register_shutdown_function( 'unlink', $oldpath );
+                }
+            }
+            // write new backup
+            if( $num ){
+                $dest .= date('YmdHis').'.'.strtolower($ftype).'~';
+                copy( $path, $dest );
+            }
         }
-        if( ! is_dir($dir) || ! is_writable($dir) ){
-            throw new Exception( sprintf(Loco::__('Web server cannot create files in the "%s" directory. Fix file permissions or use the download function.'), basename($dir) ) );
+        else if( $num ){
+            throw new Exception( sprintf(Loco::__('Web server cannot create backups in "%s". Fix file permissions or disable backups in settings'), basename($podir) ) );
         }
     }
+
+    
+    // else construct directory tree if file does not exist
+    else if( ! file_exists($podir) && ! mkdir( $path, 0775, true ) ){
+        $pname = basename( dirname($podir) );
+        throw new Exception( sprintf(Loco::__('Web server cannot create "%s" directory in "%s". Fix file permissions or create it manually.'), $dname, $pname ) );
+    }
+    else if( ! is_dir($podir) || ! is_writable($podir) ){
+        throw new Exception( sprintf(Loco::__('Web server cannot create files in the "%s" directory. Fix file permissions or use the download function.'), basename($podir) ) );
+    }
+
     
     // Undo magic quotes if enabled
     if( get_magic_quotes_gpc() ){

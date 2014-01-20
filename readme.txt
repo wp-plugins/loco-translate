@@ -98,6 +98,9 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 == Changelog ==
 
 
+= 1.4.2 =
+* Added backup feature
+
 = 1.4.1 =
 * Cache invalidation
 * Magic quotes stripping from po save
@@ -157,7 +160,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.4.1 =
+= 1.4.2 =
 * Bug fixes and improvements.
 
 
@@ -167,8 +170,8 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 These features are on our todo list. There's no particular timeframe for any of them and they're in no particular order:
 
 * Integration with Google and Bing for automatic translation
-* Full, but optional integration with Loco for collaborative translation
-* Support multiple pairings of POT and PO files within a single package.
+* Integration with Loco API for collaborative translation
+* Support multiple message domains within a single package.
 
 
 == Credits ==

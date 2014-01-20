@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"PO-Revision-Date: Wed Jan 15 2014 00:10:04 GMT+0000 (GMT)\n"
+"PO-Revision-Date: Mon Jan 20 2014 00:38:09 GMT+0000 (GMT)\n"
 "Last-Translator: admin <support@localise.biz>\n"
 "Language-Team: \n"
 "Language: German\n"
@@ -21,14 +21,6 @@ msgstr ""
 "comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Generator: Loco - https://localise.biz/\n"
 "X-Loco-Target-Locale: de_DE"
-
-#: ../php/loco-posave.php:98
-msgid "Failed to write MO file"
-msgstr "Fehler beim Schreiben der MO-Datei"
-
-#: ../tpl/admin-opts.tpl.php:54
-msgid "Generate hash tables"
-msgstr "Erzeuge Hashtabellen"
 
 #. Translators: Bold text label in admin error messages
 #: ../lib/loco-admin.php:15 ../pub/js/lang/dummy.php:7
@@ -164,35 +156,35 @@ msgstr "Dateidownload ist fehlgeschlagen"
 msgid "Unknown language"
 msgstr "Unbekannte Sprache"
 
-#: ../lib/loco-packages.php:240 ../lib/loco-packages.php:246
+#: ../lib/loco-packages.php:273 ../lib/loco-packages.php:279
 msgid "Some files not writable"
 msgstr "Einige Dateien nicht schreibbar"
 
-#: ../lib/loco-packages.php:249
+#: ../lib/loco-packages.php:282
 msgid "Some files missing"
 msgstr "Einige Dateien fehlen"
 
-#: ../lib/loco-packages.php:255
+#: ../lib/loco-packages.php:288
 msgid "\"%s\" folder not writable"
 msgstr "Ordner \"%s\" nicht schreibbar"
 
-#: ../lib/loco-packages.php:266
+#: ../lib/loco-packages.php:299
 msgid "Folder not writable"
 msgstr "Ordner nicht schreibbar"
 
-#: ../lib/loco-packages.php:268
+#: ../lib/loco-packages.php:301
 msgid "POT file not writable"
 msgstr "POT-Datei nicht schreibbar"
 
-#: ../lib/loco-packages.php:272
+#: ../lib/loco-packages.php:305
 msgid "PO file not writable"
 msgstr "PO-Datei nicht schreibbar"
 
-#: ../lib/loco-packages.php:274
+#: ../lib/loco-packages.php:307
 msgid "MO file not writable"
 msgstr "MO-Datei nicht schreibbar"
 
-#: ../lib/loco-packages.php:274
+#: ../lib/loco-packages.php:307
 msgid "MO file not found"
 msgstr "MO-Datei nicht gefunden"
 
@@ -200,7 +192,7 @@ msgstr "MO-Datei nicht gefunden"
 msgid "User does not have permission to manage translations"
 msgstr "Benutzer hat keine Rechte die Übersetzungen zu verwalten"
 
-#: ../php/loco-download.php:68 ../php/loco-posave.php:88
+#: ../php/loco-download.php:75 ../php/loco-posave.php:121
 msgid "Failed to compile MO file with %s, check your settings"
 msgstr "Kompilieren der MO-Datei fehlgeschlagen. Bitte prüfe Deine Einstellungen"
 
@@ -212,7 +204,13 @@ msgstr "Ungültige Daten zum Server gesendet"
 msgid "Package not found called %s"
 msgstr "Paket %s nicht gefunden"
 
-#: ../php/loco-posave.php:37
+#: ../php/loco-posave.php:58
+msgid ""
+"Web server cannot create backups in \"%s\". Fix file permissions or disable "
+"backups in settings"
+msgstr ""
+
+#: ../php/loco-posave.php:66
 msgid ""
 "Web server cannot create \"%s\" directory in \"%s\". Fix file permissions or create "
 "it manually."
@@ -220,7 +218,7 @@ msgstr ""
 "Webserver kann Ordner \"%s\" nicht in \"%s\" erstellen. Setze die Zugriffsrechte "
 "oder erstelle den Ordner selbst."
 
-#: ../php/loco-posave.php:40
+#: ../php/loco-posave.php:69
 msgid ""
 "Web server cannot create files in the \"%s\" directory. Fix file permissions or "
 "use the download function."
@@ -228,7 +226,7 @@ msgstr ""
 "Webserver kann keine Dateien im Ordner \"%s\" erstellen. Setze die Datei-"
 "Zugriffsrechte oder benutze Download anstatt Speichern."
 
-#: ../php/loco-posave.php:48
+#: ../php/loco-posave.php:81
 msgid ""
 "%s file is not writable by the web server. Fix file permissions or download and "
 "copy to \"%s/%s\"."
@@ -237,13 +235,17 @@ msgstr ""
 "oder benutze Download anstatt Speichern und speichere die Datei auf dem Server "
 "unter \"%s/%s\" ab."
 
-#: ../php/loco-posave.php:69
+#: ../php/loco-posave.php:102
 msgid "Cannot create MO file"
 msgstr "Erstellen der MO-Datei fehlgeschlagen."
 
-#: ../php/loco-posave.php:72
+#: ../php/loco-posave.php:105
 msgid "Cannot overwrite MO file"
 msgstr "Überschreiben der MO-Datei fehlgeschlagen"
+
+#: ../php/loco-posave.php:131
+msgid "Failed to write MO file"
+msgstr "Fehler beim Schreiben der MO-Datei"
 
 #: ../php/loco-posync.php:53
 msgid "No strings could be extracted from source files"
@@ -309,7 +311,7 @@ msgstr "Dateisystem-Rechte für %s"
 msgid "Back"
 msgstr "Zurück"
 
-#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:64
+#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:80
 msgid "Get help"
 msgstr "Hilfe erhalten"
 
@@ -372,7 +374,19 @@ msgstr "Benutze externes Befehlsprogramm:"
 msgid "Enter path to msgfmt on server"
 msgstr "Pfad zum msgfmt-Programm"
 
-#: ../tpl/admin-opts.tpl.php:63
+#: ../tpl/admin-opts.tpl.php:54
+msgid "Generate hash tables"
+msgstr "Erzeuge Hashtabellen"
+
+#: ../tpl/admin-opts.tpl.php:61 ../tpl/admin-opts.tpl.php:65
+msgid "Backing up PO files"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:69
+msgid "Number of backups to keep of each file:"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:79
 msgid "Save settings"
 msgstr "Einstellungen speichern"
 

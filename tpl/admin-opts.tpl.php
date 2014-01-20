@@ -57,6 +57,22 @@ $nav = array (
                         </fieldset>
                     </td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row"><?php Loco::h( Loco::__('Backing up PO files') )?></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text">
+                                <span><?php Loco::h( Loco::__('Backing up PO files') )?></span>
+                            </legend>
+                            <p>
+                                <label for="loco--num-backups">
+                                    <?php Loco::h( Loco::__('Number of backups to keep of each file:') )?> 
+                                </label>
+                                <input type="number" min="0" max="99" size="2" name="loco[num_backups]" id="loco--num_backups" value="<?php printf('%u',$num_backups)?>" />
+                            </p>
+                        </fieldset>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <p class="submit">

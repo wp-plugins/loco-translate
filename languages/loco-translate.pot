@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Loco Translate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: Thu Jan 02 2014 17:30:57 GMT+0000 (GMT)\n"
-"POT-Revision-Date: Sat Jan 04 2014 20:45:33 GMT+0000 (GMT)\n"
+"POT-Revision-Date: Mon Jan 20 2014 00:38:01 GMT+0000 (GMT)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -154,35 +154,35 @@ msgstr ""
 msgid "Unknown language"
 msgstr ""
 
-#: ../lib/loco-packages.php:240 ../lib/loco-packages.php:246
+#: ../lib/loco-packages.php:273 ../lib/loco-packages.php:279
 msgid "Some files not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:249
+#: ../lib/loco-packages.php:282
 msgid "Some files missing"
 msgstr ""
 
-#: ../lib/loco-packages.php:255
+#: ../lib/loco-packages.php:288
 msgid "\"%s\" folder not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:266
+#: ../lib/loco-packages.php:299
 msgid "Folder not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:268
+#: ../lib/loco-packages.php:301
 msgid "POT file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:272
+#: ../lib/loco-packages.php:305
 msgid "PO file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:274
+#: ../lib/loco-packages.php:307
 msgid "MO file not writable"
 msgstr ""
 
-#: ../lib/loco-packages.php:274
+#: ../lib/loco-packages.php:307
 msgid "MO file not found"
 msgstr ""
 
@@ -190,7 +190,7 @@ msgstr ""
 msgid "User does not have permission to manage translations"
 msgstr ""
 
-#: ../php/loco-download.php:68 ../php/loco-posave.php:88
+#: ../php/loco-download.php:75 ../php/loco-posave.php:121
 msgid "Failed to compile MO file with %s, check your settings"
 msgstr ""
 
@@ -202,33 +202,39 @@ msgstr ""
 msgid "Package not found called %s"
 msgstr ""
 
-#: ../php/loco-posave.php:37
+#: ../php/loco-posave.php:58
+msgid ""
+"Web server cannot create backups in \"%s\". Fix file permissions or disable "
+"backups in settings"
+msgstr ""
+
+#: ../php/loco-posave.php:66
 msgid ""
 "Web server cannot create \"%s\" directory in \"%s\". Fix file permissions or create "
 "it manually."
 msgstr ""
 
-#: ../php/loco-posave.php:40
+#: ../php/loco-posave.php:69
 msgid ""
 "Web server cannot create files in the \"%s\" directory. Fix file permissions or "
 "use the download function."
 msgstr ""
 
-#: ../php/loco-posave.php:48
+#: ../php/loco-posave.php:81
 msgid ""
 "%s file is not writable by the web server. Fix file permissions or download and "
 "copy to \"%s/%s\"."
 msgstr ""
 
-#: ../php/loco-posave.php:69
+#: ../php/loco-posave.php:102
 msgid "Cannot create MO file"
 msgstr ""
 
-#: ../php/loco-posave.php:72
+#: ../php/loco-posave.php:105
 msgid "Cannot overwrite MO file"
 msgstr ""
 
-#: ../php/loco-posave.php:98
+#: ../php/loco-posave.php:131
 msgid "Failed to write MO file"
 msgstr ""
 
@@ -296,7 +302,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:64
+#: ../tpl/admin-fscheck.tpl.php:41 ../tpl/admin-opts.tpl.php:80
 msgid "Get help"
 msgstr ""
 
@@ -363,7 +369,15 @@ msgstr ""
 msgid "Generate hash tables"
 msgstr ""
 
-#: ../tpl/admin-opts.tpl.php:63
+#: ../tpl/admin-opts.tpl.php:61 ../tpl/admin-opts.tpl.php:65
+msgid "Backing up PO files"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:69
+msgid "Number of backups to keep of each file:"
+msgstr ""
+
+#: ../tpl/admin-opts.tpl.php:79
 msgid "Save settings"
 msgstr ""
 

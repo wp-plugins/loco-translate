@@ -8,7 +8,7 @@ abstract class Loco {
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.4.1';
+    const VERSION = '1.4.2';
     const CAPABILITY = 'manage_options';
     
     /* whether to enable APC cache */
@@ -263,6 +263,8 @@ abstract class Loco {
                 'which_msgfmt' => '',
                 // whether to compile hash table into mo files
                 'gen_hash' => '0',
+                // number of backups to keep of PO and MO files
+                'num_backups' => '1',
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);

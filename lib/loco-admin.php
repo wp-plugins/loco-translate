@@ -35,11 +35,22 @@ abstract class LocoAdmin {
     }
     
     
+    /**
+     * Exit forbidden
+     */
+    private static function forbid(){
+        wp_die( Loco::__('Permission denied'), 'Forbidden', array('response' => 403 ) );
+        trigger_error('wp_die failure', E_USER_ERROR );
+        exit();
+    }     
+    
+    
     
     /**
      * Admin settings page render call
      */
     public static function render_page_options(){
+        current_user_can(Loco::CAPABILITY) or self::forbid();
         // update applicaion settings if posted
         if( isset($_POST['loco']) && is_array( $update = $_POST['loco'] ) ){
             $update += array( 'gen_hash' => '0' );
@@ -54,6 +65,7 @@ abstract class LocoAdmin {
             function_exists('loco_find_executable') or loco_require('build/shell-compiled');
             $args['which_msgfmt'] = loco_find_executable('msgfmt');// and Loco::config( $args );
         }
+        Loco::enqueue_scripts('build/admin-common');
         Loco::render('admin-opts', $args );
     }     
     
@@ -63,13 +75,13 @@ abstract class LocoAdmin {
      * Admin tools page render call
      */
     public static function render_page_tools(){
+        current_user_can(Loco::CAPABILITY) or self::forbid();
         do {
             try {
                 
                 // libs required for all manage translation pages
                 loco_require('loco-locales','loco-packages');
                 
-
                 // most actions except root listing define a single package by name and type
                 $package = null;
                 if( isset($_GET['name']) && isset($_GET['type']) ){
@@ -119,7 +131,7 @@ abstract class LocoAdmin {
                     // else render msginit start screen
                     $title = Loco::__('New PO file');
                     $locales = loco_require('build/locales-compiled');
-                    Loco::enqueue_scripts('admin-poinit');
+                    Loco::enqueue_scripts( 'build/admin-common', 'build/admin-poinit');
                     Loco::render('admin-poinit', compact('package','domain','title','locales') );
                     break;
                 }
@@ -138,6 +150,7 @@ abstract class LocoAdmin {
                 //
                 if( isset($_GET['fscheck']) ){
                     $meta = $package->meta();
+                    Loco::enqueue_scripts('build/admin-common');
                     Loco::render('admin-fscheck', $meta + compact('package') );
                     break;
                 }
@@ -253,6 +266,7 @@ abstract class LocoAdmin {
         if( ! $export ){
             $export = self::xgettext( $package, $po_dir );
             if( ! $export ){
+                var_dump( $domain );
                 throw new Exception( Loco::__('No translatable strings found').'. '.Loco::__('Cannot create a PO file.') );
             }
         }
@@ -289,12 +303,21 @@ abstract class LocoAdmin {
         }
         // template file is developer-editable and has no locale
         $ispot = self::is_pot($path);
+
+        // path may not exist if we're creating a new one
+        if( file_exists($path) ){
+            $modified = self::format_datetime( filemtime($path) );
+        }
+        else {
+            $modified = 0;
+        }
         
         // support incorrect usage of template PO files
-        if( ! $ispot && $head && ! $head->Language && self::none_translated($data) ){
+        if( ! $ispot && $head && $modified && ! $head->Language && self::none_translated($data) ){
             $path .= 't';
             $warnings[] = sprintf( Loco::__('PO file used as template. This will be renamed to %s on first save'), basename($path) );
             $ispot = true;
+            $modified = 0;
         }
         
         if( $ispot ){
@@ -311,13 +334,6 @@ abstract class LocoAdmin {
         }
         
         
-        // path may not exist if we're creating a new one
-        if( file_exists($path) ){
-            $modified = self::format_datetime( filemtime($path) );
-        }
-        else {
-            $modified = 0;
-        }
         // warn if new file can't be written
         $writable = self::is_writable( $path );
         if( ! $writable && ! $modified ){
@@ -743,26 +759,35 @@ abstract class LocoAdmin {
     /**
      * Generate an admin page URI with custom args
      */
-    public static function uri( array $args = array() ){
-        static $base_uri;
-        if( ! isset($base_uri) ){
-            $snip = 'page='.Loco::NS;
-            $base_uri = current( explode($snip,$_SERVER['REQUEST_URI']) ).$snip;
+    public static function uri( array $args = array(), $suffix = '' ){
+        $base_uri = admin_url('admin.php');
+        if( ! isset($args['page']) ){
+            $args['page'] = Loco::NS;
+            if( $suffix ){
+                $args['page'].= '-'.$suffix;
+            }
         }
-        if( ! $args ){
-            return $base_uri;
-        }
-        return $base_uri.'&'.http_build_query( $args );
+        return $base_uri.'?'.http_build_query( $args );
     }
     
     
     
     /**
      * Test if we're on our own admin page
+     * @param string optionally specify exact slug including Loco::NS
+     * @return string current slug
      */
-    public static function is_self(){
-        static $bool;
-        return isset($bool) ? $bool : ( $bool = false !== strpos($_SERVER['REQUEST_URI'], '?page='.Loco::NS ) );
+    public static function is_self( $page = null ){
+        static $active;
+        if( ! isset($active) ){
+            $screen = get_current_screen();
+            $splode = explode( Loco::NS, $screen->base, 2 );
+            $active = isset($splode[1]) ? Loco::NS.$splode[1] : false;
+        }
+        if( false !== $active && ( is_null($page) || $page === $active ) ){
+            return $active;
+        }
+        return '';
     }
     
     
@@ -917,26 +942,56 @@ abstract class LocoAdmin {
 /**
  * Enqueue only admin styles we need
  */  
-function _loco_hook__admin_print_styles(){
-    if( LocoAdmin::is_self() ){
+function _loco_hook__current_screen(){
+    if( $slug = LocoAdmin::is_self() ){
+        // redirect legacy links
+        if( $i = strpos( $slug,'-legacy') ){
+            $args = $_GET;
+            $args['page'] = substr_replace( $slug, '', $i );
+            $uri = LocoAdmin::uri( $args, $slug );
+            wp_redirect( $uri );
+        }
+        // add common resources for all Loco admin pages
         Loco::enqueue_styles('loco-admin');
     }
 }  
+
 
 
 /**
  * Admin menu registration callback
  */
 function _loco_hook__admin_menu() {
-    // Settings menu
-    $title = Loco::__('Loco, Translation Management');
-    $page = array( 'LocoAdmin', 'render_page_options' );
-    add_options_page( $title, Loco::__('Translation'), 'manage_options', Loco::NS, $page );
-    // Tools menu
-    $page = array( 'LocoAdmin', 'render_page_tools' );
-    $hook = add_management_page( $title, Loco::__('Manage translations'), LOCO::CAPABILITY, Loco::NS, $page );
-    add_action('admin_print_styles', '_loco_hook__admin_print_styles' );
+    $cap = LOCO::CAPABILITY;
+    if( current_user_can($cap) ){
+        // hook in legacy wordpress styles as menu will display
+        $wp_38 = version_compare( $GLOBALS['wp_version'], '3.8', '>=' ) or
+        Loco::enqueue_styles('loco-legacy');
         
+        $page_title = Loco::__('Loco, Translation Management');
+        $tool_title = Loco::__('Manage translations');
+        $opts_title = Loco::__('Translation options');
+        // Loco main menu item
+        $slug = Loco::NS;
+        $title = $page_title.' - '.$tool_title;
+        $page = array( 'LocoAdmin', 'render_page_tools' );
+        // Dashicons were introduced in WP 3.8
+        $icon = $wp_38 ? 'dashicons-translation' : 'none';
+        add_menu_page( $title, Loco::__('Loco Translate'), $cap, $slug, $page, $icon );
+        // add main link under self with different name
+        add_submenu_page( $slug, $title, $tool_title, $cap, $slug, $page );
+        // also add under Tools menu (legacy)
+        add_management_page( $title, $tool_title, $cap, $slug.'-legacy', $page );
+        // Settings page
+        $slug = $slug.'-settings';
+        $title = $page_title.' - '.$opts_title;
+        $page = array( 'LocoAdmin', 'render_page_options' );
+        add_submenu_page( Loco::NS, $title, $opts_title, $cap, $slug, $page );
+        // also add under Settings menu (legacy)
+        add_options_page( $title, $opts_title, Loco::CAPABILITY, $slug.'-legacy', $page );
+        // Hook in page stuff as soon as screen is avaiable
+        add_action('current_screen', '_loco_hook__current_screen' );
+    }        
 }
 
 
@@ -945,8 +1000,8 @@ function _loco_hook__admin_menu() {
  */
 function _loco_hook__plugin_row_meta( $links, $file = '' ){
     if( false !== strpos($file,'/loco.php') ){
-        $links[] = '<a href="tools.php?page='.Loco::NS.'"><strong>'.Loco::__('Manage translations').'</strong></a>';
-        $links[] = '<a href="options-general.php?page='.Loco::NS.'"><strong>'.Loco::__('Settings').'</strong></a>';
+        $links[] = '<a href="'.Loco::html( LocoAdmin::uri( array(), '' ) ).'"><strong>'.Loco::__('Manage translations').'</strong></a>';
+        $links[] = '<a href="'.Loco::html( LocoAdmin::uri( array(), 'settings') ).'"><strong>'.Loco::__('Settings').'</strong></a>';
     } 
     return $links;
 }

@@ -33,7 +33,12 @@
                         <ul class="loco-details">
                             <li title="<?php Loco::h($domain)?>">
                                 <strong><?php Loco::h($name)?></strong>
-                            </li>
+                            </li><?php
+                            if( isset($parent) ):?> 
+                            <li>
+                                Inherits: <?php Loco::h($parent)?> 
+                            </li><?php 
+                            endif?> 
                             <li><?php 
                                 Loco::h( Loco::_n( '1 language', '%u languages', $n ), $n )?> 
                             </li><?php 
@@ -94,7 +99,7 @@
                             </li><?php
                         }
                         catch( Exception $Ex ){?> 
-                            <li class="loco-warn">
+                            <li class="loco-warning">
                                 <?php echo LocoAdmin::fscheck_link( $package, $domain, $Ex->getMessage() )?> 
                             </li><?php
                         }?> 

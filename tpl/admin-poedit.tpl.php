@@ -5,7 +5,7 @@
 $nav = array (
     Loco::__('Packages') => LocoAdmin::uri(),
     $name => '',
-    Loco::__('Settings') => str_replace( 'tools', 'options-general', LocoAdmin::uri() ),
+    Loco::__('Settings') => LocoAdmin::uri( array(), 'settings' ),
 );  
 
 $phpbase = Loco::html( Loco::baseurl() ).'/php';
@@ -39,9 +39,9 @@ $modified or $pofiles[] = $path;
                     <?php Loco::h(Loco::_x('Switch to...','Dropdown label'))?> 
                 </option><?php
                 // drop down of files in package
-                $poname = basename( $path );
+                $poname = str_replace( '.mo', '.po', basename( $path ) );
                 foreach( $pofiles as $_path ):
-                    $label = basename($_path);
+                    $label = str_replace( '.mo', '.po', basename($_path) );
                     $poedit = LocoAdmin::trim_path($_path);
                     $url = LocoAdmin::uri( $package->get_query() + compact('poedit') );
                 ?> 

@@ -2,8 +2,8 @@
 Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 1.4.1
+Tested up to: 3.9
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,9 +97,24 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
+= 1.4.4 =
+* Fixed bug in prefixing new PO files with text domain based on existing files
+* Language file updates
+* Tested in WP 3.9
+* Added loco_cache_enabled filter
+
+= 1.4.3 =
+* Child themes use parent text domains
+* MO files parsed when PO files missing
+* Handle incorrect usage of PO files as templates
+* Nicer top-level menu with dashicons icon
+* Added IE<=8 warning
 
 = 1.4.2 =
 * Added backup feature
+* Removed utm domain
+* Added Turkish translations
+* Fixed file naming for new theme files
 
 = 1.4.1 =
 * Cache invalidation
@@ -160,7 +175,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.4.2 =
+= 1.4.4 =
 * Bug fixes and improvements.
 
 
@@ -178,3 +193,5 @@ These features are on our todo list. There's no particular timeframe for any of 
 
 * Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)
 * German translations courtesy of [Sebastian König](http://aykutmania.de)
+* Turkish translations courtesy of [Abdullah Pazarbaşı](http://abdullahpazarbasi.com)
+

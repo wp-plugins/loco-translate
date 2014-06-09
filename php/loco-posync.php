@@ -29,7 +29,7 @@
         if( ! LocoAdmin::is_pot($path) ){
                
             // if a POT file exists, sync from that
-            $domain = LocoAdmin::resolve_file_domain($path);
+            $domain = LocoAdmin::resolve_file_domain($path) or $domain = $package->get_domain();
             if( $pot_path = $package->get_pot($domain) ){
                 $exp = LocoAdmin::parse_po( $pot_path );
                 if( ! $exp || ( 1 === count($exp) && '' === $exp[0]['source'] ) ){
@@ -43,6 +43,10 @@
         }
     
         // Extract from sources by default     
+        if( ! $package->get_source_dirs() ){
+            throw new Exception( Loco::__('No source files in this package, nothing to sync') );
+        }        
+        
         $relative_to = dirname($path);
         //$relative_to = $pot_path ? dirname($pot_path) : $package->get_root();
         if( $exp = LocoAdmin::xgettext( $package, $relative_to ) ){

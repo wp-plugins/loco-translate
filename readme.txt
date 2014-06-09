@@ -2,8 +2,8 @@
 Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 1.4.1
+Tested up to: 3.9.1
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,8 @@ Features include:
 * Create and update language files directly in your theme or plugin
 * Extraction of translatable strings from your source code
 * Native MO file compilation without the need for Gettext on your system
+* Support for PO features including comments, references and plural forms
+* Configurable PO file backups
 
 Official [Loco](https://localise.biz/) WordPress plugin by <a href="//twitter.com/timwhitlock">@timwhitlock</a> / <a rel="author" href="https://plus.google.com/106703751121449519322">Tim Whitlock</a>
 
@@ -29,19 +31,19 @@ Official [Loco](https://localise.biz/) WordPress plugin by <a href="//twitter.co
 
 1. Unzip all files to the `/wp-content/plugins/loco-translate` directory
 2. Log into Wordpress admin and activate the 'Loco Translate' plugin through the 'Plugins' menu
-3. Go to *Tools > Manage Translations* in the left-hand menu to start translating
+3. Go to *Loco Translate > Manage Translations* in the left-hand menu to start translating
 
 
 If you want to create new translations for a theme or plugin, follow these steps:
 
 1. Create a `languages` directory in your plugin or theme's root directory
 2. Make the new directory writable by the web server
-3. Find the theme or plugin in the list at *Tools > Manage Translations*
+3. Find the theme or plugin in the list at *Loco Translate > Manage Translations*
 4. Click `+ New language` and follow the on-screen prompts.
 
 A quick guide on using the plugin is [available here](https://localise.biz/help/wordpress/translate-plugin), but make sure you're familiar with the conventions of [Translating Wordpress](http://codex.wordpress.org/Translating_WordPress) before you start.
 
-Please note that this plugin doesn’t support Windows servers.
+Please note that this plugin doesn’t support Windows servers and the editor doesn't fully support MSIE<=8.
 
 
 == Frequently Asked Questions ==
@@ -56,6 +58,13 @@ No. It's for manually entering your own translations, but we do intend to be int
 The extraction process looks for Wordpress translation functions with string literal arguments, such as `__('Foo')`.
 
 Using your own custom functions like `myTranslate('Foo')` won't work. Neither will using variables, such as `__( $foo )`.
+
+= Why can't I see the translations appearing in my theme/plugin? =
+
+All Loco Translate does is manage your translation process and organize your files. There is more to localizing your theme or plugin than just creating the files. 
+
+Make sure you're familiar with the conventions of [translating Wordpress](http://codex.wordpress.org/Translating_WordPress) and if you think Loco is saving invalid files or putting them in the wrong place, then open a [support ticket](http://wordpress.org/support/plugin/loco-translate).
+
 
 
 = Do I need to create a POT file? =
@@ -84,7 +93,8 @@ You can configure the path to the `msgfmt` program in the Settings tab.
 
 = Does it support Windows? =
 
-At the user end, yes you can access the interface on Windows using Internet Explorer. But Loco Translate does not support Windows versions of PHP, so if your server running Wordpress has a Windows operating system the back end won’t work.
+You can access the interface on Windows using Internet Explorer, but version 9 or above is recommended.  
+Loco Translate does not support Windows versions of PHP, so if your server running Wordpress has a Windows operating system the back end may not work properly.
 
 
 
@@ -97,9 +107,36 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Changelog ==
 
+= 1.4.5 =
+* Support for Domain Path tag
+* Added choice of location when language and package dirs both writable
+* Fixed bug extracting domain from file names
+* Child themes always have their own text domain and don't duplicate parent files
+* Better plural support in po file editor
+* Added experimental support for core packages
+* Tested in WP 3.9.1
+* Added Swedish translations
+* Added Russian translations
+* Added text filter clear button
+
+= 1.4.4 =
+* Fixed bug in prefixing new PO files with text domain based on existing files
+* Language file updates
+* Tested in WP 3.9
+* Added loco_cache_enabled filter
+
+= 1.4.3 =
+* Child themes use parent text domains
+* MO files parsed when PO files missing
+* Handle incorrect usage of PO files as templates
+* Nicer top-level menu with dashicons icon
+* Added IE<=8 warning
 
 = 1.4.2 =
 * Added backup feature
+* Removed utm domain
+* Added Turkish translations
+* Fixed file naming for new theme files
 
 = 1.4.1 =
 * Cache invalidation
@@ -160,7 +197,7 @@ At the user end, yes you can access the interface on Windows using Internet Expl
 
 == Upgrade Notice ==
 
-= 1.4.2 =
+= 1.4.5 =
 * Bug fixes and improvements.
 
 
@@ -178,3 +215,7 @@ These features are on our todo list. There's no particular timeframe for any of 
 
 * Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)
 * German translations courtesy of [Sebastian König](http://aykutmania.de)
+* Turkish translations courtesy of [Abdullah Pazarbaşı](http://abdullahpazarbasi.com)
+* Swedish translations courtesy of [Jimmy Malmqvist](http://jimmymalmqvist.com)
+* Russian translations courtesy of [Alexey Tkachenko](http://atkachenko.ru)
+

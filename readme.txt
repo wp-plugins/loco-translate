@@ -109,6 +109,8 @@ Loco Translate does not support Windows versions of PHP, so if your server runni
 
 = 1.4.6 =
 * Updated Swedish and Turkish translations
+* Added Indonesian translations
+* Added Italian translations
 
 = 1.4.5 =
 * Support for Domain Path tag
@@ -216,9 +218,11 @@ These features are on our todo list. There's no particular timeframe for any of 
 
 == Credits ==
 
-* Dutch translations courtesy of [Niels Geryl](http://hetwittepaard.be)
-* German translations courtesy of [Sebastian König](http://aykutmania.de)
-* Turkish translations courtesy of [Abdullah Pazarbaşı](http://abdullahpazarbasi.com) and Abdullah Manaz
-* Swedish translations courtesy of [Jimmy Malmqvist](http://jimmymalmqvist.com)
-* Russian translations courtesy of [Alexey Tkachenko](http://atkachenko.ru)
+* Dutch translations by [Niels Geryl](http://hetwittepaard.be)
+* German translations by [Sebastian König](http://aykutmania.de)
+* Turkish translations by [Abdullah Pazarbaşı](http://abdullahpazarbasi.com) and Abdullah Manaz
+* Swedish translations by [Jimmy Malmqvist](http://jimmymalmqvist.com)
+* Russian translations by [Alexey Tkachenko](http://atkachenko.ru)
+* Indonesian translations by [Ivan Lanin](https://twitter.com/ivanlanin)
+* Italian translations by [ElectricFeet](http://wordpress.org/support/profile/electricfeet)
 

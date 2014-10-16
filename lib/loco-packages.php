@@ -3,7 +3,7 @@
  * Object representing a theme, plugin or domain within core code.
  * Packages are identified uniquely by a type (e.g. "theme") and internal wordpress name, e.g. "loco-translate".
  */
-class LocoPackage {
+abstract class LocoPackage {
     
     /**
      * Internal identifier, could be name, or path, or anything in future
@@ -16,6 +16,12 @@ class LocoPackage {
      * @var string
      */    
     private $domain;
+
+    /**
+     * Default domain path relative to package root, e.g. "/languages"
+     * @var string
+     */    
+    protected $domainpath = '/languages';
     
     /**
      * Nice descriptive name, e.g. "Loco Translate"
@@ -71,28 +77,48 @@ class LocoPackage {
     private $_meta;    
 
     /**
+     * Get package subclass type
+     * @return string theme, plugin or core
+     */
+    abstract public function get_type();
+
+
+    /**
      * Construct package from name, root and domain
      */    
-    protected function __construct( $name_or_path, $domain, $name ){
+    protected function __construct( $name_or_path, $domain, $name, $dpath = '' ){
         $this->handle = $name_or_path;
         $this->domain = $domain;
         $this->name = $name or $this->name = $domain;
+        if( $dpath ){
+            $this->domainpath = '/'.trim($dpath,'/');
+        }
     }   
     
     /**
      * Get default system languages directory
      */    
-    protected function _lang_dir(){
+    public function global_lang_dir(){
         return WP_LANG_DIR;
-    }    
-    
-    
+    }
+
+
     /**
-     * Get package type, defaults to 'core'
-     */
-    public function get_type(){
-        return 'core';
-    }    
+     * Test if provided path is under global lang dir 
+     */    
+    public function is_global_path($path){
+        return 0 === strpos( $path, $this->global_lang_dir() );
+    }
+
+
+    /**
+     * Test if package has a writable global lang dir 
+     */    
+    public function is_global_writable(){
+        $dir = $this->global_lang_dir();
+        return $dir && is_dir($dir) && is_writable( $dir );
+    }
+
     
     /**
      * Get identifying pair of arguments for fetching this object
@@ -107,11 +133,46 @@ class LocoPackage {
     
     
     /**
+     * Get package handle used for retreiving theme or plugin via wordpress functions 
+     */
+    public function get_handle(){
+        return $this->handle;
+    }    
+    
+    
+    /**
+     * Get descriptive package name
+     */
+    public function get_name(){
+        return $this->name;
+    }
+    
+    
+    /**
+     * Get all text domains with PO or POT files.
+     */    
+    private function get_domains(){     
+        return array_unique( array_merge( array_keys($this->pot), array_keys($this->po) ) );
+    }
+    
+    
+    /**
      * Get default text domain
      */
     public function get_domain(){
+        if( ! $this->domain ){
+            $this->domain = $this->handle;
+        }
+        if( $this->domain === $this->handle ){
+            // if text domain defaulted and existing files disagree, try to correct primary domain
+            $candidates = $this->get_domains();
+            if( $candidates && ! in_array( $this->domain, $candidates, true ) ){
+                $this->domain = $candidates[0];
+            }
+        }
         return $this->domain;
     }    
+
     
     /**
      * Get time most recent PO/POT file was updated
@@ -164,16 +225,16 @@ class LocoPackage {
      * Add multiple locations from found PO and POT files
      * @return LocoPackage
      */
-    public function add_po( array $files, $domain = '' ){
+    private function add_po( array $files, $domain = '' ){
         if( isset($files['pot']) && is_array($files['pot']) ){
             foreach( $files['pot'] as $path ){
-                $domain or $domain = LocoAdmin::resolve_file_domain($path) or $domain = $this->domain;
+                $domain or $domain = LocoAdmin::resolve_file_domain($path) or $domain = $this->get_domain();
                 $this->add_file($path) and $this->pot[$domain] = $path;
             }
         }
         if( isset($files['po']) && is_array($files['po']) ){
             foreach( $files['po'] as $path ){
-                $domain or $domain = LocoAdmin::resolve_file_domain($path) or $domain = $this->domain;
+                $domain or $domain = LocoAdmin::resolve_file_domain($path) or $domain = $this->get_domain();
                 $locale = LocoAdmin::resolve_file_locale($path);
                 $code = $locale->get_code() or $code = 'xx_XX';
                 $this->add_file($path) and $this->po[ $domain ][ $code ] = $path;
@@ -183,11 +244,32 @@ class LocoPackage {
     }    
     
     
+    
+    /**
+     * Add any MO files for which PO files are missing
+     */ 
+    private function add_mo( array $files, $domain = '' ){
+        foreach( $files as $mo_path ){
+            $domain or $domain = LocoAdmin::resolve_file_domain($mo_path) or $domain = $this->get_domain();
+            $locale = LocoAdmin::resolve_file_locale($mo_path);
+            $code = $locale->get_code() or $code = 'xx_XX';
+            if( isset($this->po[$domain][$code]) ){
+                // PO matched, ignore this MO
+                // @todo better matching as PO may not be in same location as MO
+                continue;
+            }
+            // add MO in place of PO
+            $this->add_file($mo_path) and $this->po[$domain][$code] = $mo_path;
+        }
+    }    
+    
+    
+    
     /**
      * Add a location under which there may be PHP source files for one or more of our domains
      * @return LocoPackage
      */        
-    public function add_source( $path ){
+    private function add_source( $path ){
         $this->src[] = $path;
         return $this;
     }    
@@ -196,10 +278,14 @@ class LocoPackage {
     /**
      * Get most likely intended language folder
      */    
-    public function lang_dir( $domain = '' ){
+    public function lang_dir( $domain = '', $skip_global = false ){
         $dirs = array();
+        // check location of POT in domain
         foreach( $this->pot as $d => $path ){
             if( ! $domain || $d === $domain ){
+                if( $skip_global && $this->is_global_path($path) ){
+                    continue;
+                }
                 $path = dirname($path);
                 if( is_writable($path) ){
                     return $path;
@@ -207,9 +293,13 @@ class LocoPackage {
                 $dirs[] = $path;
             }
         }
+        // check location of al PO files in domain
         foreach( $this->po as $d => $paths ){
             if( ! $domain || $d === $domain ){
                 foreach( $paths as $path ){
+                    if( $skip_global && $this->is_global_path($path) ){
+                        continue;
+                    }
                     $path = dirname($path);
                     if( is_writable($path) ){
                         return $path;
@@ -218,22 +308,80 @@ class LocoPackage {
                 }
             }
         }
+        // check languages subfolder of all source file locations
         foreach( $this->src as $path ){
-            $path .= '/languages';
+            if( $skip_global && $this->is_global_path($path) ){
+                continue;
+            }
+            $pref = $path.$this->domainpath;
+            if( is_writable($pref) ){
+                return $pref;
+            }
+            if( is_writable($path) ){
+                return $path;
+            }
+            if( is_dir($pref) ){
+                $dirs[] = $pref;
+            }
+            else {
+                $dirs[] = $path;
+            }
+        }
+        // check global languages location
+        if( ! $skip_global ){
+            $path = $this->global_lang_dir();
             if( is_writable($path) ){
                 return $path;
             }
             $dirs[] = $path;
         }
-        $path = $this->_lang_dir();
-        if( is_writable($path) ){
-            return $path;
-        }
-        $dirs[] = $path;
         // failed to get writable directory, so we'll just return the highest priority
         return array_shift( $dirs );
     }
-    
+
+
+    /**
+     * Build name of PO file for given or default domain
+     */
+    public function create_po_path( LocoLocale $locale, $domain = '', $force_global = null ){
+        if( ! $domain ){
+            $domain = $this->get_domain();
+        }
+        // get best directory
+        if( is_null($force_global) ){
+            $dir = $this->lang_dir( $domain );
+            $force_global = $this->is_global_path( $dir );
+        }
+        // else use global directory by force
+        else if( $force_global ){
+            $dir = $this->global_lang_dir();
+        }
+        // else use best, but skipping global directory
+        else {
+            $dir = $this->lang_dir( $domain, true );
+        }
+        $name = $locale->get_code().'.po';
+        // only prefix with text domain for plugins and files in global lang directory
+        if( 'plugin' === $this->get_type() || $force_global ){
+            $prefix = $domain.'-';
+        }
+        else {
+            $prefix = '';
+        }
+        // if PO files exist, copy their naming format and use location if writable
+        if( is_null($force_global) && ! empty($this->po[$domain]) ){
+            foreach( $this->po[$domain] as $code => $path ){
+                $info = pathinfo( $path );
+                $prefix = str_replace( $code.'.'.$info['extension'], '', $info['basename'] );
+                if( is_writable($info['dirname']) ){
+                    $dir = $info['dirname'];
+                    break;
+                }
+            }
+        }
+        return $dir.'/'.$prefix.$name;
+    }
+        
     
     /**
      * Get root of package
@@ -268,13 +416,16 @@ class LocoPackage {
      * Called when generating root list view for simple error indicators.
      */    
     public function check_permissions(){
+        $dirs = array();
         foreach( $this->pot as $path ){
+            $dirs[ dirname($path) ] = 1;
             if( ! is_writable($path) ){
                 throw new Exception( Loco::__('Some files not writable') );
             }
         }
         foreach( $this->po as $paths ){
             foreach( $paths as $path ){
+                $dirs[ dirname($path) ] = 1;
                 if( ! is_writable($path) ){
                     throw new Exception( Loco::__('Some files not writable') );
                 }
@@ -287,6 +438,11 @@ class LocoPackage {
         if( ! is_writable($dir) ){
             throw new Exception( sprintf( Loco::__('"%s" folder not writable'), basename($dir) ) );
         }
+        foreach( array_keys($dirs) as $path ){
+            if( ! is_writable($path) ){
+                throw new Exception( sprintf( Loco::__('"%s" folder not writable'), basename($dir) ) );
+            }
+        }
     }    
     
     
@@ -294,19 +450,32 @@ class LocoPackage {
      * Get file permission for every important file path in package 
      */
     public function get_permission_errors(){
+        $dirs = array();
+        // add common directories
+        $base = $this->get_root();
+        $dirs[ $base ] = 1;
+        $dirs[ $base.$this->domainpath ] = 1;
+        $dirs[ $this->lang_dir() ] = 1;
+        $dirs[ $this->global_lang_dir() ] = 1;
+        // add and check files, collecting additional directories along the way
         $paths = array();
-        $dir = $this->lang_dir();
-        $paths[$dir] = is_writable($dir) ? '' : Loco::__('Folder not writable');
         foreach( $this->pot as $path ){
+            $dirs[ dirname($path) ] = 1;
             $paths[$path] = is_writable($path) ? '' : Loco::__('POT file not writable');
         }
         foreach( $this->po as $pos ){
             foreach( $pos as $path ){
+                $dirs[ dirname($path) ] = 1;
                 $paths[$path] = is_writable($path) ? '' : Loco::__('PO file not writable');
                 $path = preg_replace('/\.po$/', '.mo', $path );
                 $paths[$path] = file_exists($path) ? ( is_writeable($path) ? '' : Loco::__('MO file not writable') ) : Loco::__('MO file not found');
             }
         }
+        // run directory checks and sort final list alphabetically
+        foreach( array_keys($dirs) as $dir ){
+            $paths[$dir] = is_writable($dir) ? '' : ( is_dir($dir) ? Loco::__('Folder not writable') : Loco::__('Folder not found') );
+        }
+        ksort( $paths );
         return $paths;    
     }   
     
@@ -317,9 +486,23 @@ class LocoPackage {
      */    
     public function get_pot( $domain = '' ){
         if( ! $domain ){
-            $domain = $this->domain;
+            $domain = $this->get_domain();
         }
-        return isset($this->pot[$domain]) ? $this->pot[$domain] : '';
+        if( ! empty($this->pot[$domain]) ){
+            return $this->pot[$domain];
+        }
+        // no POT, but some authors may use locale-less PO files incorrectly as a template
+        if( isset($this->po[$domain]) ){
+            foreach( array('','xx_XX','en_US','en_GB') as $try ){
+                if( isset($this->po[$domain][$try]) ){
+                    $pot = $this->po[$domain][$try];
+                    unset( $this->po[$domain][$try] );
+                    return $this->pot[$domain] = $pot;
+                }
+            }
+        }
+        // no template candidate
+        return '';
     }    
     
     
@@ -329,7 +512,7 @@ class LocoPackage {
      */
     public function get_po( $domain = '' ){
         if( ! $domain ){
-            $domain = $this->domain;
+            $domain = $this->get_domain();
         }
         return isset($this->po[$domain]) ? $this->po[$domain] : array();
     }
@@ -376,7 +559,9 @@ class LocoPackage {
     public function meta(){
         if( ! is_array($this->_meta) ){
             $pot = $po = array();
-            foreach( $this->pot as $domain => $path ){
+            // get POT files for all domains, fixing incorrect PO usage
+            foreach( $this->get_domains() as $domain ){
+                $path = $this->get_pot( $domain ) and
                 $pot[] = compact('domain','path');
             }
             // get progress and locale for each PO file
@@ -388,10 +573,11 @@ class LocoPackage {
                         $po[] = array (
                             'path'   => $path,
                             'domain' => $domain,
-                            'name'   => str_replace( array('.po',$domain), array('',''), basename($path) ),
+                            'name'   => trim( str_replace( array('.po','.mo',$domain), array('','',''), basename($path) ), '-_'),
                             'stats'  => loco_po_stats( $export ),
                             'length' => count( $export ),
                             'locale' => loco_locale_resolve($code),
+                            'projid' => trim( $headers->{'project-id-version'} ),
                         );
                     }
                     catch( Exception $Ex ){
@@ -400,9 +586,9 @@ class LocoPackage {
                 }
             }
             $this->_meta = compact('po','pot') + array(
-                'name' => $this->name,
+                'name' => $this->get_name(),
                 'root' => $this->get_root(),
-                'domain' => $this->domain,
+                'domain' => $this->get_domain(),
             );
         }
         return $this->_meta;
@@ -442,16 +628,28 @@ class LocoPackage {
     private static function get_theme( $handle ){
         $theme = wp_get_theme( $handle );
         if( $theme && $theme->exists() ){
+            $name = $theme->get('Name');
             $domain = $theme->get('TextDomain') or $domain = $handle;
-            $package = new LocoThemePackage( $handle, $domain, $theme->get('Name') );
+            // create theme package with text domain defaulting to template name
+            $package = new LocoThemePackage( $handle, $domain, $name, $theme->get('DomainPath') );
             $root = $theme->get_theme_root().'/'.$handle;
             $package->add_source( $root );
             // add PO and POT under theme root
             if( $files = LocoAdmin::find_po($root) ){
                 $package->add_po( $files, $domain );
             }
-            // find additional theme PO under WP_LANG_DIR/themes
+            // pick up any MO files that have missing PO
+            if( $files = LocoAdmin::find_mo($root) ){
+                $package->add_mo( $files, $domain );
+            }
+            // find additional theme PO under WP_LANG_DIR/themes unless a child theme
             $package->add_lang_dir(  WP_LANG_DIR.'/themes', $domain );
+            // child theme inherits parent, but keeps its own domain
+            if( $parent = $theme->get_template() ){
+                if( $parent !== $handle ){
+                    $package->inherit( $parent );
+                }
+            }
             return $package;
         }
     }    
@@ -466,36 +664,68 @@ class LocoPackage {
         if( isset($plugins[$handle]) && is_array($plugins[$handle]) ){
             $plugin = $plugins[$handle];
             $domain = $plugin['TextDomain'] or $domain = str_replace('/','-',dirname($handle));
-            $package = new LocoPluginPackage( $handle, $domain, $plugin['Name'] );
+            $package = new LocoPluginPackage( $handle, $domain, $plugin['Name'], $plugin['DomainPath'] );
             $root = WP_PLUGIN_DIR.'/'.dirname($handle);
             $package->add_source( $root );
             // add PO and POT under plugin root
             if( $files = LocoAdmin::find_po($root) ){
                 $package->add_po( $files, $domain );
             }
+            // pick up any MO files that have missing PO
+            if( $files = LocoAdmin::find_mo($root) ){
+                $package->add_mo( $files, $domain );
+            }
             // find additional plugin PO under WP_LANG_DIR/plugin
             $package->add_lang_dir(  WP_LANG_DIR.'/plugins', $domain );
             return $package;
         }
     }
-    
-    
+
+
     /**
      * construct a core package object from name
+     * @return LocoPackage
      */
     private static function get_core( $handle ){
-        /*
-        $files = LocoAdmin::pop_lang_dir($domain);
-        if( $files['po'] || $files['pot'] ){
-            $package = new LocoPackage( $domain, $handle );
-            $package->add_po( $files );
-            //
-            Loco::cache( $key, $package );
-            return $package;
+        static $grouped;
+        if( ! isset($grouped) ){
+            $grouped = array();
+            foreach( LocoAdmin::find_grouped( WP_LANG_DIR.'/*{.po,.pot}', GLOB_NOSORT|GLOB_BRACE ) as $ext => $files ){
+                foreach( $files as $path ){
+                    $domain = LocoAdmin::resolve_file_domain( $path );
+                    $grouped[ $domain ][ $ext ][] = $path;
+                }
+            }
         }
-        */
+        $domain = $handle or $domain = 'default';
+        $package = new LocoCorePackage( $handle, $domain, '' );
+        if( isset($grouped[$handle]) ){
+            $package->add_po( $grouped[$handle], $domain );
+            // get name from po file
+            $meta = $package->meta();
+            foreach( $meta['po'] as $pmeta ){
+                if( $pmeta['projid'] ){
+                    $package->name = $pmeta['projid'];
+                }
+            }
+        }
+        return $package;
     }
-    
+
+
+
+    /**
+     * Get all core pseudo packages
+     */
+    public static function get_core_packages(){
+        static $names = array( '', 'admin', 'admin-network', 'continents-cities', 'ms' );
+        $packages = array();
+        foreach( $names as $handle ){
+            $packages[$handle] = self::get( $handle, 'core' );
+        }
+        return $packages;
+    }   
+     
     
     
     /**
@@ -559,8 +789,57 @@ class LocoPackage {
  * Extended package class for themes
  */
 class LocoThemePackage extends LocoPackage {
-    protected function _lang_dir(){
+    private $parent;
+    public function global_lang_dir(){
         return WP_LANG_DIR.'/themes';
+    }
+    protected function inherit( $template ){
+        $parent = wp_get_theme( $template );
+        if( $parent && $parent->exists() ){
+            $this->parent = $template;
+        }
+    }
+    protected function is_child(){
+        return ! empty($this->parent);
+    }
+    protected function get_parent(){
+        return $this->parent ? LocoPackage::get( $this->parent, 'theme' ) : null;
+    }
+    public function meta(){
+        $meta = parent::meta();
+        if( $parent = $this->get_parent() ){
+            $pmeta = $parent->meta();
+            $meta['parent'] = $parent->get_name();
+            // merge parent resources unless child has its own domain
+            if( $meta['domain'] === $pmeta['domain'] ){
+                $meta['po'] = array_merge( $meta['po'], $pmeta['po'] );
+                $meta['pot'] = array_merge( $meta['pot'], $pmeta['pot'] );
+            }
+        }
+        return $meta;
+    }
+    public function check_permissions(){
+        parent::check_permissions();
+        if( $parent = $this->get_parent() ){
+            $parent->check_permissions();
+        }
+    }
+    public function get_permission_errors(){
+        $paths = parent::get_permission_errors();
+        // check parent theme if exists
+        if( $parent = $this->get_parent() ){
+            // recurse if child theme uses same domain as parent
+            if( $this->get_domain() === $parent->get_domain() ){
+                $paths += $parent->get_permission_errors( true );
+            }
+        }
+        return $paths;
+    }
+    public function get_pot( $domain = '' ){
+        if( ( $parent = $this->get_parent() ) && ( $pot = $parent->get_pot($domain) ) ){
+            return $pot;
+        }
+        return parent::get_pot( $domain );
     }
     public function get_type(){
         return 'theme';
@@ -572,11 +851,22 @@ class LocoThemePackage extends LocoPackage {
  * Extended package class for plugins
  */
 class LocoPluginPackage extends LocoPackage {
-    protected function _lang_dir(){
+    public function global_lang_dir(){
         return WP_LANG_DIR.'/plugins';
     }
     public function get_type(){
         return 'plugin';
+    }      
+}
+
+
+/**
+ * Extended package class for core pseudo packages
+ */
+class LocoCorePackage extends LocoPackage {
+    protected $domainpath = '';
+    public function get_type(){
+        return 'core';
     }      
 }
 

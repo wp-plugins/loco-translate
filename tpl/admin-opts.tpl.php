@@ -3,7 +3,7 @@
  * Admin options screen - changes loco plugin settings
  */
 $nav = array (
-    Loco::__('Packages') => str_replace( 'options-general', 'tools', LocoAdmin::uri() ),
+    Loco::__('Packages') => LocoAdmin::uri(),
     Loco::__('Settings') => '',
 ); 
 ?>
@@ -69,6 +69,22 @@ $nav = array (
                                     <?php Loco::h( Loco::__('Number of backups to keep of each file:') )?> 
                                 </label>
                                 <input type="number" min="0" max="99" size="2" name="loco[num_backups]" id="loco--num_backups" value="<?php printf('%u',$num_backups)?>" />
+                            </p>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php Loco::h( Loco::__('Experimental features') )?></th>
+                    <td>
+                        <fieldset>
+                            <legend class="screen-reader-text">
+                                <span><?php Loco::h( Loco::__('Experimental features') )?></span>
+                            </legend>
+                            <p>
+                                <label for="loco--enable-core">
+                                    <input type="checkbox" name="loco[enable_core]" value="1" id="loco--enable-core"<?php echo $enable_core ? ' checked' : '';?> />
+                                    <?php Loco::h( Loco::__('Enable Wordpress core translations') )?> 
+                                </label>
                             </p>
                         </fieldset>
                     </td>

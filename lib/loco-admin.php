@@ -125,7 +125,7 @@ abstract class LocoAdmin {
                         }
                     }    
                     // else do a dry run to pre-empt failures and allow manual alteration of target path
-                    $path = self::msginit( $package, $domain, 'en', $export, $head, $force_global );
+                    $path = self::msginit( $package, $domain, 'zz_ZZ', $export, $head, $force_global );
                     // get alternative location options
                     $pdir = $package->lang_dir( $domain, true );
                     $gdir = $package->global_lang_dir();
@@ -560,8 +560,8 @@ abstract class LocoAdmin {
      * Recursively find all PHP source files anywhere under a directory
      */
     public static function find_php( $dir ){
-        $files = self::find( $dir, array('php') );
-        return $files['php'];
+        $files = self::find( $dir, array('php','phtml') );
+        return array_merge($files['php'], $files['phtml']);
     }
     
     
@@ -773,7 +773,7 @@ abstract class LocoAdmin {
                 $args['page'].= '-'.$suffix;
             }
         }
-        return $base_uri.'?'.http_build_query( $args );
+        return add_query_arg($args,$base_uri);
     }
     
     

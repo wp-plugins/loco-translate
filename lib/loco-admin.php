@@ -100,12 +100,25 @@ abstract class LocoAdmin {
         loco_require('loco-locales','loco-packages');
         // global data
         global $wp_version;
+        $user = wp_get_current_user();
+        // collect data about Loco plugin
+        $config = Loco::config();
+        $caching = Loco::$cache_enabled ? ( Loco::$apc_enabled ? 'APC' : 'WP' ) : 'Off'; 
         // collect data about current theme
         $theme = wp_get_theme();
         $package = LocoPackage::get( $theme->get_stylesheet(), 'theme' );
         $theme_locale = apply_filters( 'theme_locale', get_locale(), $theme->get('TextDomain') );
-        // 
-        $args = compact('wp_version','theme','theme_locale','package');
+        // collect data about all plugins
+        $plugins = array();
+        foreach( get_plugins() as $plugin_file => $plugin ){
+            $package = LocoPackage::get( $plugin_file, 'plugin' ) and
+            $plugins[ $package->get_name() ] = $package->get_domain();
+        }
+        // check if locale is a valid Wordpress language code
+        if( ! LocoLocale::is_valid_wordpress($theme_locale) ){
+            self::warning( sprintf( Loco::__('"%s" is not a standard WordPress locale code'), $theme_locale ) );
+        }
+        $args = compact('wp_version','theme','theme_locale','package','config','caching','user','plugins');
         Loco::enqueue_scripts('build/admin-common', 'debug');
         Loco::render('admin-debug', $args );
     }    
@@ -191,9 +204,9 @@ abstract class LocoAdmin {
                 // Show filesystem check if 'fscheck' in query
                 //
                 if( isset($_GET['fscheck']) ){
-                    $meta = $package->meta();
+                    $args = $package->meta() + compact('package');
                     Loco::enqueue_scripts('build/admin-common');
-                    Loco::render('admin-fscheck', $meta + compact('package') );
+                    Loco::render('admin-fscheck', $args );
                     break;
                 }
                 
@@ -784,8 +797,8 @@ abstract class LocoAdmin {
         if( 'pot' === $extension ){
             return $filename;
         }
-        if( $domain = preg_replace('/[a-z]{2}(_[A-Z]{2})?$/', '', $filename ) ){
-            return trim( $domain, '-' );
+        if( $domain = preg_replace('/[a-z]{2,3}(_[A-Z]{2})?$/', '', $filename ) ){
+            return rtrim( $domain, '-' );
         }
         // empty domain means file name is probably just a locale
         return '';
@@ -1038,9 +1051,11 @@ function _loco_hook__admin_menu() {
         add_submenu_page( Loco::NS, $title, $opts_title, $cap, $slug, $page );
         // also add under Settings menu (legacy)
         add_options_page( $title, $opts_title, $cap, $slug.'-legacy', $page );
-        /*/ TODO Diagnostics page
-        $page = array( 'LocoAdmin', 'render_page_diagnostics' );
-        add_submenu_page( Loco::NS, $page_title.' - '.$diag_title, $diag_title, $cap, Loco::NS.'-diagnostics', $page );*/
+        /*/ Diagnostics page - enabled in debug mode only
+        if( WP_DEBUG ){
+            $page = array( 'LocoAdmin', 'render_page_diagnostics' );
+            add_submenu_page( Loco::NS, $page_title.' - '.$diag_title, $diag_title, $cap, Loco::NS.'-diagnostics', $page );
+        }*/
         // Hook in page stuff as soon as screen is avaiable
         add_action('current_screen', '_loco_hook__current_screen' );
     }        

@@ -82,6 +82,11 @@ abstract class LocoPackage {
      */
     abstract public function get_type();
 
+    /**
+     * Get original data about package stored in Wordpress
+     */
+    abstract public function get_original( $header );     
+
 
     /**
      * Construct package from name, root and domain
@@ -487,6 +492,42 @@ abstract class LocoPackage {
         ksort( $paths );
         return $paths;    
     }   
+
+
+    /**
+     * Get package errors, or things that may cause problems displaying translations
+     */
+    public function get_author_warnings(){
+        $warn = array();
+        $type = $this->get_type();
+        if( 'core' === $type ){
+            // no tests for core packages
+        }
+        else {
+            $camelType = strtoupper($type{0}).substr($type,1);
+            // check package declares Text Domain
+            $domain = $this->get_original('TextDomain');
+            if( ! $domain ){
+                $domain = $this->get_domain();
+                $warn[] = sprintf(Loco::__('%s does not declare a "Text Domain"'),$camelType).' .. '.sprintf(Loco::__('Loco has guessed "%s"'), $domain );
+            }
+            // check package declares "Domain Path"
+            $path = $this->get_original('Domain Path');
+            if( ! $domain ){
+                $warn[] = sprintf(Loco::__('%s does not declare a "Domain Path"'),$camelType).' .. '.sprintf(Loco::__('Loco has guessed "%s"'), $this->domainpath );
+            }
+            // check POT exists and looks correct
+            $path = $this->get_pot($domain);
+            if( ! $path ){
+                $warn[] = sprintf( Loco::__('%s has no POT file. Create one at "%s/%s.pot" if you need one.'), $camelType, $this->domainpath, $domain );
+            }
+            else if( $domain.'.pot' !== basename($path) ){
+                $warn[] = sprintf(Loco::__('%s has a strange POT file name (%s). A better name would be "%s.pot"'), $camelType, basename($path), $domain );
+            }
+            // TODO check references to other domains in xgettext
+        }
+        return $warn;
+    }     
     
     
     /**
@@ -863,6 +904,10 @@ class LocoThemePackage extends LocoPackage {
     public function get_type(){
         return 'theme';
     }      
+    public function get_original( $header ){
+        $theme = wp_get_theme( $this->get_handle() );
+        return $theme->get( $header );
+    }
 }
 
 
@@ -876,6 +921,11 @@ class LocoPluginPackage extends LocoPackage {
     public function get_type(){
         return 'plugin';
     }      
+    public function get_original( $header ){
+        $plugins = get_plugins();
+        $plugin = $plugins[ $this->get_handle() ];
+        return isset($plugin[$header]) ? $plugin[$header] : '';
+    }
 }
 
 
@@ -887,5 +937,8 @@ class LocoCorePackage extends LocoPackage {
     public function get_type(){
         return 'core';
     }      
+    public function get_original( $header ){
+        return null;
+    }
 }
 

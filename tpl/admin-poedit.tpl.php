@@ -5,7 +5,7 @@
 $nav = array (
     Loco::__('Packages') => LocoAdmin::uri(),
     $name => '',
-    Loco::__('Settings') => str_replace( 'tools', 'options-general', LocoAdmin::uri() ),
+    Loco::__('Settings') => LocoAdmin::uri( array(), 'settings' ),
 );  
 
 $phpbase = Loco::html( Loco::baseurl() ).'/php';
@@ -39,9 +39,9 @@ $modified or $pofiles[] = $path;
                     <?php Loco::h(Loco::_x('Switch to...','Dropdown label'))?> 
                 </option><?php
                 // drop down of files in package
-                $poname = basename( $path );
+                $poname = str_replace( '.mo', '.po', basename( $path ) );
                 foreach( $pofiles as $_path ):
-                    $label = basename($_path);
+                    $label = str_replace( '.mo', '.po', basename($_path) );
                     $poedit = LocoAdmin::trim_path($_path);
                     $url = LocoAdmin::uri( $package->get_query() + compact('poedit') );
                 ?> 
@@ -76,7 +76,7 @@ $modified or $pofiles[] = $path;
     <div id="loco-poedit">
         
         <nav id="loco-nav" class="wp-core-ui">
-            <form action="<?php echo $phpbase?>/loco-fail.php" method="post">
+            <form action="<?php echo $phpbase?>/loco-fail.php" method="post" id="loco-poedit-save">
                 <input type="hidden" name="po" value="" />
                 <input type="hidden" name="path" value="<?php Loco::h($path)?>" />
                 <input type="hidden" name="action" value="loco-posave" /><?php
@@ -136,9 +136,11 @@ $modified or $pofiles[] = $path;
                 </button>
             </form>
             <form action="<?php echo $phpbase?>/loco-fail.php" id="loco-filter">
-                <input type="text" maxlength="100" name="q" id="loco-search" placeholder="<?php Loco::h(Loco::__('Filter translations'))?>" autocomplete="off" disabled />
+                <div class="loco-clearable">
+                    <input type="text" maxlength="100" name="q" id="loco-search" placeholder="<?php Loco::h(Loco::__('Filter translations'))?>" autocomplete="off" disabled />
+                </div>
             </form>
-            <form action="http://wordpress.org/support/plugin/<?php echo Loco::NS?>" target="_blank">
+            <form action="http://wordpress.org/support/plugin/<?php echo Loco::NS?>" target="_blank" class="loco-right">
                 <button class="button loco-help" data-loco="help" type="submit">
                     <span><?php Loco::h( Loco::_x('Help','Editor button') )?></span>
                 </button>

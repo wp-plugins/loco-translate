@@ -1,21 +1,15 @@
 <?php
 /**
- * Unit tests for compiled Loco utils.
- * $ php -c /etc -f /path/to/phpunit.phar - --colors path/to/test.php
+ * Test built gettext libs.
+ * 
+ * @group gettext
+ * @group built
  */
-require __DIR__.'/gettext-compiled.php';
-require __DIR__.'/locales-compiled.php';
-require __DIR__.'/shell-compiled.php';
-require __DIR__.'/../loco-locales.php';
+class GettextTest extends PHPUnit_Framework_TestCase {
 
 
-class LocoTest extends PHPUnit_Framework_TestCase {
-    
-    /**
-     * Test PO parser.
-     */    
     public function testParsePO(){
-        $popath = __DIR__.'/../../languages/loco-translate-de_DE.po';
+        $popath = __DIR__.'/../../../languages/loco-translate-de_DE.po';
         $this->assertFileExists( $popath );
         $posrc = file_get_contents($popath);
         $po = loco_parse_po( $posrc );
@@ -51,35 +45,38 @@ class LocoTest extends PHPUnit_Framework_TestCase {
         $this->assertStringEndsWith('/msgfmt', $cmd );
         define( 'WHICH_MSGFMT', $cmd );
         // test shell compile via temp file
-        $popath = realpath( __DIR__.'/../../languages/loco-translate-de_DE.po' );
+        $popath = realpath( __DIR__.'/../../../languages/loco-translate-de_DE.po' );
         $mopath = tempnam( sys_get_temp_dir(), 'loco-mo-' );
         register_shutdown_function('unlink', $mopath );
         $this->assertEquals( $mopath, loco_compile_mo_file( $popath, $mopath ), 'Failed to compile MO' );
         $bin = file_get_contents( $mopath );
         $this->assertStringEndsWith( "\0", $bin, 'Bad mo file ending' );
-    }    
-    
-
-    
-    /**
-     * Test locale data
-     */
-    public function testLocales(){
-        $locale = loco_locale_resolve( '--fr_FR' );
-        $this->assertEquals('French', $locale->get_name(), 'Failed to parse language code fr_FR' );
-        // object equality
-        $other = LocoLocale::init('fr','');
-        $this->assertTrue( $locale->equal_to($other), $locale.' is not the same locale as '.$other );
-        // plurals
-        $data = $locale->export();
-        $this->assertEquals( 2, (int) $data['nplurals'] );
-        // preg matching
-        $pattern = '/'.$locale->preg().'/';
-        $this->assertTrue( (bool) preg_match($pattern, '--fr_FR' ) );
     }
     
     
     
+    /**
+     * Test xgettext style tring extraction
+     */
+    public function testLocoPHPExtractor(){
+        $source = file_get_contents( __DIR__.'/../../../pub/js/lang/dummy.php' );
+        $tokens = token_get_all($source);
+        $extractor = new LocoPHPExtractor;
+        $export = $extractor->extract( $tokens, 'test.php' );
+        // should have got 15 messages, 2 of which pluralized
+        $this->assertCount( 17, $export );
+        // check first message on line 8, "Unknown error"
+        $this->assertEquals( 'Unknown error', $export[0]['source'] );
+        // reference should be intact with line number
+        $this->assertContains('test.php:8', $export[0]['refs'] );
+        // first message should not have included the file header comment not intended to go with it
+        $this->assertEmpty( $export[0]['notes'], 'Comment block should not have been extracted' );
+        // third item should auto-detect its php-format flag
+        $this->assertEquals( 'php', $export[3]['format'] );
+    }
+
+
 }
+
 
 

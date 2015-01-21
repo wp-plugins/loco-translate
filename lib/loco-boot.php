@@ -2,17 +2,23 @@
 /**
  * Loco | bootstraps plugin when it's needed.
  * Top-level Loco class holds some basic utilities
- */ 
+ */
 abstract class Loco {
 
     /** plugin namespace */
     const NS = 'loco-translate';
     
-    const VERSION = '1.4.2';
+    const VERSION = '1.5';
     const CAPABILITY = 'manage_options';
     
+    /* current plugin locale */
+    private static $locale;
+
     /* whether to enable APC cache */
     public static $apc_enabled;
+
+    /* whether to enable the cache at all  */
+    public static $cache_enabled;
 
     /* call Wordpress __ with our text domain  */
     public static function __( $msgid = '' ){
@@ -33,14 +39,35 @@ abstract class Loco {
     /**
      * Bootstrap localisation of self
      */
-    public static function load_textdomain(){
-        $locale = get_locale();
-        if( ! $locale || 0 === strpos($locale,'en') ){
-            return;
+    public static function load_textdomain( $locale = null ){
+        if( is_null($locale) ){
+            $locale = get_locale();
         }
-        $plugin_rel_path = basename( self::basedir() );
-        load_plugin_textdomain( Loco::NS, false, $plugin_rel_path.'/languages' );
+        if( ! $locale || 0 === strpos($locale,'en') ){
+            self::$locale and unload_textdomain( Loco::NS );
+            $locale = 'en_US';
+        }
+        else if( self::$locale !== $locale ){
+            $plugin_rel_path = basename( self::basedir() );
+            load_plugin_textdomain( Loco::NS, false, $plugin_rel_path.'/languages' );
+        }
+        // detect changes in plugin locale, binding once only
+        isset(self::$locale) or add_filter( 'plugin_locale', array(__CLASS__,'filter_plugin_locale'), 10 , 2 );
+        self::$locale = $locale;
     }
+    
+    
+    
+    /**
+     * Listen for change in plugin locale
+     */
+    public static function filter_plugin_locale( $locale, $domain ){
+        if( self::NS !== $domain && $locale !== self::$locale ){
+            self::load_textdomain( $locale );
+        }
+        return $locale;
+    }
+    
     
     
     /**
@@ -53,6 +80,7 @@ abstract class Loco {
             // temporary measure assumes name of plugin folder is unchanged.
             $here = WP_PLUGIN_DIR.'/'.Loco::NS.'/loco.php';
         }
+        //var_dump( $here );
         return $here;
     }     
     
@@ -149,12 +177,10 @@ abstract class Loco {
     /**
      * 
      */
-    public static function utm_query( $utm_medium = 'wp', $utm_campaign = 'wp' ){
-        static $utm_source, $utm_content;
-        if( ! isset($utm_source) ){
-            $utm_source = parse_url( get_bloginfo('url'), PHP_URL_HOST ) or $utm_source = $_SERVER['HTTP_HOST'];
-            $utm_content = Loco::NS.'-'.Loco::VERSION;
-        }
+    public static function utm_query( $utm_medium ){
+        $utm_campaign = 'wp';
+        $utm_source = 'wp-admin';
+        $utm_content = Loco::VERSION;
         return http_build_query( compact('utm_campaign','utm_medium','utm_content','utm_source') );
     }
     
@@ -189,7 +215,7 @@ abstract class Loco {
      * @return mixed 
      */
     public static function cached( $key ){
-        if( WP_DEBUG ){
+        if( ! self::$cache_enabled ){
             return null;
         }
         $key = self::cache_key($key);
@@ -206,6 +232,9 @@ abstract class Loco {
      * @return void
      */
      public static function cache( $key, $value, $ttl = 0 ){
+        if( ! self::$cache_enabled ){
+            return;
+        }
         $key = self::cache_key($key);
         if( self::$apc_enabled ){
             apc_store( $key, $value, $ttl );
@@ -265,6 +294,8 @@ abstract class Loco {
                 'gen_hash' => '0',
                 // number of backups to keep of PO and MO files
                 'num_backups' => '1',
+                // whether to enable core package translation
+                'enable_core' => '0',
             );
             foreach( $conf as $key => $val ){
                 $conf[$key] = get_option( Loco::NS.'-'.$key);
@@ -291,8 +322,7 @@ abstract class Loco {
 
 
 // minimum config
+Loco::$cache_enabled = apply_filters( 'loco_cache_enabled', ! WP_DEBUG ) and
 Loco::$apc_enabled = function_exists('apc_fetch') && ini_get('apc.enabled');
 Loco::load_textdomain();
-
-
 

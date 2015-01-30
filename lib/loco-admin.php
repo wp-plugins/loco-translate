@@ -64,14 +64,21 @@ abstract class LocoAdmin {
         trigger_error('wp_die failure', E_USER_ERROR );
         exit();
     }     
-    
+
+
+    /**
+     * Check current user has permission to access Loco admin screens, or exit forbidden
+     */
+    private static function check_capability(){
+        current_user_can( Loco::admin_capablity() ) or self::forbid();
+    }    
     
     
     /**
      * Admin settings page render call
      */
     public static function render_page_options(){
-        current_user_can(Loco::CAPABILITY) or self::forbid();
+        self::check_capability();
         // update applicaion settings if posted
         if( isset($_POST['loco']) && is_array( $update = $_POST['loco'] ) ){
             $update += array( 'gen_hash' => '0', 'enable_core' => '0' );
@@ -96,7 +103,7 @@ abstract class LocoAdmin {
      * Admin diagnostics page render call
      */
     public static function render_page_diagnostics(){
-        current_user_can(Loco::CAPABILITY) or self::forbid();
+        self::check_capability();
         loco_require('loco-locales','loco-packages');
         // global data
         global $wp_version;
@@ -129,7 +136,7 @@ abstract class LocoAdmin {
      * Admin tools page render call
      */
     public static function render_page_tools(){
-        current_user_can(Loco::CAPABILITY) or self::forbid();
+        self::check_capability();
         do {
             try {
                 
@@ -196,6 +203,11 @@ abstract class LocoAdmin {
                 //
                 if( isset($_GET['poedit']) && $po_path = self::resolve_path( $_GET['poedit'] ) ){
                     $export = self::parse_po_with_headers( $po_path, $head );
+                    // support incorrect usage of PO files as templates
+                    if( isset($_GET['pot']) && ! self::is_pot($po_path) ){
+                        $po_path = dirname($po_path).'/'.$_GET['pot'].'.pot';
+                        self::warning( sprintf( Loco::__('PO file used as template. This will be renamed to %s on first save'), basename($po_path) ) );
+                    }
                     self::render_poeditor( $package, $po_path, $export, $head );
                     break;
                 }
@@ -351,8 +363,6 @@ abstract class LocoAdmin {
             $data[0] = array();
             $minlength = 2;
         }
-        // template file is developer-editable and has no locale
-        $ispot = self::is_pot($path);
 
         // path may not exist if we're creating a new one
         if( file_exists($path) ){
@@ -362,15 +372,7 @@ abstract class LocoAdmin {
             $modified = 0;
         }
         
-        // support incorrect usage of template PO files
-        if( ! $ispot && $head && $modified && ! $head->Language && self::none_translated($data) ){
-            $path .= 't';
-            $warnings[] = sprintf( Loco::__('PO file used as template. This will be renamed to %s on first save'), basename($path) );
-            $ispot = true;
-            $modified = 0;
-        }
-        
-        if( $ispot ){
+        if( $is_pot = self::is_pot($path) ){
             $pot = $data;
             $type = 'POT';
         }
@@ -395,7 +397,7 @@ abstract class LocoAdmin {
         // Warnings if file is empty
         if( count($data) < $minlength ){
             $lines = array();
-            if( $ispot ){
+            if( $is_pot ){
                 if( $modified ){
                     // existing POT, may need sync
                     $lines[] = sprintf( Loco::__('%s file is empty'), 'POT' );
@@ -426,7 +428,7 @@ abstract class LocoAdmin {
 
         // warning if file needs syncing
         else if( $modified ){
-            if( $ispot ){
+            if( $is_pot ){
                 $sources = $package->get_source_files();
                 if( $sources && filemtime($path) < self::newest_mtime_recursive($sources) ){
                     $warnings[] = Loco::__('Source code has been modified, run Sync to update POT');
@@ -449,7 +451,7 @@ abstract class LocoAdmin {
         }
         
         // set Last-Translator if PO file
-        if( ! $ispot ){
+        if( ! $is_pot ){
             /* @var WP_User $user */
             $user = wp_get_current_user() and
             $head->add( 'Last-Translator', $user->get('display_name').' <'.$user->get('user_email').'>' );
@@ -482,7 +484,7 @@ abstract class LocoAdmin {
         $path = self::trim_path( $path );
         
         // If parsing MO file, from now on treat as PO
-        if( ! $ispot && self::is_mo($path) ){
+        if( ! $is_pot && self::is_mo($path) ){
             $path = str_replace( '.mo', '.po', $path );
         }
 
@@ -494,7 +496,7 @@ abstract class LocoAdmin {
     
     
     /**
-     * test if a file path is a POT (template) file
+     * Test if a file path is a POT (template) file
      */
     public static function is_pot( $path ){
         return 'pot' === strtolower( pathinfo($path,PATHINFO_EXTENSION) );
@@ -503,10 +505,19 @@ abstract class LocoAdmin {
     
     
     /**
-     * test if a file path is a MO (compiled) file
+     * Test if a file path is a MO (compiled) file
      */
     public static function is_mo( $path ){
         return 'mo' === strtolower( pathinfo($path,PATHINFO_EXTENSION) );
+    }
+    
+    
+    
+    /**
+     * Test if a file path is a PO file
+     */
+    public static function is_po( $path ){
+        return 'po' === strtolower( pathinfo($path,PATHINFO_EXTENSION) );
     }
     
     
@@ -852,14 +863,25 @@ abstract class LocoAdmin {
     }
     
     
+    /**
+     * Generate a URL to edit a po/pot file
+     */
+    public static function edit_uri( LocoPackage $package, $path ){
+        $args = $package->get_query() + array (
+            'poedit' => self::trim_path( $path ),
+        );
+        if( $domain = $package->is_pot($path) ){
+            $args['pot'] = $domain;
+        }
+        return self::uri( $args );
+    }    
+    
     
     /**
      * Generate a link to edit a po/pot file
      */
     public static function edit_link( LocoPackage $package, $path, $label = '', $icon = '' ){
-        $url = self::uri( $package->get_query() + array (
-            'poedit' => self::trim_path( $path ),
-        ) );
+        $url = self::edit_uri( $package, $path );
         if( ! $label ){
             $label = basename( $path );
         }
@@ -1023,7 +1045,7 @@ function _loco_hook__current_screen(){
  * Admin menu registration callback
  */
 function _loco_hook__admin_menu() {
-    $cap = Loco::CAPABILITY;
+    $cap = Loco::admin_capablity();
     if( current_user_can($cap) ){
         // hook in legacy wordpress styles as menu will display
         $wp_38 = version_compare( $GLOBALS['wp_version'], '3.8', '>=' ) or

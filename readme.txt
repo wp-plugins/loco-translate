@@ -3,7 +3,7 @@ Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, POEdit, productivity
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.5
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,7 @@ If you have a suggestion on how to improve the experience of using Loco Translat
 * Better handling of incorrectly named POT files
 * Appended potential issue warnings on existing "file check" page
 * Added loco_admin_capability filter for all plugin access
+* Fixed editor shortcuts to avoid blocking alt-commands
 
 = 1.5 =
 * Added PO Editor keyboard shortcuts

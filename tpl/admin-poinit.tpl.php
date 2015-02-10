@@ -5,7 +5,7 @@
 $nav = array (
     Loco::__('Packages') => LocoAdmin::uri(),
     $title => '',
-    Loco::__('Settings') => str_replace( 'tools', 'options-general', LocoAdmin::uri() ),
+    Loco::__('Settings') => LocoAdmin::uri( array(), 'settings' ),
 );  
 
 /* @var $package LocoPackage */
@@ -42,13 +42,32 @@ $argpair = $package->get_query();
         </p>
         <p>
             <label for="f-loco-locale">
+                &ndash;
                 <?php Loco::h( Loco::_x('or enter any language code','Form label') )?>:
                 <br />
             </label>
-            <input type="text" maxlength="5" size="5" pattern="^[a-zA-Z]{2}([\-_][a-zA-Z]{2})?$" name="custom-locale" for="f-loco-locale" placeholder="xx_XX" />
-        </p>
+            <input type="text" maxlength="6" size="5" pattern="^[a-zA-Z]{2,3}([\-_][a-zA-Z]{2})?$" name="custom-locale" for="f-loco-locale" placeholder="xx_XX" />
+            <span class="flag"></span>
+        </p><?php
+        // provide location choice if package and global dirs are both writable
+        if( is_writeable($pdir) && is_writable($gdir) ):
+            $is_global = $package->is_global_path( $path );
+            $pdir = LocoAdmin::trim_path( $pdir );
+        ?> 
+        <p>
+            <label>
+                <input type="radio" name="gforce" value="0"<?php print( $is_global ? '' : ' checked') ?> />
+                <?php echo sprintf( Loco::_x('create in <code>%s</code>','Form label' ), $pdir )?>
+            </label>
+            <br />
+            <label>
+                <input type="radio" name="gforce" value="1"<?php print( $is_global ? ' checked' : '') ?> />
+                <?php Loco::h( Loco::_x('create in global languages directory','Form label') )?>
+            </label>
+        </p><?php
+        endif?> 
         <p class="submit">
-            <input type="submit" value="<?php Loco::h( Loco::_x('Start translating','Submit button') )?>" class="button button-primary button-large" />
+            <input type="submit" value="<?php Loco::h( Loco::_x('Start translating','Submit button') )?>" class="button button-primary button-large" disabled />
         </p>
     </form>
     

@@ -3,9 +3,10 @@
  * PO file editor screen
  */
 $nav = array (
-    Loco::__('Packages') => LocoAdmin::uri(),
-    $name => '',
-    Loco::__('Settings') => LocoAdmin::uri( array(), 'settings' ),
+    Loco::__('Packages') => array( 'href' => LocoAdmin::uri() ),
+    Loco::__('Settings') => array( 'href' => LocoAdmin::uri( array(), 'settings' ), 'icon' => 'admin-settings' ),
+    //
+    $name => array( 'icon' => 'POT' === $type ? 'edit' : 'translation' ),
 );  
 
 $phpbase = Loco::html( Loco::baseurl() ).'/php';

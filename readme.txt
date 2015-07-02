@@ -2,7 +2,7 @@
 Contributors: timwhitlock
 Tags: translation, translators, localization, localisation, l10n, i18n, Gettext, PO, MO, productivity
 Requires at least: 3.5
-Tested up to: 4.2
+Tested up to: 4.2.2
 Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -135,7 +135,7 @@ If you have a suggestion on how to improve the experience of using Loco Translat
 
 = 1.5.2 =
 * Handle locale codes used wrongly in POT file names
-* Added Persian and Japanese translations. Updated Turkish and German
+* Added French, Brazilian Portuguese, Persian, Japanese and Spanish translations. Updated Turkish and German
 
 = 1.5.1 =
 * Better handling of incorrectly named POT files
@@ -282,7 +282,9 @@ These features are on our todo list. There's no particular timeframe for any of 
 * Polish translations by [Jerry1333](http://www.jerry1333.net)
 * Persian translations by [Araz Rad](http://fa.araz.id.ir)
 * Japanese translations by [Agarthe LLC](https://agarthe.com)
-
+* Spanish translations by [temesis1234](https://wordpress.org/support/profile/temesis1234)
+* Brazilian Portuguese translations by [pamcabezas](https://github.com/pamcabezas)
+* French translations by [Borjan Tchakaloff](https://github.com/bibz)
 
 == Keyboard shortcuts ==
 

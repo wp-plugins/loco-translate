@@ -24,6 +24,7 @@
             <tbody><?php 
             /* @var $package LocoPackage */
             foreach( $items as $package ): 
+                unset($parent);
                 extract( $package->meta() );
                 $mtime = $package->get_modified();
                 $n = count( $po );
@@ -32,8 +33,13 @@
                     <td>
                         <ul class="loco-details">
                             <li title="<?php Loco::h($domain)?>">
-                                <strong><?php Loco::h($name)?></strong>
-                            </li>
+                                <strong><?php Loco::h($package->get_name())?></strong>
+                            </li><?php
+                            if( isset($parent) ):?> 
+                            <li>
+                                <?php Loco::h( Loco::__('Extends: %s'), $parent ) ?> 
+                            </li><?php 
+                            endif?> 
                             <li><?php 
                                 Loco::h( Loco::_n( '1 language', '%u languages', $n ), $n )?> 
                             </li><?php 
@@ -60,7 +66,7 @@
                             ?> 
                             <li class="loco-edit-po">
                                 <?php echo LocoAdmin::edit_link( $package, $po_path, $label, $po_locale->icon_class() )?> 
-                                <small class="loco-progress">
+                                <small class="loco-progress" title="<?php echo $po_stats['p']?>">
                                     <?php echo $po_stats['p']?>%
                                 </small>
                             </li><?php
@@ -77,12 +83,11 @@
                                 <?php echo LocoAdmin::edit_link( $package, $pot_path )?> 
                             </li><?php
                             endforeach;
-                         // else no POT file
                          else:?> 
                             <li class="loco-add">
                                 <?php echo LocoAdmin::xgettext_link( $package )?> 
                             </li><?php 
-                         endif;?>
+                         endif?> 
                         </ul>
                     </td>
                     <td>
@@ -90,11 +95,11 @@
                         try {
                             $package->check_permissions();?> 
                             <li class="loco-ok">
-                                <?php echo LocoAdmin::fscheck_link( $package, $domain, Loco::__('OK') )?> 
+                                <?php echo LocoAdmin::fscheck_link( $package, $domain, Loco::_x('OK','Message label') )?> 
                             </li><?php
                         }
                         catch( Exception $Ex ){?> 
-                            <li class="loco-warn">
+                            <li class="loco-warning">
                                 <?php echo LocoAdmin::fscheck_link( $package, $domain, $Ex->getMessage() )?> 
                             </li><?php
                         }?> 

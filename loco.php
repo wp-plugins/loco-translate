@@ -4,8 +4,10 @@ Plugin Name: Loco Translate
 Plugin URI: http://wordpress.org/extend/plugins/loco-translate
 Description: Translate Wordpress plugins and themes directly in your browser
 Author: Tim Whitlock
-Version: 1.4.2
+Version: 1.5.2
 Author URI: http://localise.biz/help/wordpress/translate-plugin
+Text Domain: loco-translate
+Domain Path: /languages/
 */
 
 
@@ -38,9 +40,9 @@ else {
     function loco_after_setup_theme(){
         if( is_user_logged_in() ){
             loco_require('loco-boot');
-            if( current_user_can(Loco::CAPABILITY) ){
-                // @todo font end functionality
-            }
+            //if( current_user_can( Loco::admin_capablity() ) ){
+            // TODO font end functionality
+            //}
         }
     }
 }

@@ -5,7 +5,7 @@
  
     DOING_AJAX or die();
     
-    if( empty($path) || empty($name) || empty($type) ){
+    if( empty($path) || ! isset($name) || empty($type) ){
         throw new Exception( Loco::__('Invalid data posted to server'), 422 );
     }
   
@@ -29,28 +29,31 @@
         if( ! LocoAdmin::is_pot($path) ){
                
             // if a POT file exists, sync from that
-            $domain = LocoAdmin::resolve_file_domain($path);
+            $domain = LocoAdmin::resolve_file_domain($path) or $domain = $package->get_domain();
             if( $pot_path = $package->get_pot($domain) ){
                 $exp = LocoAdmin::parse_po( $pot_path );
                 if( ! $exp || ( 1 === count($exp) && '' === $exp[0]['source'] ) ){
-                    //throw new Exception( Loco::__('POT file is empty') );
-                    continue;
+                    // throw new Exception( Loco::__('POT file is empty').' - '.basename($pot_path) );
+                    // fall through to try source code
                 }
-                $pot = basename($pot_path);
-                break;
+                else {
+                    $pot = basename($pot_path);
+                    break;
+                }
             }
     
         }
     
-        // Extract from sources by default     
-        $relative_to = dirname($path);
-        //$relative_to = $pot_path ? dirname($pot_path) : $package->get_root();
-        if( $exp = LocoAdmin::xgettext( $package, $relative_to ) ){
+        // Extract from sources by default
+        if( ! $package->has_source_dirs() ){
+            // nothing to sync
+        }        
+        else if( $exp = LocoAdmin::xgettext( $package, dirname($path) ) ){
             $pot = '';
             break;
         }
 
-        throw new Exception( Loco::__('No strings could be extracted from source files') );
+        throw new Exception( Loco::__('No strings could be extracted from source code') );
     }
     
 
@@ -59,7 +62,7 @@
     if( '' === $exp[0]['source'] ){
         $keep = array('Project-Id-Version','Language-Team','POT-Creation-Date','POT-Revision-Date');
         $head = loco_parse_po_headers( $exp[0]['target'] );
-        $headers = array_intersect_key( $head->to_array(), array_flip($keep) );
+        $headers = array_intersect_key( $head->export(), array_flip($keep) );
         /*/ add prefixed header keys that can't be included above
         foreach( $head as $key => $value ){
             if( 0 === strpos($key, 'X-Poedit-' ) ){

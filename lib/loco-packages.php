@@ -98,7 +98,16 @@ abstract class LocoPackage {
         if( $dpath ){
             $this->domainpath = '/'.trim($dpath,'/');
         }
-    }   
+    }
+
+
+    /**
+     * Get translatable header tags
+     */
+    public function get_headers(){
+        return array();
+    }
+
     
     /**
      * Get default system languages directory
@@ -243,7 +252,19 @@ abstract class LocoPackage {
         }
         if( isset($files['po']) && is_array($files['po']) ){
             foreach( $files['po'] as $path ){
-                $key = LocoAdmin::resolve_file_domain($path) or $key = $this->get_domain();
+                // catch namings like "default.po", "en.po" etc..
+                $name = basename($path);
+                if( false === strpos($name,'-') ){
+                    // PO file has no locale suffix, we might need to use this as a POT if there is none
+                    $key = $this->get_domain();
+                    if( ! isset($this->pot[$key]) ){
+                        $this->pot[$key] = $path;
+                        continue;
+                    }
+                }
+                else {
+                    $key = LocoAdmin::resolve_file_domain($path) or $key = $this->get_domain();
+                }
                 if( ! $domain || $key !== $domain ){
                     continue;
                 }
@@ -272,8 +293,10 @@ abstract class LocoPackage {
                 // @todo better matching as PO may not be in same location as MO
                 continue;
             }
-            // add MO in place of PO
-            $this->add_file($mo_path) and $this->po[$domain][$code] = $mo_path;
+            // add MO in place of PO, but only if locale code is valid
+            if( 'xx_XX' !== $code ){
+                $this->add_file($mo_path) and $this->po[$domain][$code] = $mo_path;
+            }
         }
     }    
     
@@ -935,9 +958,17 @@ class LocoThemePackage extends LocoPackage {
     public function get_type(){
         return 'theme';
     }      
-    public function get_original( $header ){
+    public function get_original( $tag ){
         $theme = wp_get_theme( $this->get_handle() );
-        return $theme->get( $header );
+        return $theme->get( $tag );
+    }
+    public function get_headers(){
+        $headers = array();
+        $theme = wp_get_theme( $this->get_handle() );
+        foreach( array('Name','ThemeURI','Description','Author','AuthorURI') as $tag ){
+            $headers[$tag] = $theme->get($tag) or $headers[$tag] = '';
+        }
+        return $headers;
     }
 }
 
@@ -952,10 +983,19 @@ class LocoPluginPackage extends LocoPackage {
     public function get_type(){
         return 'plugin';
     }      
-    public function get_original( $header ){
+    public function get_original( $tag ){
         $plugins = get_plugins();
         $plugin = $plugins[ $this->get_handle() ];
-        return isset($plugin[$header]) ? $plugin[$header] : '';
+        return isset($plugin[$tag]) ? $plugin[$tag] : '';
+    }
+    public function get_headers(){
+        $headers = array();
+        $plugins = get_plugins();
+        $plugin = $plugins[ $this->get_handle() ];
+        foreach( array('Name','PluginURI','Description','Author','AuthorURI') as $tag ){
+            $headers[$tag] = isset($plugin[$tag]) ? $plugin[$tag] : '';
+        }
+        return $headers;
     }
 }
 

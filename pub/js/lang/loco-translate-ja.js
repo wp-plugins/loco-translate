@@ -4,7 +4,7 @@
  * Release: Working copy
  * Locale: ja_JP, Japanese
  * Exported by: Unregistered user
- * Exported at: Thu, 02 Jul 2015 14:56:22 +0100 
+ * Exported at: Sun, 26 Jul 2015 17:58:04 +0100
  */
 loco = window.loco||{}, loco.t = function( pairs ){
     
@@ -143,6 +143,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Use external command:": "外部コマンドを使用する:",
     "Enter path to msgfmt on server": "サーバのmsgfmtへのパスを入力",
     "Generate hash tables": "ハッシュテーブルを生成する",
+    "Include Fuzzy strings": "",
     "Backing up PO files": "POファイルのバックアップ",
     "Number of backups to keep of each file:": "ファイルごとに保存するバックアップ数:",
     "Experimental features": "実験的な機能",
@@ -171,6 +172,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Select a plugin or theme to translate": "翻訳するテーマまたはプラグインを選択して下さい",
     "Themes": "テーマ",
     "Plugins": "プラグイン",
-    "Core": "コア"
+    "Core": "コア",
+    "Translate Wordpress plugins and themes directly in your browser": ""
 } 
 );

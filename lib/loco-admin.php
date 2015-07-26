@@ -699,6 +699,13 @@ abstract class LocoAdmin {
     public static function xgettext( LocoPackage $package, $relative_to = '' ){
         class_exists('LocoPHPExtractor') or loco_require('build/gettext-compiled');
         $extractor = new LocoPHPExtractor;
+        // parse out header tags in template files
+        if( $package instanceof LocoThemePackage ){
+            $extractor->set_wp_theme();
+        }
+        else if( $package instanceof LocoPluginPackage ){
+            $extractor->set_wp_plugin();
+        }
         $export = array();
         // extract from PHP sources, as long as source locations exist
         if( $srcdirs = $package->get_source_dirs() ){
@@ -721,7 +728,17 @@ abstract class LocoAdmin {
                 }
                 break;
             }
-        }        
+        }
+        // add translatable header tags that won't have been in PHP
+        if( $package instanceof LocoThemePackage ){
+            $id = $target = '';
+            foreach( $package->get_headers() as $tag => $source ){
+                if( $source ){
+                    $notes = str_replace('URI',' URI',$tag).' of the theme';
+                    $export[] = compact('id','source','target','notes');
+                }
+            }
+        }
         return $export;
     }
     

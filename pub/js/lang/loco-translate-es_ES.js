@@ -4,7 +4,7 @@
  * Release: Working copy
  * Locale: es_ES, Spanish (Spain)
  * Exported by: Unregistered user
- * Exported at: Mon, 06 Jul 2015 10:41:09 +0100
+ * Exported at: Sun, 26 Jul 2015 17:58:03 +0100
  */
 loco = window.loco||{}, loco.t = function( pairs ){
     
@@ -148,6 +148,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Use external command:": "Utilice\n el \ncomando\n \nexterno\n:",
     "Enter path to msgfmt on server": "Introduzca la carpeta del servidor msgfmt",
     "Generate hash tables": "Generar\n \ntablas\n \nhash",
+    "Include Fuzzy strings": "",
     "Backing up PO files": "Haciendo copia de seguridad de archivos PO",
     "Number of backups to keep of each file:": "Número de copias de seguridad para mantener de cada archivo:",
     "Experimental features": "Características experimentales",
@@ -176,6 +177,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Select a plugin or theme to translate": "Seleccione un plugin o tema para traducir",
     "Themes": "Temas",
     "Plugins": "Plugins",
-    "Core": "Núcleo"
+    "Core": "Núcleo",
+    "Translate Wordpress plugins and themes directly in your browser": ""
 } 
 );

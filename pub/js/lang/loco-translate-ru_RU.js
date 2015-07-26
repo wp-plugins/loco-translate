@@ -4,7 +4,7 @@
  * Release: Working copy
  * Locale: ru_RU, Russian
  * Exported by: Unregistered user
- * Exported at: Thu, 02 Jul 2015 14:56:23 +0100 
+ * Exported at: Sun, 26 Jul 2015 17:58:06 +0100
  */
 loco = window.loco||{}, loco.t = function( pairs ){
     
@@ -153,6 +153,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Use external command:": "Использовать внешнюю программу:",
     "Enter path to msgfmt on server": "Путь к msgfmt на сервере",
     "Generate hash tables": "Генерировать hash таблицы",
+    "Include Fuzzy strings": "",
     "Backing up PO files": "Резервное копирование РО файлов",
     "Number of backups to keep of each file:": "",
     "Experimental features": "",
@@ -181,6 +182,7 @@ loco = window.loco||{}, loco.t = function( pairs ){
     "Select a plugin or theme to translate": "Выбрать плагин или тему для перевода ",
     "Themes": "Темы",
     "Plugins": "Плагины",
-    "Core": "Ядро"
+    "Core": "Ядро",
+    "Translate Wordpress plugins and themes directly in your browser": ""
 } 
 );

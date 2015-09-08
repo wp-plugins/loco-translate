@@ -4,7 +4,7 @@
  * Release: Working copy
  * Locale: fa_IR, Persian
  * Exported by: Unregistered user
- * Exported at: Wed, 29 Jul 2015 10:24:47 +0100
+ * Exported at: Tue, 08 Sep 2015 10:15:18 +0100
  */
 loco = window.loco||{}, loco.t = function( pairs ){
     

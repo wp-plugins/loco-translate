@@ -46,7 +46,9 @@ $modified or $pofiles[] = $path;
                     $url = LocoAdmin::edit_uri( $package, $_path );
                 ?> 
                 <option value="<?php Loco::h($url)?>" <?php $poname === $label and print('selected')?>>
-                    <?php Loco::h($label)?> 
+                    <?php Loco::h($label); 
+					if (strpos($_path, DIRECTORY_SEPARATOR . 'wp-content' . DIRECTORY_SEPARATOR . 'languages' . DIRECTORY_SEPARATOR ) !== false) echo " (override)";
+					else echo " (official)"; ?>  
                 </option><?php
                 endforeach?> 
             </select>
